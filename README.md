@@ -1,36 +1,213 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chat App - Production-Ready Next.js 14 Shell
+
+A modern, production-grade Next.js 14 application shell with authentication, role-based access control, Neon PostgreSQL integration, and a beautiful UI with theme support.
+
+## Features
+
+- **Next.js 14 App Router** with TypeScript (strict mode)
+- **Authentication** with NextAuth.js (email/password, extensible to OAuth)
+- **Role-Based Access Control** (admin/user roles)
+- **Neon PostgreSQL** database integration
+- **Modern UI** with Tailwind CSS and Framer Motion
+- **Theme System** with light/dark mode and custom themes
+- **Vercel AI SDK** integration with streaming chat UI
+- **Feature Flags** system for gradual rollouts
+- **Modular Architecture** with internal packages
+- **Responsive Design** with mobile-first approach
+
+## Project Structure
+
+```
+chat-new/
+├── app/                    # Next.js app router pages and layouts
+│   ├── (auth)/            # Public auth pages (login, register)
+│   ├── (protected)/       # Protected pages (dashboard, admin)
+│   └── api/               # API routes
+├── components/            # Shared React components
+├── features/              # Feature-based modules
+├── lib/                   # Core utilities
+│   ├── theme/            # Theme system
+│   └── features/         # Feature flags
+├── packages/              # Internal packages
+│   ├── @chat/ui          # UI component library
+│   ├── @chat/auth        # Authentication logic
+│   ├── @chat/database    # Database utilities
+│   └── @chat/shared-types # Shared TypeScript types
+└── migrations/            # Database migrations
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ and npm
+- Neon PostgreSQL database
+- OpenAI API key (for AI chat features)
+
+### 1. Clone and Install
+
+```bash
+git clone <repository-url>
+cd chat-new
+npm install
+```
+
+### 2. Environment Setup
+
+Create a `.env.local` file:
+
+```env
+# Database
+DATABASE_URL=postgresql://username:password@your-neon-database.neon.tech/dbname?sslmode=require
+
+# NextAuth
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key-here-change-in-production
+
+# OpenAI (for chat features)
+OPENAI_API_KEY=your-openai-api-key
+
+# App
+NEXT_PUBLIC_APP_NAME=Chat App
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
+
+### 3. Database Setup
+
+Run the migrations to set up your database schema:
+
+```bash
+# Using psql
+psql $DATABASE_URL -f migrations/001_initial_schema.sql
+
+# Optionally, seed with sample data
+psql $DATABASE_URL -f migrations/002_seed_data.sql
+```
+
+### 4. Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Default Credentials
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+After running the seed script:
+- **Admin**: admin@example.com / admin123
+- **User**: user@example.com / user123
 
-## Learn More
+## Available Scripts
 
-To learn more about Next.js, take a look at the following resources:
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm test` - Run tests
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Authentication
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The app uses NextAuth.js with the following features:
+- Email/password authentication
+- Session management with JWT
+- Role-based access control (admin/user)
+- Protected routes with middleware
 
-## Deploy on Vercel
+## Theme System
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The app includes a sophisticated theme system:
+- **Light/Dark mode** with system preference detection
+- **Custom themes**: Ocean, Forest
+- **CSS variables** for easy customization
+- **Theme persistence** in localStorage
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## UI Components
+
+The `@chat/ui` package includes:
+- Button (with loading states)
+- Card (with hover effects)
+- Input (with error states)
+- Avatar
+- Dropdown
+- ThemeToggle
+- ChatBubble
+- Layout components
+
+## Feature Flags
+
+Control feature availability with the built-in feature flag system:
+
+```typescript
+import { FeatureFlag, FEATURES } from '@/lib/features';
+
+<FeatureFlag feature={FEATURES.CHAT}>
+  <ChatInterface />
+</FeatureFlag>
+```
+
+## Deployment
+
+### Vercel (Recommended)
+
+1. Push your code to GitHub
+2. Import project in Vercel
+3. Add environment variables
+4. Deploy
+
+### Environment Variables for Production
+
+- `DATABASE_URL` - Neon PostgreSQL connection string
+- `NEXTAUTH_URL` - Your production URL
+- `NEXTAUTH_SECRET` - Generate with `openssl rand -base64 32`
+- `OPENAI_API_KEY` - Your OpenAI API key
+
+## Security Considerations
+
+- Always use HTTPS in production
+- Keep `NEXTAUTH_SECRET` secure and unique
+- Use environment variables for sensitive data
+- Enable Neon's connection pooling for production
+- Implement rate limiting for API routes
+- Regular security updates for dependencies
+
+## Extending the App
+
+### Adding New Features
+
+1. Create a new directory in `features/`
+2. Add pages, components, and API routes
+3. Use the internal packages for shared functionality
+
+### Adding OAuth Providers
+
+Update `packages/auth/src/index.ts`:
+
+```typescript
+import GoogleProvider from "next-auth/providers/google";
+
+providers: [
+  GoogleProvider({
+    clientId: process.env.GOOGLE_CLIENT_ID!,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+  }),
+  // ... existing providers
+]
+```
+
+### Custom Themes
+
+Add new themes in `lib/theme/themes.ts`:
+
+```typescript
+export const customTheme: Theme = {
+  name: 'custom',
+  colors: {
+    // ... your color values
+  }
+};
+```
+
+## License
+
+MIT
