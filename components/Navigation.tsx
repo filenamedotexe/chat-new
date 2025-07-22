@@ -6,10 +6,15 @@ import { signOut } from 'next-auth/react';
 import { IconLogout, IconDashboard, IconShieldLock, IconPalette } from '@tabler/icons-react';
 import { Avatar, Dropdown, DropdownItem, DropdownSeparator, ThemeToggle } from '@chat/ui';
 import { useTheme } from '@chat/ui';
-import type { User } from '@chat/shared-types';
+import type { UserRole } from '@chat/shared-types';
 
 interface NavigationProps {
-  user: User;
+  user: {
+    id: string;
+    email: string;
+    name?: string | null;
+    role: UserRole;
+  };
 }
 
 export function Navigation({ user }: NavigationProps) {

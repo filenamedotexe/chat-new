@@ -30,7 +30,9 @@ export interface Theme {
   name: string;
   colors: {
     primary: string;
+    primaryForeground: string;
     secondary: string;
+    secondaryForeground: string;
     background: string;
     foreground: string;
     muted: string;

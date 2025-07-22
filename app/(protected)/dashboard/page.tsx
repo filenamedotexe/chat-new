@@ -14,7 +14,7 @@ export default async function DashboardPage() {
             Welcome back, {session?.user.name || session?.user.email}!
           </h1>
           <p className="text-muted-foreground">
-            You're logged in as a {session?.user.role} user.
+            You&apos;re logged in as a {session?.user.role} user.
           </p>
         </div>
 

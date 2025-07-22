@@ -61,14 +61,16 @@ export function ChatBubble({
               ul: ({ children }) => <ul className="mb-2 ml-4 list-disc">{children}</ul>,
               ol: ({ children }) => <ol className="mb-2 ml-4 list-decimal">{children}</ol>,
               li: ({ children }) => <li className="mb-1">{children}</li>,
-              code: ({ inline, children }) =>
-                inline ? (
+              code: ({ children, ...props }) => {
+                const isInline = !props.className;
+                return isInline ? (
                   <code className="px-1 py-0.5 rounded bg-muted text-sm">{children}</code>
                 ) : (
                   <code className="block p-3 rounded bg-muted text-sm overflow-x-auto">
                     {children}
                   </code>
-                ),
+                );
+              },
             }}
           >
             {content}

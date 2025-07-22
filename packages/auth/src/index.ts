@@ -19,6 +19,8 @@ declare module 'next-auth' {
     email: string;
     name?: string | null;
     role: UserRole;
+    createdAt: Date;
+    updatedAt: Date;
   }
 }
 
@@ -68,7 +70,9 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: user.name,
-          role: user.role
+          role: user.role,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt
         };
       }
     })
@@ -112,19 +116,19 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
   return bcrypt.compare(password, hash);
 }
 
-export function isAdmin(user: User | null): boolean {
+export function isAdmin(user: Pick<User, 'role'> | null): boolean {
   return user?.role === 'admin';
 }
 
-export function hasRole(user: User | null, role: UserRole): boolean {
+export function hasRole(user: Pick<User, 'role'> | null, role: UserRole): boolean {
   return user?.role === role;
 }
 
-export function canAccessAdminPanel(user: User | null): boolean {
+export function canAccessAdminPanel(user: Pick<User, 'role'> | null): boolean {
   return isAdmin(user);
 }
 
-export function canAccessUserData(user: User | null, targetUserId: string): boolean {
+export function canAccessUserData(user: Pick<User, 'id' | 'role'> | null, targetUserId: string): boolean {
   if (!user) return false;
   return isAdmin(user) || user.id === targetUserId;
 }
