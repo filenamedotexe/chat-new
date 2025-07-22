@@ -17,8 +17,13 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@chat/ui": ["./packages/ui/src"],
+      "@chat/auth": ["./packages/auth/src"],
+      "@chat/database": ["./packages/database/src"],
+      "@chat/shared-types": ["./packages/shared-types/src"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

@@ -3,6 +3,13 @@ import type { User, Session, Feature } from '@chat/shared-types';
 
 const sql = neon(process.env.DATABASE_URL!);
 
+export * from './client';
+export * from './schema/auth';
+export * from './schema/organizations';
+export * from './schema/tasks';
+export * from './schema/files';
+export * from './schema/communications';
+
 export { sql };
 
 export const schema = `
