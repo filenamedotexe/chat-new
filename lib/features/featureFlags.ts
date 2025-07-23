@@ -1,10 +1,9 @@
 import { getFeature, isFeatureEnabled } from '@chat/database';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@chat/auth';
+import { auth } from '@/lib/auth/auth.config';
 
 export async function checkFeature(featureName: string): Promise<boolean> {
-  const session = await getServerSession(authOptions);
-  const userId = session?.user.id;
+  const session = await auth();
+  const userId = session?.user?.id;
   
   return isFeatureEnabled(featureName, userId);
 }

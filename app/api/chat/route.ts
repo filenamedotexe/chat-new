@@ -1,10 +1,9 @@
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@chat/auth';
+import { auth } from '@/lib/auth/auth.config';
 
 export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   
   if (!session) {
     return new Response('Unauthorized', { status: 401 });

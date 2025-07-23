@@ -1,4 +1,4 @@
-export type UserRole = 'admin' | 'user';
+export type UserRole = 'admin' | 'user' | 'team_member' | 'client';
 
 export interface User {
   id: string;
@@ -56,4 +56,31 @@ export interface ChatMessage {
   role: 'system' | 'user' | 'assistant';
   content: string;
   createdAt?: Date;
+}
+
+export interface Organization {
+  id: string;
+  name: string;
+  slug: string;
+  type: 'agency' | 'client';
+  description?: string | null;
+  website?: string | null;
+  contactEmail?: string | null;
+  contactPhone?: string | null;
+  address?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Project {
+  id: string;
+  organizationId: string;
+  name: string;
+  slug: string;
+  description?: string | null;
+  status: string;
+  startDate?: Date | null;
+  endDate?: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
 }

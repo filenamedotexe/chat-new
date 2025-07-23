@@ -1,12 +1,19 @@
-import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, uuid, pgEnum } from 'drizzle-orm/pg-core';
 import { users } from './auth';
+
+export const organizationType = pgEnum('organization_type', ['agency', 'client']);
 
 export const organizations = pgTable('organizations', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull(),
   slug: text('slug').notNull().unique(),
+  type: organizationType('type').notNull().default('client'),
   description: text('description'),
   logo: text('logo'),
+  website: text('website'),
+  contactEmail: text('contact_email'),
+  contactPhone: text('contact_phone'),
+  address: text('address'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });

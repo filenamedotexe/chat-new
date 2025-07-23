@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Task UI Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .task-card { border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
+    button { margin: 5px; padding: 5px 10px; cursor: pointer; }
+    .status { font-weight: bold; }
+    #log { background: #f0f0f0; padding: 10px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Task Status Update Test</h1>
+  
+  <div class="task-card">
+    <h3>Test Task</h3>
+    <p>Status: <span class="status" id="status">not_started</span></p>
+    <button id="startBtn" onclick="updateStatus('in_progress')">Start Task</button>
+  </div>
+
+  <div id="log">
+    <h3>Console Log:</h3>
+    <pre id="logContent"></pre>
+  </div>
+
+  <script>
+    const log = (msg) => {
+      document.getElementById('logContent').textContent += msg + '\n';
+    };
+
+    async function updateStatus(newStatus) {
+      const taskId = '67bef59f-d04e-4fb6-82ab-7f0025e5c1f6';
+      log(`Updating task ${taskId} to ${newStatus}`);
+      
+      try {
+        const response = await fetch(`/api/tasks/${taskId}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+        
+        const data = await response.json();
+        log(`Response: ${response.status} - ${JSON.stringify(data)}`);
+        
+        if (response.ok) {
+          document.getElementById('status').textContent = newStatus;
+        }
+      } catch (error) {
+        log(`Error: ${error.message}`);
+      }
+    }
+  </script>
+</body>
+</html>

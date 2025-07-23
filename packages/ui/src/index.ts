@@ -1,6 +1,7 @@
 export * from './components/Button';
 export * from './components/Card';
 export * from './components/Input';
+export * from './components/Textarea';
 export * from './components/ThemeToggle';
 export * from './components/Dropdown';
 export * from './components/Avatar';

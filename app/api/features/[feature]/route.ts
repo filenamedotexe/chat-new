@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@chat/auth';
+import { auth } from '@/lib/auth/auth.config';
 import { isFeatureEnabled } from '@chat/database';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { feature: string } }
 ) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   
   if (!session) {
     return NextResponse.json({ enabled: false });

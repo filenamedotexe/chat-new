@@ -1,13 +1,12 @@
-import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
-import { authOptions, isAdmin } from '@chat/auth';
+import { auth } from '@/lib/auth/auth.config';
 import { Main, PageContainer, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chat/ui';
 import { sql } from '@chat/database';
 
 export default async function AdminPage() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   
-  if (!session || !isAdmin(session.user)) {
+  if (!session || session.user?.role !== 'admin') {
     redirect('/dashboard');
   }
 

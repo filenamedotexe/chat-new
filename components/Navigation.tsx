@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
-import { IconLogout, IconDashboard, IconShieldLock, IconPalette } from '@tabler/icons-react';
+import { IconLogout, IconDashboard, IconShieldLock, IconPalette, IconBriefcase, IconFolders } from '@tabler/icons-react';
 import { Avatar, Dropdown, DropdownItem, DropdownSeparator, ThemeToggle } from '@chat/ui';
-import { useTheme } from '@chat/ui';
+import { useTheme } from '@/lib/theme/ThemeProvider';
 import type { UserRole } from '@chat/shared-types';
 
 interface NavigationProps {
@@ -48,6 +48,24 @@ export function Navigation({ user }: NavigationProps) {
             <IconDashboard className="h-4 w-4" />
             Dashboard
           </Link>
+          
+          <Link
+            href="/projects"
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <IconFolders className="h-4 w-4" />
+            Projects
+          </Link>
+          
+          {(user.role === 'admin' || user.role === 'team_member') && (
+            <Link
+              href="/organizations"
+              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <IconBriefcase className="h-4 w-4" />
+              Organizations
+            </Link>
+          )}
           
           {user.role === 'admin' && (
             <Link

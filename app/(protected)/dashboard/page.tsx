@@ -1,10 +1,9 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@chat/auth';
+import { auth } from '@/lib/auth/auth.config';
 import { Main, PageContainer, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chat/ui';
 import { ChatInterface } from '@/components/chat/ChatInterface';
 
 export default async function DashboardPage() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   
   return (
     <Main>
