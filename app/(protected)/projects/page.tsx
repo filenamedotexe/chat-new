@@ -1,8 +1,9 @@
 import { auth } from '@/lib/auth/auth.config';
-import { ProjectList } from '@/features/projects/components/project-list';
+import { ProjectListEnhanced } from '@/features/projects/components/project-list-enhanced';
 import { Button } from '@chat/ui';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { IconPlus } from '@tabler/icons-react';
 
 export default async function ProjectsPage() {
   const session = await auth();
@@ -16,15 +17,23 @@ export default async function ProjectsPage() {
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Projects</h1>
+        <div>
+          <h1 className="text-3xl font-bold">Projects</h1>
+          <p className="text-muted-foreground mt-1">
+            Manage and track all your projects in one place
+          </p>
+        </div>
         {canCreateProjects && (
           <Link href="/projects/new">
-            <Button>Create Project</Button>
+            <Button>
+              <IconPlus className="h-4 w-4 mr-2" />
+              Create Project
+            </Button>
           </Link>
         )}
       </div>
       
-      <ProjectList userId={session.user.id} userRole={session.user.role} />
+      <ProjectListEnhanced userId={session.user.id} userRole={session.user.role} />
     </div>
   );
 }

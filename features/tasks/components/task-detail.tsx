@@ -11,7 +11,8 @@ import {
   IconFlag,
   IconPaperclip,
   IconPlus,
-  IconTrash
+  IconTrash,
+  IconMessage
 } from '@tabler/icons-react';
 import { format } from 'date-fns';
 import { FileUpload } from '@/features/files/components/file-upload';
@@ -122,40 +123,49 @@ export function TaskDetail({
           </div>
         </div>
         
-        {canEdit && (
-          <div className="flex gap-2">
-            <Button 
-              variant="outline"
-              onClick={() => window.location.href = `/tasks/${task.id}/edit`}
-            >
-              <IconEdit className="h-4 w-4 mr-2" />
-              Edit Task
-            </Button>
-            <Button 
-              variant="outline"
-              className="text-destructive hover:text-destructive"
-              onClick={async () => {
-                if (confirm('Are you sure you want to delete this task?')) {
-                  try {
-                    const response = await fetch(`/api/tasks/${task.id}`, {
-                      method: 'DELETE',
-                    });
-                    if (response.ok) {
-                      window.location.href = `/projects/${task.project.id}/tasks`;
-                    } else {
-                      alert('Failed to delete task');
+        <div className="flex gap-2">
+          <Button 
+            variant="outline"
+            onClick={() => window.location.href = `/tasks/${task.id}/chat`}
+          >
+            <IconMessage className="h-4 w-4 mr-2" />
+            Discussion
+          </Button>
+          {canEdit && (
+            <>
+              <Button 
+                variant="outline"
+                onClick={() => window.location.href = `/tasks/${task.id}/edit`}
+              >
+                <IconEdit className="h-4 w-4 mr-2" />
+                Edit Task
+              </Button>
+              <Button 
+                variant="outline"
+                className="text-destructive hover:text-destructive"
+                onClick={async () => {
+                  if (confirm('Are you sure you want to delete this task?')) {
+                    try {
+                      const response = await fetch(`/api/tasks/${task.id}`, {
+                        method: 'DELETE',
+                      });
+                      if (response.ok) {
+                        window.location.href = `/projects/${task.project.id}/tasks`;
+                      } else {
+                        alert('Failed to delete task');
+                      }
+                    } catch (error) {
+                      alert('Error deleting task');
                     }
-                  } catch (error) {
-                    alert('Error deleting task');
                   }
-                }
-              }}
-            >
-              <IconTrash className="h-4 w-4 mr-2" />
-              Delete
-            </Button>
-          </div>
-        )}
+                }}
+              >
+                <IconTrash className="h-4 w-4 mr-2" />
+                Delete
+              </Button>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Task Overview */}

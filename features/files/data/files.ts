@@ -1,8 +1,7 @@
 import { db } from '@chat/database';
-import { files } from '@/packages/database/src/schema/files';
-import { users, projects, tasks } from '@chat/database';
+import { files, users, projects, tasks } from '@chat/database';
 import { eq, and, desc, isNull, ilike } from 'drizzle-orm';
-import { saveFileToStorage } from '../lib/storage';
+import { saveFileToStorage, deleteFileFromStorage } from '../lib/storage';
 import { getFileTypeCategory } from '../lib/client-utils';
 import type { UserRole } from '@chat/shared-types';
 
@@ -36,32 +35,50 @@ export interface FileWithAssociations {
  * Creates a new file record and saves file to storage
  */
 export async function createFile(input: CreateFileInput): Promise<typeof files.$inferSelect> {
-  // Save file to local storage first
-  const uploadedFile = await saveFileToStorage(
-    input.buffer,
-    input.originalName,
-    input.mimeType,
-    input.uploadedById
-  );
+  let uploadedFile: any;
+  
+  try {
+    // Save file to local storage first
+    uploadedFile = await saveFileToStorage(
+      input.buffer,
+      input.originalName,
+      input.mimeType,
+      input.uploadedById
+    );
+    
+    // Create database record
+    const [fileRecord] = await db
+      .insert(files)
+      .values({
+        originalName: input.originalName,
+        fileName: uploadedFile.fileName,
+        mimeType: input.mimeType,
+        fileType: getFileTypeCategory(input.mimeType) as any,
+        fileSize: input.buffer.length,
+        storageType: 'local',
+        filePath: uploadedFile.filePath,
+        projectId: input.projectId,
+        taskId: input.taskId,
+        uploadedById: input.uploadedById,
+      })
+      .returning();
 
-  // Create database record
-  const [fileRecord] = await db
-    .insert(files)
-    .values({
-      originalName: input.originalName,
-      fileName: uploadedFile.fileName,
-      mimeType: input.mimeType,
-      fileType: getFileTypeCategory(input.mimeType) as any,
-      fileSize: input.buffer.length,
-      storageType: 'local',
-      filePath: uploadedFile.filePath,
-      projectId: input.projectId,
-      taskId: input.taskId,
-      uploadedById: input.uploadedById,
-    })
-    .returning();
-
-  return fileRecord;
+    return fileRecord;
+  } catch (error) {
+    console.error('[createFile] Error:', error);
+    
+    // If file was saved but database insert failed, try to clean up
+    if (uploadedFile?.filePath) {
+      try {
+        await deleteFileFromStorage(uploadedFile.filePath);
+        console.log('[createFile] Cleaned up orphaned file:', uploadedFile.filePath);
+      } catch (cleanupError) {
+        console.error('[createFile] Failed to clean up file:', cleanupError);
+      }
+    }
+    
+    throw error;
+  }
 }
 
 /**

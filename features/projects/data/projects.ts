@@ -1,7 +1,8 @@
 import { db } from '@chat/database';
-import { projects, organizations, organizationMembers } from '@chat/database';
-import { eq, and, desc, inArray } from 'drizzle-orm';
+import { projects, organizations, organizationMembers, tasks, files } from '@chat/database';
+import { eq, and, desc, inArray, sql, count } from 'drizzle-orm';
 import type { UserRole } from '@chat/shared-types';
+import { calculateMultipleProjectsProgress, calculateProjectProgress, type ProjectProgress } from '@/features/progress/lib/calculate-progress';
 
 export interface CreateProjectInput {
   organizationId: string;
@@ -160,4 +161,88 @@ export async function getProjectsByOrganization(organizationId: string) {
     .leftJoin(organizations, eq(projects.organizationId, organizations.id))
     .where(eq(projects.organizationId, organizationId))
     .orderBy(desc(projects.createdAt));
+}
+
+// Get projects with task and file counts
+export async function getProjectsWithStats(userId: string, userRole: UserRole) {
+  // Get base projects first
+  const baseProjects = await getProjects(userId, userRole);
+  
+  // Get task counts for all projects
+  const projectIds = baseProjects.map(p => p.project.id);
+  
+  if (projectIds.length === 0) {
+    return baseProjects.map(p => ({
+      ...p,
+      taskCount: 0,
+      completedTaskCount: 0,
+      fileCount: 0
+    }));
+  }
+  
+  // Get task counts
+  const taskStats = await db
+    .select({
+      projectId: tasks.projectId,
+      totalCount: count(tasks.id),
+      completedCount: sql<number>`COUNT(CASE WHEN ${tasks.status} = 'done' THEN 1 END)`,
+    })
+    .from(tasks)
+    .where(inArray(tasks.projectId, projectIds))
+    .groupBy(tasks.projectId);
+  
+  // Get file counts (files associated with project tasks)
+  const fileStats = await db
+    .select({
+      projectId: tasks.projectId,
+      fileCount: count(files.id),
+    })
+    .from(files)
+    .innerJoin(tasks, eq(files.taskId, tasks.id))
+    .where(inArray(tasks.projectId, projectIds))
+    .groupBy(tasks.projectId);
+  
+  // Create lookup maps
+  const taskStatsMap = new Map(taskStats.map(ts => [ts.projectId, ts]));
+  const fileStatsMap = new Map(fileStats.map(fs => [fs.projectId, fs.fileCount]));
+  
+  // Get progress data
+  const progressMap = await calculateMultipleProjectsProgress(projectIds);
+  
+  // Combine data
+  return baseProjects.map(p => {
+    const progress = progressMap.get(p.project.id) || {
+      totalTasks: 0,
+      completedTasks: 0,
+      inProgressTasks: 0,
+      notStartedTasks: 0,
+      needsReviewTasks: 0,
+      progressPercentage: 0,
+      isComplete: false
+    };
+    
+    return {
+      ...p,
+      taskCount: taskStatsMap.get(p.project.id)?.totalCount || 0,
+      completedTaskCount: taskStatsMap.get(p.project.id)?.completedCount || 0,
+      fileCount: fileStatsMap.get(p.project.id) || 0,
+      progress
+    };
+  });
+}
+
+// Get a single project with progress data
+export async function getProjectWithProgress(projectId: string, userId: string, userRole: UserRole) {
+  const projectData = await getProjectById(projectId, userId, userRole);
+  
+  if (!projectData) {
+    return null;
+  }
+  
+  const progress = await calculateProjectProgress(projectId);
+  
+  return {
+    ...projectData,
+    progress
+  };
 }

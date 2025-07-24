@@ -9,7 +9,7 @@ import type { UserRole } from '@chat/shared-types';
 import { db } from '@chat/database';
 import { files } from '@chat/database';
 import { eq } from 'drizzle-orm';
-import { FileUpload } from '@/features/files/components/file-upload';
+import { FileUploadWrapper } from '@/features/files/components/file-upload-wrapper';
 
 interface ProjectFilesPageProps {
   params: {
@@ -63,13 +63,7 @@ export default async function ProjectFilesPage({ params }: ProjectFilesPageProps
       {canUpload && (
         <Card className="p-6 mb-6">
           <h2 className="text-lg font-semibold mb-4">Upload Files</h2>
-          <FileUpload 
-            projectId={params.id}
-            onUploadComplete={() => {
-              // Refresh the page to show new files
-              window.location.reload();
-            }}
-          />
+          <FileUploadWrapper projectId={params.id} />
         </Card>
       )}
 

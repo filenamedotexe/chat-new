@@ -1,11 +1,13 @@
 import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth/auth.config';
-import { getProjectById } from '@/features/projects/data/projects';
+import { getProjectWithProgress } from '@/features/projects/data/projects';
 import { Button, Card } from '@chat/ui';
-import { IconArrowLeft, IconClipboardList, IconCalendar, IconBuilding, IconFiles } from '@tabler/icons-react';
+import { IconArrowLeft, IconClipboardList, IconCalendar, IconBuilding, IconFiles, IconMessage } from '@tabler/icons-react';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import type { UserRole } from '@chat/shared-types';
+import { ProgressBar } from '@/features/progress/components/progress-bar';
+import { ProgressChecklist } from '@/features/progress/components/progress-checklist';
 
 interface ProjectPageProps {
   params: {
@@ -20,7 +22,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     redirect('/login');
   }
 
-  const projectData = await getProjectById(params.id, session.user.id, session.user.role as UserRole);
+  const projectData = await getProjectWithProgress(params.id, session.user.id, session.user.role as UserRole);
   
   if (!projectData) {
     return (
@@ -36,7 +38,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     );
   }
 
-  const { project, organization } = projectData;
+  const { project, organization, progress } = projectData;
   const canEdit = session.user.role === 'admin' || session.user.role === 'team_member';
 
   return (
@@ -83,6 +85,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </div>
         </div>
       </div>
+
+      {/* Progress Overview */}
+      <Card className="p-6 mb-6">
+        <ProgressBar progress={progress} size="lg" />
+      </Card>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <Card className="p-6">
@@ -137,10 +144,22 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 View Files
               </Button>
             </Link>
-            <Button variant="outline" size="lg" className="flex-1" disabled>
-              Team Chat (Coming Soon)
-            </Button>
+            <Link href={`/projects/${params.id}/chat`} className="flex-1">
+              <Button variant="outline" size="lg" className="w-full">
+                <IconMessage className="h-5 w-5 mr-2" />
+                Team Chat
+              </Button>
+            </Link>
           </div>
+        </Card>
+
+        {/* Detailed Progress Checklist */}
+        <Card className="p-6">
+          <ProgressChecklist 
+            progress={progress} 
+            projectName={project.name}
+            showRules={true}
+          />
         </Card>
       </div>
     </div>

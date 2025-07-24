@@ -304,3 +304,57 @@ export async function getOverdueTasks(userId: string, userRole: UserRole) {
     .where(and(...whereConditions))
     .orderBy(tasks.dueDate);
 }
+
+// Get all tasks for a user (either assigned to them or in their accessible projects)
+export async function getAllUserTasks(userId: string, userRole: UserRole) {
+  const assignee = alias(users, 'assignee');
+  
+  // Base query for all roles
+  let query = db
+    .select({
+      task: tasks,
+      project: projects,
+      assignee: {
+        id: assignee.id,
+        name: assignee.name,
+        email: assignee.email,
+      },
+      fileCount: count(files.id),
+    })
+    .from(tasks)
+    .leftJoin(projects, eq(tasks.projectId, projects.id))
+    .leftJoin(assignee, eq(tasks.assignedToId, assignee.id))
+    .leftJoin(files, eq(files.taskId, tasks.id))
+    .groupBy(tasks.id, projects.id, assignee.id, assignee.name, assignee.email);
+
+  if (userRole === 'admin') {
+    // Admins see all tasks
+    return await query.orderBy(desc(tasks.createdAt));
+  } else if (userRole === 'team_member') {
+    // Team members see tasks assigned to them or created by them
+    return await query
+      .where(
+        or(
+          eq(tasks.assignedToId, userId),
+          eq(tasks.createdById, userId)
+        )
+      )
+      .orderBy(desc(tasks.createdAt));
+  } else {
+    // Clients see tasks in their organization's projects
+    const { organizationMembers } = await import('@chat/database');
+    const userOrgs = await db
+      .select({ organizationId: organizationMembers.organizationId })
+      .from(organizationMembers)
+      .where(eq(organizationMembers.userId, userId));
+      
+    const orgIds = userOrgs.map(o => o.organizationId);
+    if (orgIds.length === 0) {
+      return [];
+    }
+    
+    return await query
+      .where(inArray(projects.organizationId, orgIds))
+      .orderBy(desc(tasks.createdAt));
+  }
+}

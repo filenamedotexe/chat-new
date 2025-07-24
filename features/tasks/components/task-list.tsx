@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { TaskCard } from './task-card';
 import { Card } from '@chat/ui';
 import { IconClipboardList } from '@tabler/icons-react';
@@ -35,6 +36,7 @@ export function TaskList({
   loading = false 
 }: TaskListProps) {
   const [filter, setFilter] = useState<TaskStatus | 'all'>('all');
+  const router = useRouter();
 
   const filteredTasks = filter === 'all' 
     ? tasks 
@@ -123,7 +125,7 @@ export function TaskList({
             <TaskCard
               key={task.id}
               task={task}
-              onClick={() => onTaskClick?.(task)}
+              onClick={() => onTaskClick ? onTaskClick(task) : router.push(`/tasks/${task.id}`)}
               onStatusChange={
                 onStatusChange
                   ? (status) => onStatusChange(task.id, status)

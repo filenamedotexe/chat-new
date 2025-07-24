@@ -47,7 +47,7 @@ export function ChatBubble({
       <div className={clsx('flex-1', isUser && 'flex justify-end')}>
         <div
           className={clsx(
-            'rounded-lg px-4 py-2 max-w-[80%]',
+            'rounded-lg px-4 py-2 max-w-[80%] overflow-hidden',
             isUser
               ? 'bg-primary text-primary-foreground'
               : 'bg-muted text-foreground'
@@ -55,7 +55,10 @@ export function ChatBubble({
         >
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
-            className="prose prose-sm dark:prose-invert max-w-none"
+            className={clsx(
+              'prose prose-sm max-w-none break-words overflow-wrap-anywhere',
+              isUser ? 'prose-invert' : 'dark:prose-invert'
+            )}
             components={{
               p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
               ul: ({ children }) => <ul className="mb-2 ml-4 list-disc">{children}</ul>,
@@ -63,10 +66,11 @@ export function ChatBubble({
               li: ({ children }) => <li className="mb-1">{children}</li>,
               code: ({ children, ...props }) => {
                 const isInline = !props.className;
+                const bgClass = isUser ? 'bg-primary-foreground/20' : 'bg-muted';
                 return isInline ? (
-                  <code className="px-1 py-0.5 rounded bg-muted text-sm">{children}</code>
+                  <code className={`px-1 py-0.5 rounded ${bgClass} text-sm`}>{children}</code>
                 ) : (
-                  <code className="block p-3 rounded bg-muted text-sm overflow-x-auto">
+                  <code className={`block p-3 rounded ${bgClass} text-sm overflow-x-auto whitespace-pre`}>
                     {children}
                   </code>
                 );

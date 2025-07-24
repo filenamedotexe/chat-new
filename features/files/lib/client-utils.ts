@@ -129,7 +129,16 @@ export function formatFileSize(bytes: number): string {
 export function getFileTypeCategory(mimeType: string): string {
   for (const [category, types] of Object.entries(ALLOWED_FILE_TYPES)) {
     if ((types as readonly string[]).includes(mimeType)) {
-      return category;
+      // Convert plural category names to singular for database enum
+      const singularMap: Record<string, string> = {
+        'images': 'image',
+        'documents': 'document',
+        'spreadsheets': 'spreadsheet',
+        'presentations': 'presentation',
+        'archives': 'archive',
+        'code': 'code'
+      };
+      return singularMap[category] || category;
     }
   }
   return 'other';

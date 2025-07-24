@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TaskCard } from './task-card';
 import { TaskForm } from './task-form';
@@ -47,6 +48,7 @@ export function TaskBoard({
   const [creatingInColumn, setCreatingInColumn] = useState<TaskStatus | null>(null);
   const [draggedTask, setDraggedTask] = useState<Task | null>(null);
   const [dragOverColumn, setDragOverColumn] = useState<TaskStatus | null>(null);
+  const router = useRouter();
 
   const tasksByStatus = tasks.reduce((acc, task) => {
     if (!acc[task.status]) acc[task.status] = [];
@@ -156,7 +158,7 @@ export function TaskBoard({
                       >
                         <TaskCard
                           task={task}
-                          onClick={() => window.location.href = `/tasks/${task.id}`}
+                          onClick={() => router.push(`/tasks/${task.id}`)}
                           onStatusChange={onTaskUpdate ? (status) => onTaskUpdate(task.id, status) : undefined}
                         />
                       </motion.div>

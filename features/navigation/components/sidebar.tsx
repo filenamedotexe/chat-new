@@ -10,7 +10,7 @@ import {
   IconMessage,
   IconSettings,
   IconShield,
-  IconFileCheck,
+  IconFiles,
   IconChartBar,
   IconBuilding
 } from '@tabler/icons-react';
@@ -18,12 +18,12 @@ import { UserRole } from '@/lib/auth/permissions';
 
 interface NavItem {
   title: string;
-  href: string;
+  href: string | ((userId: string) => string);
   icon: React.ReactNode;
   roles?: UserRole[];
 }
 
-const navItems: NavItem[] = [
+const getNavItems = (userId: string): NavItem[] => [
   {
     title: 'Dashboard',
     href: '/dashboard',
@@ -47,26 +47,14 @@ const navItems: NavItem[] = [
     icon: <IconFolders className="h-5 w-5" />,
   },
   {
-    title: 'Tasks',
+    title: 'My Tasks',
     href: '/tasks',
     icon: <IconChecklist className="h-5 w-5" />,
   },
   {
-    title: 'Approvals',
-    href: '/approvals',
-    icon: <IconFileCheck className="h-5 w-5" />,
-    roles: ['client'],
-  },
-  {
-    title: 'Messages',
-    href: '/messages',
-    icon: <IconMessage className="h-5 w-5" />,
-  },
-  {
-    title: 'Analytics',
-    href: '/analytics',
-    icon: <IconChartBar className="h-5 w-5" />,
-    roles: ['admin', 'team_member'],
+    title: 'My Files',
+    href: `/users/${userId}/files`,
+    icon: <IconFiles className="h-5 w-5" />,
   },
   {
     title: 'Settings',
@@ -77,10 +65,12 @@ const navItems: NavItem[] = [
 
 interface SidebarProps {
   userRole: UserRole;
+  userId: string;
 }
 
-export function Sidebar({ userRole }: SidebarProps) {
+export function Sidebar({ userRole, userId }: SidebarProps) {
   const pathname = usePathname();
+  const navItems = getNavItems(userId);
 
   const filteredItems = navItems.filter(item => {
     if (!item.roles) return true; // Show to all roles
@@ -90,11 +80,12 @@ export function Sidebar({ userRole }: SidebarProps) {
   return (
     <nav className="space-y-1">
       {filteredItems.map((item) => {
-        const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+        const href = typeof item.href === 'function' ? item.href(userId) : item.href;
+        const isActive = pathname === href || pathname.startsWith(href + '/');
         return (
           <Link
-            key={item.href}
-            href={item.href}
+            key={href}
+            href={href}
             className={`
               flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors
               ${isActive 
