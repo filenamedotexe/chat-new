@@ -46,9 +46,13 @@ export default async function TasksPage({ params }: TasksPageProps) {
   const canCreateTasks = session.user.role === 'admin' || session.user.role === 'team_member';
 
   // Transform tasks to match component interface
-  const formattedTasks = tasks.map(({ task, assignee }) => ({
+  const formattedTasks = tasks.map(({ task, assignee, fileCount }) => ({
     ...task,
     assignee: assignee?.id ? assignee : null,
+    fileCount: fileCount || 0,
+    createdAt: task.createdAt.toISOString(),
+    updatedAt: task.updatedAt.toISOString(),
+    dueDate: task.dueDate?.toISOString() || null,
   }));
 
   return (

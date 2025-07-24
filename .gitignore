@@ -39,3 +39,11 @@ next-env.d.ts
 /playwright/.auth/
 /test-results/
 /playwright-report/
+
+# cypress
+/cypress/videos/
+/cypress/screenshots/
+/cypress/downloads/
+
+# uploaded files
+/public/uploads/

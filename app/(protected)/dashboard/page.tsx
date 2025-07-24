@@ -1,6 +1,8 @@
 import { auth } from '@/lib/auth/auth.config';
-import { Main, PageContainer, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chat/ui';
+import { Main, PageContainer, Card, CardContent, CardDescription, CardHeader, CardTitle, Button } from '@chat/ui';
 import { ChatInterface } from '@/components/chat/ChatInterface';
+import { IconFiles, IconEye } from '@tabler/icons-react';
+import Link from 'next/link';
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -17,7 +19,7 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
           <Card hover>
             <CardHeader>
               <CardTitle>Profile</CardTitle>
@@ -56,6 +58,29 @@ export default async function DashboardPage() {
               <p className="text-sm text-muted-foreground">
                 Customize your experience
               </p>
+            </CardContent>
+          </Card>
+
+          <Card hover data-testid="my-files-card">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <IconFiles className="h-5 w-5" />
+                My Files
+              </CardTitle>
+              <CardDescription>View and manage your uploaded files</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <p className="text-sm text-muted-foreground">
+                  Access all your files across projects
+                </p>
+                <Link href={`/users/${session?.user.id}/files`}>
+                  <Button size="sm" className="w-full">
+                    <IconEye className="h-4 w-4 mr-2" />
+                    View All Files
+                  </Button>
+                </Link>
+              </div>
             </CardContent>
           </Card>
         </div>

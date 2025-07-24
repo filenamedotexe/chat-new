@@ -1,7 +1,7 @@
 'use client';
 
 import { Card } from '@chat/ui';
-import { IconClock, IconUser, IconCalendar } from '@tabler/icons-react';
+import { IconClock, IconUser, IconCalendar, IconPaperclip } from '@tabler/icons-react';
 import { format } from 'date-fns';
 import type { TaskStatus } from '../data/tasks';
 
@@ -17,6 +17,7 @@ interface TaskCardProps {
       name: string | null;
       email: string;
     } | null;
+    fileCount?: number;
   };
   onClick?: () => void;
   onStatusChange?: (status: TaskStatus) => void;
@@ -49,6 +50,7 @@ export function TaskCard({ task, onClick, onStatusChange }: TaskCardProps) {
     <Card
       className="p-4 cursor-pointer hover:shadow-md transition-shadow"
       onClick={onClick}
+      data-testid="task-card"
     >
       <div className="space-y-3">
         <div className="flex items-start justify-between gap-2">
@@ -76,6 +78,13 @@ export function TaskCard({ task, onClick, onStatusChange }: TaskCardProps) {
             <div className={`flex items-center gap-1 ${isOverdue ? 'text-red-600 dark:text-red-400' : ''}`}>
               <IconCalendar className="h-3 w-3" />
               <span>{format(new Date(task.dueDate), 'MMM d')}</span>
+            </div>
+          )}
+          
+          {task.fileCount && task.fileCount > 0 && (
+            <div className="flex items-center gap-1">
+              <IconPaperclip className="h-3 w-3" data-testid="file-count-icon" />
+              <span data-testid="file-count">{task.fileCount}</span>
             </div>
           )}
         </div>

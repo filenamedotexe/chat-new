@@ -37,6 +37,7 @@ export function TaskForm({ projectId, onSuccess, onCancel, existingTask }: TaskF
     title: existingTask?.title || '',
     description: existingTask?.description || '',
     assignedToId: existingTask?.assignedToId || '',
+    status: existingTask?.status || 'not_started',
     dueDate: existingTask?.dueDate 
       ? new Date(existingTask.dueDate).toISOString().split('T')[0] 
       : '',
@@ -73,8 +74,20 @@ export function TaskForm({ projectId, onSuccess, onCancel, existingTask }: TaskF
       const method = existingTask ? 'PATCH' : 'POST';
       
       const body = existingTask 
-        ? formData 
-        : { ...formData, projectId };
+        ? {
+            title: formData.title,
+            description: formData.description || null,
+            assignedToId: formData.assignedToId || null,
+            status: formData.status,
+            dueDate: formData.dueDate || null,
+          }
+        : { 
+            title: formData.title,
+            description: formData.description || null,
+            assignedToId: formData.assignedToId || null,
+            dueDate: formData.dueDate || null,
+            projectId 
+          };
 
       const response = await fetch(url, {
         method,
@@ -104,7 +117,7 @@ export function TaskForm({ projectId, onSuccess, onCancel, existingTask }: TaskF
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value === '' ? null : value,
+      [name]: value,
     }));
   };
 
@@ -179,6 +192,38 @@ export function TaskForm({ projectId, onSuccess, onCancel, existingTask }: TaskF
             onChange={handleChange}
             min={new Date().toISOString().split('T')[0]}
           />
+        </div>
+      </div>
+
+      {/* Status field - only show for existing tasks */}
+      {existingTask && (
+        <div>
+          <label htmlFor="status" className="block text-sm font-medium mb-2">
+            Status
+          </label>
+          <select
+            id="status"
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-md bg-background"
+          >
+            <option value="not_started">Not Started</option>
+            <option value="in_progress">In Progress</option>
+            <option value="needs_review">Needs Review</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+      )}
+
+      {/* File Upload Section */}
+      <div className="space-y-4">
+        <div className="border-t pt-6">
+          <h3 className="text-lg font-medium mb-4">Attachments</h3>
+          {/* File upload component will be added here after task creation */}
+          <div className="p-4 border border-dashed rounded-lg text-center text-gray-500">
+            <p className="text-sm">Files can be attached after the task is created</p>
+          </div>
         </div>
       </div>
 

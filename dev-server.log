@@ -1,0 +1,269 @@
+
+> agency-client-platform@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.30
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 868ms
+ ✓ Compiled /middleware in 143ms (118 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 1034ms (564 modules)
+ GET / 200 in 1104ms
+ ✓ Compiled in 68ms (246 modules)
+ ○ Compiling /register ...
+ ✓ Compiled /register in 1101ms (1871 modules)
+ GET /register 200 in 1210ms
+ ✓ Compiled /api/auth/[...nextauth] in 355ms (1345 modules)
+ GET /api/auth/session 200 in 603ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ ✓ Compiled /_not-found in 169ms (2236 modules)
+ GET /api/auth/session 404 in 221ms
+ GET /api/auth/session 404 in 10ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, lstat '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/vendor-chunks/@swc.js'
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/@swc' in /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server for build dependencies doesn't lead to expected result '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/vendor-chunks/@swc.js', but to 'Error: Can't resolve './vendor-chunks/@swc' in '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/@swc (expected /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/vendor-chunks/@swc.js)
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/_not-found/page.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/_not-found/page.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-app-loader.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-app-loader.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/swc/index.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/swc/index.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-barrel-loader.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-barrel-loader.js
+<w>  at resolve commonjs /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-barrel-loader.js
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/next-auth' in /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server for build dependencies doesn't lead to expected result '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/vendor-chunks/next-auth.js', but to 'Error: Can't resolve './vendor-chunks/next-auth' in '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/next-auth (expected /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/vendor-chunks/next-auth.js)
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/_not-found/page.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/_not-found/page.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-app-loader.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-app-loader.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/swc/index.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/swc/index.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-barrel-loader.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-barrel-loader.js
+<w>  at resolve commonjs /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-barrel-loader.js
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/@opentelemetry' in /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server for build dependencies doesn't lead to expected result '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/vendor-chunks/@opentelemetry.js', but to 'Error: Can't resolve './vendor-chunks/@opentelemetry' in '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/@opentelemetry (expected /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/vendor-chunks/@opentelemetry.js)
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/_not-found/page.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/_not-found/page.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-app-loader.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-app-loader.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/swc/index.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/swc/index.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-barrel-loader.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-barrel-loader.js
+<w>  at resolve commonjs /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-barrel-loader.js
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving './vendor-chunks/@auth' in /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server for build dependencies doesn't lead to expected result '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/vendor-chunks/@auth.js', but to 'Error: Can't resolve './vendor-chunks/@auth' in '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ./vendor-chunks/@auth (expected /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/vendor-chunks/@auth.js)
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/_not-found/page.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/_not-found/page.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-app-loader.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-app-loader.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/swc/index.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/swc/index.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-barrel-loader.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-barrel-loader.js
+<w>  at resolve commonjs /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-barrel-loader.js
+ ✓ Compiled in 334ms (904 modules)
+ ✓ Compiled in 57ms (904 modules)
+ ✓ Compiled in 57ms (904 modules)
+ ✓ Compiled in 51ms (904 modules)
+ ✓ Compiled in 70ms (904 modules)
+ ✓ Compiled in 73ms (904 modules)
+ ✓ Compiled in 58ms (904 modules)
+ ✓ Compiled in 49ms (904 modules)
+ ✓ Compiled in 58ms (904 modules)
+ ✓ Compiled in 50ms (904 modules)
+ ✓ Compiled in 63ms (904 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, lstat '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/_not-found'
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving '../../../../.next/server/app/_not-found/page' in /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server for build dependencies doesn't lead to expected result '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/_not-found/page.js', but to 'Error: Can't resolve '../../../../.next/server/app/_not-found/page' in '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ../../../../.next/server/app/_not-found/page (expected /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/_not-found/page.js)
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/handle-externals.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/handle-externals.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at resolve commonjs /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+ ✓ Compiled in 265ms (904 modules)
+ ✓ Compiled in 70ms (904 modules)
+ ✓ Compiled in 60ms (904 modules)
+ ⚠ Failed to reload dynamic routes: Error: You cannot use different slug names for the same dynamic path ('id' !== 'userId').
+    at handleSlug (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:94:31)
+    at UrlNode._insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:131:17)
+    at UrlNode._insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:142:40)
+    at UrlNode.insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:13:14)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:165:46
+    at Array.forEach (<anonymous>)
+    at getSortedRoutes (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:165:21)
+    at Watchpack.<anonymous> (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js:558:65)
+Error: You cannot use different slug names for the same dynamic path ('userId' !== 'id').
+    at handleSlug (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:94:31)
+    at UrlNode._insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:131:17)
+    at UrlNode._insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:142:40)
+    at UrlNode.insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:13:14)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:165:46
+    at Array.forEach (<anonymous>)
+    at getSortedRoutes (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:165:21)
+    at DevRouteMatcherManager.reload (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:112:55)
+    at async DevRouteMatcherManager.reload (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:112:9)
+    at async Object.propagateServerField (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/render-server.js:75:13)
+    at async propagateServerField (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js:134:5)
+    at async Watchpack.<anonymous> (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js:627:17)
+ ⨯ unhandledRejection: Error: You cannot use different slug names for the same dynamic path ('userId' !== 'id').
+    at handleSlug (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:94:31)
+    at UrlNode._insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:131:17)
+    at UrlNode._insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:142:40)
+    at UrlNode.insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:13:14)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:165:46
+    at Array.forEach (<anonymous>)
+    at getSortedRoutes (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:165:21)
+    at DevRouteMatcherManager.reload (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:112:55)
+    at async DevRouteMatcherManager.reload (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:112:9)
+    at async Object.propagateServerField (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/render-server.js:75:13)
+    at async propagateServerField (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js:134:5)
+    at async Watchpack.<anonymous> (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js:627:17)
+ ⨯ unhandledRejection: Error: You cannot use different slug names for the same dynamic path ('userId' !== 'id').
+    at handleSlug (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:94:31)
+    at UrlNode._insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:131:17)
+    at UrlNode._insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:142:40)
+    at UrlNode.insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:13:14)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:165:46
+    at Array.forEach (<anonymous>)
+    at getSortedRoutes (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:165:21)
+    at DevRouteMatcherManager.reload (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:112:55)
+    at async DevRouteMatcherManager.reload (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:112:9)
+    at async Object.propagateServerField (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/render-server.js:75:13)
+    at async propagateServerField (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js:134:5)
+    at async Watchpack.<anonymous> (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js:627:17)
+ ✓ Compiled in 59ms (904 modules)
+ ⚠ Failed to reload dynamic routes: Error: You cannot use different slug names for the same dynamic path ('id' !== 'userId').
+    at handleSlug (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:94:31)
+    at UrlNode._insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:131:17)
+    at UrlNode._insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:142:40)
+    at UrlNode.insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:13:14)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:165:46
+    at Array.forEach (<anonymous>)
+    at getSortedRoutes (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:165:21)
+    at Watchpack.<anonymous> (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js:558:65)
+ ✓ Compiled in 73ms (904 modules)
+ ⚠ Failed to reload dynamic routes: Error: You cannot use different slug names for the same dynamic path ('id' !== 'userId').
+    at handleSlug (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:94:31)
+    at UrlNode._insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:131:17)
+    at UrlNode._insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:142:40)
+    at UrlNode.insert (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:13:14)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:165:46
+    at Array.forEach (<anonymous>)
+    at getSortedRoutes (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/shared/lib/router/utils/sorted-routes.js:165:21)
+    at Watchpack.<anonymous> (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js:558:65)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, lstat '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/_not-found'
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving '../../../../.next/server/app/_not-found/page' in /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server for build dependencies doesn't lead to expected result '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/_not-found/page.js', but to 'Error: Can't resolve '../../../../.next/server/app/_not-found/page' in '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ../../../../.next/server/app/_not-found/page (expected /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/_not-found/page.js)
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-app-loader.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-app-loader.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/bundle5.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/webpack/webpack.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/plugins/define-env-plugin.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/swc/index.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/swc/index.js
+<w>  at file dependencies /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-barrel-loader.js
+<w>  at file /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-barrel-loader.js
+<w>  at resolve commonjs /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/webpack/loaders/next-barrel-loader.js
+ ✓ Compiled / in 93ms (981 modules)
+ GET / 200 in 165ms
+ ✓ Compiled /dashboard in 63ms (1345 modules)
+ ✓ Compiled in 500ms (978 modules)
+ GET /api/auth/session 200 in 837ms
+ GET /api/auth/session 200 in 12ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /dashboard 200 in 129ms
+ ✓ Compiled /_not-found in 207ms (2436 modules)
+ GET /api/auth/session 200 in 39ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+[?25h

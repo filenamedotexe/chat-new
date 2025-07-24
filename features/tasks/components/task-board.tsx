@@ -156,6 +156,7 @@ export function TaskBoard({
                       >
                         <TaskCard
                           task={task}
+                          onClick={() => window.location.href = `/tasks/${task.id}`}
                           onStatusChange={onTaskUpdate ? (status) => onTaskUpdate(task.id, status) : undefined}
                         />
                       </motion.div>

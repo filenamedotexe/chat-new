@@ -79,7 +79,7 @@ test.describe('Error Detection', () => {
     
     // Check no hydration errors
     const errors = await page.evaluate(() => (window as any).getErrors());
-    const hydrationErrors = errors.filter(e => 
+    const hydrationErrors = errors.filter((e: any) => 
       e.includes('Hydration') || 
       e.includes('useTheme') || 
       e.includes('ThemeProvider')

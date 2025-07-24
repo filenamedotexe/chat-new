@@ -35,7 +35,7 @@ export async function PATCH(
     }
 
     // Validate status transition
-    const currentStatus = task.task.status;
+    const currentStatus = task.task.status as TaskStatus;
     const allowedTransitions = TASK_STATUS_TRANSITIONS[currentStatus];
     
     if (!allowedTransitions.includes(status as TaskStatus)) {

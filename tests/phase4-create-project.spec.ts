@@ -30,7 +30,7 @@ test('Create project flow', async ({ page }) => {
   // Select organization
   await page.waitForTimeout(1000); // Give time for options to load
   const orgOptions = await page.$$eval('select[name="organizationId"] option', options => 
-    options.map(opt => ({ value: opt.value, text: opt.textContent }))
+    options.map(opt => ({ value: (opt as HTMLOptionElement).value, text: opt.textContent }))
   );
   console.log('Available organizations:', orgOptions);
   

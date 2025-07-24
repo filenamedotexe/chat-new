@@ -1,6 +1,7 @@
 import { db } from '@chat/database';
-import { tasks, projects, users } from '@chat/database';
-import { eq, and, desc, or, lt, not, inArray } from 'drizzle-orm';
+import { tasks, projects, users, files } from '@chat/database';
+import { eq, and, desc, or, lt, not, inArray, count, sql } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
 import type { UserRole } from '@chat/shared-types';
 
 export type TaskStatus = 'not_started' | 'in_progress' | 'needs_review' | 'done';
@@ -75,38 +76,70 @@ export async function getTasksByProject(projectId: string, userId: string, userR
     }
   }
   
-  // Get tasks with assignee info
+  // Get tasks with assignee info and file counts
+  const fileCountSubquery = db
+    .select({ 
+      taskId: files.taskId,
+      fileCount: count(files.id).as('fileCount')
+    })
+    .from(files)
+    .groupBy(files.taskId)
+    .as('fileCounts');
+
+  const assigneeUser = alias(users, 'assigneeUser');
+  const createdByUser = alias(users, 'createdByUser');
+
   return await db
     .select({
       task: tasks,
       assignee: {
-        id: users.id,
-        name: users.name,
-        email: users.email,
+        id: assigneeUser.id,
+        name: assigneeUser.name,
+        email: assigneeUser.email,
       },
       createdBy: {
-        id: users.id,
-        name: users.name,
-        email: users.email,
+        id: createdByUser.id,
+        name: createdByUser.name,
+        email: createdByUser.email,
       },
+      fileCount: sql<number>`COALESCE(${fileCountSubquery.fileCount}, 0)`,
     })
     .from(tasks)
-    .leftJoin(users, eq(tasks.assignedToId, users.id))
+    .leftJoin(assigneeUser, eq(tasks.assignedToId, assigneeUser.id))
+    .leftJoin(createdByUser, eq(tasks.createdById, createdByUser.id))
+    .leftJoin(fileCountSubquery, eq(tasks.id, fileCountSubquery.taskId))
     .where(eq(tasks.projectId, projectId))
     .orderBy(desc(tasks.createdAt));
 }
 
 // Get a single task by ID with access check
 export async function getTaskById(taskId: string, userId: string, userRole: UserRole) {
+  const fileCountSubquery = db
+    .select({ 
+      taskId: files.taskId,
+      fileCount: count(files.id).as('fileCount')
+    })
+    .from(files)
+    .where(eq(files.taskId, taskId))
+    .groupBy(files.taskId)
+    .as('fileCounts');
+
+  const assigneeUser = alias(users, 'assigneeUser');
+  const createdByUser = alias(users, 'createdByUser');
+  
   const [result] = await db
     .select({
       task: tasks,
       project: projects,
-      assignee: users,
+      assignee: assigneeUser,
+      createdBy: createdByUser,
+      fileCount: sql<number>`COALESCE(${fileCountSubquery.fileCount}, 0)`,
     })
     .from(tasks)
     .leftJoin(projects, eq(tasks.projectId, projects.id))
-    .leftJoin(users, eq(tasks.assignedToId, users.id))
+    .leftJoin(assigneeUser, eq(tasks.assignedToId, assigneeUser.id))
+    .leftJoin(createdByUser, eq(tasks.createdById, createdByUser.id))
+    .leftJoin(fileCountSubquery, eq(tasks.id, fileCountSubquery.taskId))
     .where(eq(tasks.id, taskId))
     .limit(1);
     
