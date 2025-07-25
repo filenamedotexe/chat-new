@@ -4,11 +4,12 @@ import React from 'react';
 import { motion, HTMLMotionProps } from 'framer-motion';
 import { clsx } from 'clsx';
 
-export interface ButtonProps extends HTMLMotionProps<'button'> {
+export interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
   variant?: 'primary' | 'secondary' | 'destructive' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   fullWidth?: boolean;
   loading?: boolean;
+  children?: React.ReactNode;
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

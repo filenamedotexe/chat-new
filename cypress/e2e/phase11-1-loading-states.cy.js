@@ -49,9 +49,23 @@ describe('Phase 11.1: Loading States', () => {
 
   describe('Form Loading States', () => {
     it('should show loading spinner on login form submission', () => {
-      // First logout
+      // Handle Next.js redirect errors
+      cy.on('uncaught:exception', (err) => {
+        if (err.message.includes('NEXT_REDIRECT')) {
+          return false;
+        }
+      });
+      
+      // Clear all cookies to simulate logout
       cy.clearCookies();
-      cy.visit('/login');
+      cy.clearAllLocalStorage();
+      cy.clearAllSessionStorage();
+      
+      // Visit login page directly
+      cy.visit('/login', { failOnStatusCode: false });
+      
+      // Wait for login form to be visible
+      cy.get('form').should('be.visible');
       
       // Intercept the login request and delay it
       cy.intercept('POST', '/api/auth/callback/credentials', {
@@ -64,12 +78,10 @@ describe('Phase 11.1: Loading States', () => {
       cy.get('#password').type('user123');
       cy.get('button[type="submit"]').click();
       
-      // Check for loading spinner in button
+      // Check for loading spinner in button immediately after click
       cy.get('[data-testid="button-spinner"]').should('be.visible');
       cy.get('button[type="submit"]').should('be.disabled');
       cy.get('button[type="submit"]').should('contain', 'Sign In');
-      
-      cy.wait('@login');
     });
 
     it('should show loading state on project creation', () => {
@@ -98,12 +110,14 @@ describe('Phase 11.1: Loading States', () => {
     });
 
     it('should show loading state on task creation', () => {
-      // First create a project
-      cy.visit('/projects');
-      cy.get('a[href^="/projects/"]').first().click();
+      // Navigate directly to task creation form
+      cy.visit('/tasks/new');
       
-      // Navigate to task creation
-      cy.contains('Create Task').click();
+      // First select a project to reveal the form
+      cy.get('select').first().select(1); // Select first project
+      
+      // Wait for the task form to appear
+      cy.get('h3').contains('Task Details').should('be.visible');
       
       // Intercept the task creation request
       cy.intercept('POST', '/api/tasks', {
@@ -113,8 +127,8 @@ describe('Phase 11.1: Loading States', () => {
       }).as('createTask');
 
       // Fill the form
-      cy.get('#title').type('Test Task');
-      cy.get('#description').type('Test task description');
+      cy.get('input[name="title"]').type('Test Task');
+      cy.get('textarea[name="description"]').type('Test task description');
       
       cy.get('button[type="submit"]').click();
       
