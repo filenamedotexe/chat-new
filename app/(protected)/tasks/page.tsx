@@ -23,7 +23,7 @@ export default async function TasksPage() {
   }));
 
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="mx-auto max-w-7xl py-8 px-4">
       <div className="mb-8">
         <h1 className="text-3xl font-bold flex items-center gap-3">
           <IconClipboardList className="h-8 w-8" />

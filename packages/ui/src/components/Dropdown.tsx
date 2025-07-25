@@ -63,7 +63,7 @@ export function DropdownItem({
   return (
     <button
       className={clsx(
-        'relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors',
+        'relative flex w-full cursor-pointer select-none items-center rounded-sm px-3 py-3 text-sm outline-none transition-colors min-h-[44px]',
         'hover:bg-accent hover:text-accent-foreground',
         'focus:bg-accent focus:text-accent-foreground',
         destructive && 'text-destructive hover:text-destructive',

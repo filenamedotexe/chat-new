@@ -1,7 +1,8 @@
 import { auth } from '@/lib/auth/auth.config';
 import { redirect } from 'next/navigation';
-import { Main, PageContainer } from '@chat/ui';
+import { Main, PageContainer, Card } from '@chat/ui';
 import { TimelineFull } from '@/features/timeline/components/timeline';
+import { ActivityTable } from '@/features/timeline/components/activity-table';
 import { getActivityLogs } from '@/features/timeline/data/activity';
 import Link from 'next/link';
 import { IconArrowLeft } from '@tabler/icons-react';
@@ -41,7 +42,16 @@ export default async function ActivityPage() {
           </p>
         </div>
         
-        <TimelineFull activities={activities} />
+        {/* Show table on larger screens, timeline on mobile */}
+        <div className="hidden md:block">
+          <Card>
+            <ActivityTable activities={activities} />
+          </Card>
+        </div>
+        
+        <div className="md:hidden">
+          <TimelineFull activities={activities} />
+        </div>
       </PageContainer>
     </Main>
   );

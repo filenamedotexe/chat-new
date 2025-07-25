@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Card, Button, Skeleton } from '@chat/ui';
+import { Card, Button, Skeleton, EmptyState } from '@chat/ui';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
@@ -11,7 +11,8 @@ import {
   IconMessage, 
   IconProgress,
   IconCalendar,
-  IconBuilding
+  IconBuilding,
+  IconFolderPlus
 } from '@tabler/icons-react';
 import type { Project, Organization } from '@chat/shared-types';
 import type { ProjectProgress } from '@/features/progress/lib/calculate-progress';
@@ -111,13 +112,22 @@ export function ProjectListEnhanced({ userId, userRole }: ProjectListEnhancedPro
 
   if (projects.length === 0) {
     return (
-      <Card className="p-12 text-center">
-        <h3 className="text-lg font-semibold mb-2">No projects yet</h3>
-        <p className="text-muted-foreground">
-          {userRole === 'admin' || userRole === 'team_member' 
-            ? 'Create your first project to get started.'
-            : 'No projects have been assigned to your organization yet.'}
-        </p>
+      <Card>
+        <EmptyState
+          icon={<IconFolderPlus className="h-12 w-12" />}
+          title="No projects yet"
+          description={
+            userRole === 'admin' || userRole === 'team_member' 
+              ? 'Create your first project to get started.'
+              : 'No projects have been assigned to your organization yet.'
+          }
+          action={
+            (userRole === 'admin' || userRole === 'team_member') ? {
+              label: 'Create Project',
+              onClick: () => router.push('/projects/new')
+            } : undefined
+          }
+        />
       </Card>
     );
   }

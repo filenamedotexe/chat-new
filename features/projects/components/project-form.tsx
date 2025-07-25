@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Input, Textarea, Card } from '@chat/ui';
+import { Button, Input, Textarea, Card, Select } from '@chat/ui';
 import type { Organization } from '@chat/shared-types';
 
 interface ProjectFormProps {
@@ -100,13 +100,12 @@ export function ProjectForm({ organizations, userRole }: ProjectFormProps) {
         <label htmlFor="organizationId" className="block text-sm font-medium mb-2">
           Client Organization *
         </label>
-        <select
+        <Select
           id="organizationId"
           name="organizationId"
           value={formData.organizationId}
           onChange={handleChange}
           required
-          className="w-full px-3 py-2 border rounded-md bg-background"
         >
           <option value="">Select an organization</option>
           {organizations.map(org => (
@@ -114,7 +113,7 @@ export function ProjectForm({ organizations, userRole }: ProjectFormProps) {
               {org.name}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
 
       <div>

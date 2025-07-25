@@ -25,7 +25,7 @@ export default async function TasksPage({ params }: TasksPageProps) {
   
   if (!project) {
     return (
-      <div className="container mx-auto py-8 px-4">
+      <div className="mx-auto max-w-7xl py-8 px-4">
         <h1 className="text-2xl font-bold mb-4">Project not found</h1>
         <Link href="/projects">
           <Button variant="outline">
@@ -56,7 +56,7 @@ export default async function TasksPage({ params }: TasksPageProps) {
   }));
 
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="mx-auto max-w-7xl py-8 px-4">
       <div className="mb-6">
         <Link href="/projects">
           <Button variant="ghost" size="sm" className="mb-4">

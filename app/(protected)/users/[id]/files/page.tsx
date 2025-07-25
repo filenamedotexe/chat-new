@@ -21,7 +21,7 @@ export default async function UserFilesPage({ params }: UserFilesPageProps) {
   // Permission check: users can only see their own files unless they're admin
   if (session.user.role !== 'admin' && session.user.id !== params.id) {
     return (
-      <div className="container mx-auto py-8 px-4">
+      <div className="mx-auto max-w-7xl py-8 px-4">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Access Denied</h1>
           <p className="text-gray-600 mb-4">
@@ -42,7 +42,7 @@ export default async function UserFilesPage({ params }: UserFilesPageProps) {
   const userName = isOwnFiles ? 'Your' : session.user.name || 'User';
 
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="mx-auto max-w-7xl py-8 px-4">
       {/* Header */}
       <div className="mb-6">
         <Link href="/dashboard">

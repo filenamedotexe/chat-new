@@ -29,7 +29,7 @@ export default async function TaskChatPage({ params }: TaskChatPageProps) {
   const { task } = taskData;
 
   return (
-    <div className="container mx-auto py-8 px-4 h-[calc(100vh-theme(spacing.16))]">
+    <div className="mx-auto max-w-7xl py-8 px-4 h-[calc(100vh-theme(spacing.16))]">
       <div className="flex flex-col h-full">
         {/* Header */}
         <div className="mb-6">

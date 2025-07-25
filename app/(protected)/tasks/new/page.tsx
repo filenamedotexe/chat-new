@@ -20,7 +20,7 @@ export default async function NewTaskPage() {
   const projects = await getProjects(session.user.id, session.user.role as UserRole);
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-2xl">
+    <div className="mx-auto max-w-7xl py-8 px-4 max-w-2xl">
       <h1 className="text-3xl font-bold mb-8">Create New Task</h1>
       
       <TaskFormWithGate 

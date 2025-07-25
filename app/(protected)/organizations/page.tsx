@@ -21,7 +21,7 @@ export default async function OrganizationsPage() {
   const organizations = await getOrganizations(session.user.id, session.user.role as UserRole);
 
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="mx-auto max-w-7xl py-8 px-4">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Organizations</h1>
         <Link href="/organizations/new">

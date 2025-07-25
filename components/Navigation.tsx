@@ -1,13 +1,26 @@
 'use client';
-
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { signOut } from 'next-auth/react';
-import { IconLogout, IconDashboard, IconShieldLock, IconPalette, IconBriefcase, IconFolders } from '@tabler/icons-react';
-import { Avatar, Dropdown, DropdownItem, DropdownSeparator, ThemeToggle } from '@chat/ui';
-import { useTheme } from '@/lib/theme/ThemeProvider';
-import { useFeature } from '@/lib/features/hooks/use-feature';
-import { FEATURES } from '@/lib/features/constants';
+import { usePathname, useRouter } from 'next/navigation';
+import { 
+  IconMessage, 
+  IconDashboard, 
+  IconFolders, 
+  IconBriefcase, 
+  IconShieldLock,
+  IconUser,
+  IconSettings,
+  IconLogout,
+  IconMenu2,
+  IconX,
+  IconChevronDown
+} from '@tabler/icons-react';
+import { 
+  Dropdown,
+  DropdownItem,
+  DropdownSeparator,
+  MobileMenu
+} from '@chat/ui';
+import { useMobileMenuContext } from '@/lib/contexts/mobile-menu-context';
 import type { UserRole } from '@chat/shared-types';
 
 interface NavigationProps {
@@ -19,53 +32,180 @@ interface NavigationProps {
   };
 }
 
-export function Navigation({ user }: NavigationProps) {
+function NavigationHeader({ user }: NavigationProps) {
+  const pathname = usePathname();
   const router = useRouter();
-  const { theme, setTheme, themes } = useTheme();
-  const darkModeEnabled = useFeature(FEATURES.DARK_MODE);
+  const mobileMenu = useMobileMenuContext();
   
   const handleSignOut = async () => {
-    await signOut({ redirect: false });
-    router.push('/login');
+    try {
+      const response = await fetch('/api/auth/signout', {
+        method: 'POST'
+      });
+      
+      if (response.ok) {
+        router.push('/login');
+      }
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
-
-  const toggleTheme = () => {
-    const themeNames = Object.keys(themes) as Array<keyof typeof themes>;
-    const currentIndex = themeNames.indexOf(theme);
-    const nextIndex = (currentIndex + 1) % themeNames.length;
-    setTheme(themeNames[nextIndex]);
-  };
-
+  
   return (
-    <nav className="flex items-center justify-between w-full">
-      <div className="flex items-center gap-6">
-        <Link href="/dashboard" className="text-xl font-bold">
-          {process.env.NEXT_PUBLIC_APP_NAME || 'Chat App'}
+    <nav className="w-full flex items-center justify-between">
+      {/* Logo/Brand */}
+      <Link href="/dashboard" className="flex items-center gap-2 font-semibold text-lg">
+        <IconMessage className="h-6 w-6" />
+        <span className="hidden sm:inline">Agency Platform</span>
+      </Link>
+      
+      {/* Mobile menu button */}
+      <button
+        onClick={mobileMenu.toggle}
+        className="p-3 rounded-md hover:bg-accent md:hidden min-w-[44px] min-h-[44px]"
+        aria-label="Toggle menu"
+        data-mobile-menu-trigger
+      >
+        <IconMenu2 className="h-5 w-5" />
+      </button>
+      
+      {/* Desktop Navigation */}
+      <nav className="hidden md:flex items-center gap-6">
+        <Link
+          href="/dashboard"
+          className={`text-sm font-medium transition-colors hover:text-primary ${
+            pathname === '/dashboard' ? 'text-foreground' : 'text-muted-foreground'
+          }`}
+        >
+          Dashboard
         </Link>
         
-        <div className="flex items-center gap-4">
+        <Link
+          href="/projects"
+          className={`text-sm font-medium transition-colors hover:text-primary ${
+            pathname.startsWith('/projects') ? 'text-foreground' : 'text-muted-foreground'
+          }`}
+        >
+          Projects
+        </Link>
+        
+        {(user.role === 'admin' || user.role === 'team_member') && (
+          <Link
+            href="/organizations"
+            className={`text-sm font-medium transition-colors hover:text-primary ${
+              pathname.startsWith('/organizations') ? 'text-foreground' : 'text-muted-foreground'
+            }`}
+          >
+            Organizations
+          </Link>
+        )}
+        
+        {user.role === 'admin' && (
+          <Link
+            href="/admin"
+            className={`text-sm font-medium transition-colors hover:text-primary ${
+              pathname.startsWith('/admin') ? 'text-foreground' : 'text-muted-foreground'
+            }`}
+          >
+            Admin
+          </Link>
+        )}
+        
+        <Dropdown
+          align="right"
+          trigger={
+            <button className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+              <IconUser className="h-4 w-4" />
+              {user.name || user.email}
+              <IconChevronDown className="h-3 w-3" />
+            </button>
+          }
+        >
+          <div className="p-2">
+            <div className="flex flex-col space-y-1 px-2 py-1.5">
+              <p className="text-sm font-medium leading-none">{user.name || 'User'}</p>
+              <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+            </div>
+          </div>
+          <DropdownSeparator />
+          <DropdownItem onClick={() => router.push('/settings')}>
+            <IconSettings className="mr-2 h-4 w-4" />
+            Settings
+          </DropdownItem>
+          <DropdownSeparator />
+          <DropdownItem
+            onClick={handleSignOut}
+            destructive
+          >
+            <IconLogout className="mr-2 h-4 w-4" />
+            Sign Out
+          </DropdownItem>
+        </Dropdown>
+      </nav>
+    </nav>
+  );
+}
+
+export function Navigation({ user }: NavigationProps) {
+  const mobileMenu = useMobileMenuContext();
+  const router = useRouter();
+  
+  const handleSignOut = async () => {
+    try {
+      const response = await fetch('/api/auth/signout', {
+        method: 'POST'
+      });
+      
+      if (response.ok) {
+        router.push('/login');
+      }
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+  
+  return (
+    <MobileMenu isOpen={mobileMenu.isOpen} onClose={mobileMenu.close}>
+      <div className="flex flex-col h-full">
+        {/* Close button */}
+        <div className="flex items-center justify-between mb-6">
+          <span className="text-lg font-semibold">Menu</span>
+          <button
+            onClick={mobileMenu.close}
+            className="p-3 rounded-md hover:bg-accent min-w-[44px] min-h-[44px]"
+            aria-label="Close menu"
+          >
+            <IconX className="h-5 w-5" />
+          </button>
+        </div>
+        
+        {/* Mobile navigation links */}
+        <nav className="flex flex-col gap-2">
           <Link
             href="/dashboard"
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            onClick={mobileMenu.close}
+            className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent transition-colors"
           >
-            <IconDashboard className="h-4 w-4" />
+            <IconDashboard className="h-5 w-5" />
             Dashboard
           </Link>
           
           <Link
             href="/projects"
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            onClick={mobileMenu.close}
+            className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent transition-colors"
           >
-            <IconFolders className="h-4 w-4" />
+            <IconFolders className="h-5 w-5" />
             Projects
           </Link>
           
           {(user.role === 'admin' || user.role === 'team_member') && (
             <Link
               href="/organizations"
-              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              onClick={mobileMenu.close}
+              className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent transition-colors"
             >
-              <IconBriefcase className="h-4 w-4" />
+              <IconBriefcase className="h-5 w-5" />
               Organizations
             </Link>
           )}
@@ -73,64 +213,32 @@ export function Navigation({ user }: NavigationProps) {
           {user.role === 'admin' && (
             <Link
               href="/admin"
-              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              onClick={mobileMenu.close}
+              className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-accent transition-colors"
             >
-              <IconShieldLock className="h-4 w-4" />
+              <IconShieldLock className="h-5 w-5" />
               Admin
             </Link>
           )}
-        </div>
-      </div>
-
-      <div className="flex items-center gap-4">
-        {darkModeEnabled && (
-          <>
-            <Dropdown
-              trigger={
-                <button className="flex items-center gap-2 p-1 rounded-md hover:bg-accent transition-colors">
-                  <IconPalette className="h-5 w-5" />
-                </button>
-              }
-              align="right"
-            >
-              <div className="p-2">
-                <p className="text-sm font-medium mb-2">Select Theme</p>
-                {Object.keys(themes).map((themeName) => (
-                  <DropdownItem
-                    key={themeName}
-                    onClick={() => setTheme(themeName as keyof typeof themes)}
-                    className={theme === themeName ? 'bg-accent' : ''}
-                  >
-                    {themeName.charAt(0).toUpperCase() + themeName.slice(1)}
-                  </DropdownItem>
-                ))}
-              </div>
-            </Dropdown>
-
-            <ThemeToggle theme={theme} onToggle={toggleTheme} data-testid="theme-toggle" />
-          </>
-        )}
-
-        <Dropdown
-          trigger={
-            <Avatar
-              fallback={user.name || user.email}
-              className="cursor-pointer"
-            />
-          }
-          align="right"
-        >
-          <div className="p-2">
+        </nav>
+        
+        {/* User info at bottom */}
+        <div className="mt-auto pt-6 border-t">
+          <div className="px-3 py-2">
             <p className="text-sm font-medium">{user.name || 'User'}</p>
             <p className="text-xs text-muted-foreground">{user.email}</p>
           </div>
-          <DropdownSeparator />
-          <DropdownItem onClick={handleSignOut} destructive>
-            <IconLogout className="h-4 w-4 mr-2" />
+          <button
+            onClick={handleSignOut}
+            className="flex items-center gap-3 w-full px-3 py-2 mt-2 rounded-md text-sm text-destructive hover:bg-destructive/10 transition-colors"
+          >
+            <IconLogout className="h-5 w-5" />
             Sign Out
-          </DropdownItem>
-        </Dropdown>
+          </button>
+        </div>
       </div>
-    </nav>
+    </MobileMenu>
   );
 }
+
+Navigation.Header = NavigationHeader;

@@ -1,7 +1,8 @@
 'use client';
 
-import { Layout, Header } from '@chat/ui';
+import { Layout, Header, ErrorBoundary } from '@chat/ui';
 import { Navigation } from './Navigation';
+import { MobileMenuProvider } from '@/lib/contexts/mobile-menu-context';
 import type { UserRole } from '@chat/shared-types';
 
 interface ProtectedLayoutClientProps {
@@ -16,11 +17,16 @@ interface ProtectedLayoutClientProps {
 
 export function ProtectedLayoutClient({ user, children }: ProtectedLayoutClientProps) {
   return (
-    <Layout>
-      <Header>
+    <MobileMenuProvider>
+      <Layout>
         <Navigation user={user} />
-      </Header>
-      {children}
-    </Layout>
+        <Header>
+          <Navigation.Header user={user} />
+        </Header>
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
+      </Layout>
+    </MobileMenuProvider>
   );
 }

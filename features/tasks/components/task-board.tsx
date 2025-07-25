@@ -102,6 +102,19 @@ export function TaskBoard({
 
   return (
     <>
+      {/* Add Task Button for mobile */}
+      {canCreateTasks && (
+        <div className="mb-4 flex justify-end">
+          <Button
+            onClick={() => handleAddTask('not_started')}
+            disabled={loading}
+          >
+            <IconPlus className="h-4 w-4 mr-2" />
+            Add Task
+          </Button>
+        </div>
+      )}
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {COLUMNS.map(column => {
           const columnTasks = tasksByStatus[column.status] || [];
@@ -180,6 +193,7 @@ export function TaskBoard({
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             onClick={() => setShowNewTaskForm(false)}
+            data-testid="task-form-modal"
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}

@@ -15,7 +15,7 @@ export default async function NewOrganizationPage() {
   }
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-2xl">
+    <div className="mx-auto max-w-7xl py-8 px-4 max-w-2xl">
       <h1 className="text-3xl font-bold mb-8">Create New Organization</h1>
       
       <OrganizationForm />

@@ -25,7 +25,7 @@ export default async function TaskPage({ params }: TaskPageProps) {
   
   if (!taskData) {
     return (
-      <div className="container mx-auto py-8 px-4">
+      <div className="mx-auto max-w-7xl py-8 px-4">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Task not found</h1>
           <p className="text-gray-600 mb-4">
@@ -51,7 +51,7 @@ export default async function TaskPage({ params }: TaskPageProps) {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="mx-auto max-w-7xl py-8 px-4">
       <TaskDetailWrapper
         task={task}
         canEdit={canEdit}

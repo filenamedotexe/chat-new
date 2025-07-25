@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Input, Textarea } from '@chat/ui';
+import { Button, Input, Textarea, Select } from '@chat/ui';
 
 interface Project {
   id: string;
@@ -110,19 +110,18 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
         <label htmlFor="status" className="block text-sm font-medium mb-2">
           Status
         </label>
-        <select
+        <Select
           id="status"
           name="status"
           value={formData.status}
           onChange={handleChange}
-          className="w-full px-3 py-2 border rounded-md bg-background"
         >
           <option value="planning">Planning</option>
           <option value="active">Active</option>
           <option value="on_hold">On Hold</option>
           <option value="completed">Completed</option>
           <option value="cancelled">Cancelled</option>
-        </select>
+        </Select>
       </div>
 
       <div className="grid grid-cols-2 gap-4">

@@ -15,7 +15,7 @@ export default async function ProjectsPage() {
   const canCreateProjects = session.user.role === 'admin' || session.user.role === 'team_member';
 
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="mx-auto max-w-7xl py-8 px-4">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold">Projects</h1>

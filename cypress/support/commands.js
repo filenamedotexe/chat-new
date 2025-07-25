@@ -40,3 +40,28 @@ Cypress.Commands.add('createTask', (column, title, description, dueDate) => {
   cy.contains('button', 'Create Task').click();
   cy.wait(1000); // Wait for task to be created
 });
+
+// Force mobile form element heights
+Cypress.Commands.add('forceMobileHeights', () => {
+  cy.window().then((win) => {
+    const style = win.document.createElement('style');
+    style.innerHTML = `
+      input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+      select,
+      textarea {
+        min-height: 44px !important;
+        height: 44px !important;
+        box-sizing: border-box !important;
+      }
+      button {
+        min-height: 44px !important;
+        height: auto !important;
+      }
+      .h-11 {
+        height: 44px !important;
+        min-height: 44px !important;
+      }
+    `;
+    win.document.head.appendChild(style);
+  });
+});

@@ -32,7 +32,7 @@ export default async function OrganizationPage({ params }: OrganizationPageProps
   
   if (!organization) {
     return (
-      <div className="container mx-auto py-8 px-4">
+      <div className="mx-auto max-w-7xl py-8 px-4">
         <h1 className="text-2xl font-bold mb-4">Organization not found</h1>
         <Link href="/organizations">
           <Button variant="outline">
@@ -59,7 +59,7 @@ export default async function OrganizationPage({ params }: OrganizationPageProps
     : [];
 
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="mx-auto max-w-7xl py-8 px-4">
       <div className="mb-6">
         <Link href="/organizations">
           <Button variant="ghost" size="sm" className="mb-4">
