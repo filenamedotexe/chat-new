@@ -9,6 +9,7 @@ export * from './schema/organizations';
 export * from './schema/tasks';
 export * from './schema/files';
 export * from './schema/communications';
+export * from './schema/activity';
 
 export { sql };
 
@@ -186,4 +187,86 @@ export async function isFeatureEnabled(name: string, userId?: string): Promise<b
   }
   
   return false;
+}
+
+export async function createFeature(data: {
+  name: string;
+  description?: string;
+  enabled?: boolean;
+  enabledFor?: string[];
+}): Promise<Feature> {
+  const result = await sql`
+    INSERT INTO features (name, description, enabled, enabled_for)
+    VALUES (${data.name}, ${data.description || null}, ${data.enabled || false}, ${data.enabledFor || []})
+    RETURNING id, name, description, enabled, enabled_for, created_at, updated_at
+  `;
+  
+  const feature = result[0];
+  return {
+    id: feature.id,
+    name: feature.name,
+    description: feature.description,
+    enabled: feature.enabled,
+    enabledFor: feature.enabled_for,
+    createdAt: new Date(feature.created_at),
+    updatedAt: new Date(feature.updated_at)
+  };
+}
+
+export async function updateFeature(
+  name: string,
+  data: {
+    description?: string;
+    enabled?: boolean;
+    enabledFor?: string[];
+  }
+): Promise<Feature | null> {
+  const result = await sql`
+    UPDATE features
+    SET 
+      description = COALESCE(${data.description}, description),
+      enabled = COALESCE(${data.enabled}, enabled),
+      enabled_for = COALESCE(${data.enabledFor}, enabled_for),
+      updated_at = CURRENT_TIMESTAMP
+    WHERE name = ${name}
+    RETURNING id, name, description, enabled, enabled_for, created_at, updated_at
+  `;
+  
+  if (result.length === 0) return null;
+  
+  const feature = result[0];
+  return {
+    id: feature.id,
+    name: feature.name,
+    description: feature.description,
+    enabled: feature.enabled,
+    enabledFor: feature.enabled_for,
+    createdAt: new Date(feature.created_at),
+    updatedAt: new Date(feature.updated_at)
+  };
+}
+
+export async function toggleFeature(name: string): Promise<Feature | null> {
+  const feature = await getFeature(name);
+  if (!feature) return null;
+  
+  return updateFeature(name, { enabled: !feature.enabled });
+}
+
+export async function getAllFeatures(): Promise<Feature[]> {
+  const result = await sql`
+    SELECT id, name, description, enabled, enabled_for, created_at, updated_at
+    FROM features
+    ORDER BY name
+  `;
+  
+  return result.map(feature => ({
+    id: feature.id,
+    name: feature.name,
+    description: feature.description,
+    enabled: feature.enabled,
+    enabledFor: feature.enabled_for,
+    createdAt: new Date(feature.created_at),
+    updatedAt: new Date(feature.updated_at)
+  }));
 }

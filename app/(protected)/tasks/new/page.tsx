@@ -1,0 +1,35 @@
+import { auth } from '@/lib/auth/auth.config';
+import { redirect } from 'next/navigation';
+import { getProjects } from '@/features/projects/data/projects';
+import { UserRole } from '@chat/shared-types';
+import { TaskFormWithGate } from '@/features/tasks/components/task-form-with-gate';
+
+export default async function NewTaskPage() {
+  const session = await auth();
+  
+  if (!session) {
+    redirect('/login');
+  }
+
+  // Only admins and team members can create tasks
+  if (session.user.role !== 'admin' && session.user.role !== 'team_member') {
+    redirect('/tasks');
+  }
+
+  // Get projects for the project selector
+  const projects = await getProjects(session.user.id, session.user.role as UserRole);
+
+  return (
+    <div className="container mx-auto py-8 px-4 max-w-2xl">
+      <h1 className="text-3xl font-bold mb-8">Create New Task</h1>
+      
+      <TaskFormWithGate 
+        projects={projects.map(p => ({
+          id: p.project.id,
+          name: p.project.name,
+          organizationName: p.organization?.name
+        }))}
+      />
+    </div>
+  );
+}

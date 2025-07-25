@@ -6,6 +6,8 @@ import { signOut } from 'next-auth/react';
 import { IconLogout, IconDashboard, IconShieldLock, IconPalette, IconBriefcase, IconFolders } from '@tabler/icons-react';
 import { Avatar, Dropdown, DropdownItem, DropdownSeparator, ThemeToggle } from '@chat/ui';
 import { useTheme } from '@/lib/theme/ThemeProvider';
+import { useFeature } from '@/lib/features/hooks/use-feature';
+import { FEATURES } from '@/lib/features/constants';
 import type { UserRole } from '@chat/shared-types';
 
 interface NavigationProps {
@@ -20,6 +22,7 @@ interface NavigationProps {
 export function Navigation({ user }: NavigationProps) {
   const router = useRouter();
   const { theme, setTheme, themes } = useTheme();
+  const darkModeEnabled = useFeature(FEATURES.DARK_MODE);
   
   const handleSignOut = async () => {
     await signOut({ redirect: false });
@@ -80,29 +83,33 @@ export function Navigation({ user }: NavigationProps) {
       </div>
 
       <div className="flex items-center gap-4">
-        <Dropdown
-          trigger={
-            <button className="flex items-center gap-2 p-1 rounded-md hover:bg-accent transition-colors">
-              <IconPalette className="h-5 w-5" />
-            </button>
-          }
-          align="right"
-        >
-          <div className="p-2">
-            <p className="text-sm font-medium mb-2">Select Theme</p>
-            {Object.keys(themes).map((themeName) => (
-              <DropdownItem
-                key={themeName}
-                onClick={() => setTheme(themeName as keyof typeof themes)}
-                className={theme === themeName ? 'bg-accent' : ''}
-              >
-                {themeName.charAt(0).toUpperCase() + themeName.slice(1)}
-              </DropdownItem>
-            ))}
-          </div>
-        </Dropdown>
+        {darkModeEnabled && (
+          <>
+            <Dropdown
+              trigger={
+                <button className="flex items-center gap-2 p-1 rounded-md hover:bg-accent transition-colors">
+                  <IconPalette className="h-5 w-5" />
+                </button>
+              }
+              align="right"
+            >
+              <div className="p-2">
+                <p className="text-sm font-medium mb-2">Select Theme</p>
+                {Object.keys(themes).map((themeName) => (
+                  <DropdownItem
+                    key={themeName}
+                    onClick={() => setTheme(themeName as keyof typeof themes)}
+                    className={theme === themeName ? 'bg-accent' : ''}
+                  >
+                    {themeName.charAt(0).toUpperCase() + themeName.slice(1)}
+                  </DropdownItem>
+                ))}
+              </div>
+            </Dropdown>
 
-        <ThemeToggle theme={theme} onToggle={toggleTheme} />
+            <ThemeToggle theme={theme} onToggle={toggleTheme} data-testid="theme-toggle" />
+          </>
+        )}
 
         <Dropdown
           trigger={

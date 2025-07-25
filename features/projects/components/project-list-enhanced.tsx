@@ -99,7 +99,7 @@ export function ProjectListEnhanced({ userId, userRole }: ProjectListEnhancedPro
         const progress = progressData?.progressPercentage ?? getProgressPercentage(completedTaskCount, taskCount);
         
         return (
-          <Card key={project.id} className="p-6 hover:shadow-lg transition-shadow h-full flex flex-col">
+          <Card key={project.id} className="p-6 hover:shadow-lg transition-shadow h-full flex flex-col" data-testid="project-card">
             {/* Header */}
             <div className="flex-1">
               <div className="flex items-start justify-between mb-3">

@@ -2,6 +2,7 @@ import { auth } from '@/lib/auth/auth.config';
 import { redirect } from 'next/navigation';
 import { Card } from '@chat/ui';
 import { IconUser, IconPalette, IconBell, IconShield, IconMail } from '@tabler/icons-react';
+import { BetaFeaturesSection } from './beta-features-section';
 
 export default async function SettingsPage() {
   const session = await auth();
@@ -91,6 +92,9 @@ export default async function SettingsPage() {
             </div>
           </div>
         </Card>
+
+        {/* Beta Features */}
+        <BetaFeaturesSection />
 
         {/* Email Preferences */}
         <Card className="p-6">

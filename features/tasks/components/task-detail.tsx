@@ -12,12 +12,18 @@ import {
   IconPaperclip,
   IconPlus,
   IconTrash,
-  IconMessage
+  IconMessage,
+  IconCheck,
+  IconMicrophone
 } from '@tabler/icons-react';
 import { format } from 'date-fns';
 import { FileUpload } from '@/features/files/components/file-upload';
 import { FileList } from '@/features/files/components/file-list';
 import { TaskCard } from './task-card';
+import { ActionGate, TooltipActionGate } from '@/features/requirements/components/action-gate';
+import { checkTaskCanBeCompleted } from '@/features/requirements/lib/requirements';
+import { useFeature } from '@/lib/features/hooks/use-feature';
+import { FEATURES } from '@/lib/features/constants';
 import type { TaskStatus } from '../data/tasks';
 
 interface TaskWithDetails {
@@ -85,6 +91,9 @@ export function TaskDetail({
 }: TaskDetailProps) {
   const [showFileUpload, setShowFileUpload] = useState(false);
   const [fileListKey, setFileListKey] = useState(0);
+  const chatEnabled = useFeature(FEATURES.CHAT);
+  const fileUploadEnabled = useFeature(FEATURES.FILE_UPLOAD);
+  const voiceChatEnabled = useFeature(FEATURES.VOICE_CHAT);
   
   const status = statusConfig[task.status];
   const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && task.status !== 'done';
@@ -124,13 +133,28 @@ export function TaskDetail({
         </div>
         
         <div className="flex gap-2">
-          <Button 
-            variant="outline"
-            onClick={() => window.location.href = `/tasks/${task.id}/chat`}
-          >
-            <IconMessage className="h-4 w-4 mr-2" />
-            Discussion
-          </Button>
+          {chatEnabled && (
+            <Button 
+              variant="outline"
+              onClick={() => window.location.href = `/tasks/${task.id}/chat`}
+            >
+              <IconMessage className="h-4 w-4 mr-2" />
+              Discussion
+            </Button>
+          )}
+          
+          {voiceChatEnabled && (
+            <Button 
+              variant="outline"
+              onClick={() => {
+                // Voice chat functionality would be implemented here
+                alert('Voice chat feature coming soon!');
+              }}
+            >
+              <IconMicrophone className="h-4 w-4 mr-2" />
+              Voice Chat
+            </Button>
+          )}
           {canEdit && (
             <>
               <Button 
@@ -185,7 +209,8 @@ export function TaskDetail({
           </Card>
 
           {/* Files Section */}
-          <Card className="p-6" data-testid="attachments-section">
+          {fileUploadEnabled && (
+            <Card className="p-6" data-testid="attachments-section">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold flex items-center gap-2">
                 <IconPaperclip className="h-5 w-5" />
@@ -242,7 +267,8 @@ export function TaskDetail({
                 onTaskUpdate?.();
               }}
             />
-          </Card>
+            </Card>
+          )}
         </div>
 
         {/* Sidebar */}
@@ -259,6 +285,17 @@ export function TaskDetail({
               {onStatusChange && canEdit && (
                 <div className="space-y-2 mt-3">
                   <p className="text-sm text-muted-foreground">Change status:</p>
+                  
+                  {/* Show action gate if task is in review and can't be completed */}
+                  {task.status === 'needs_review' && !checkTaskCanBeCompleted(task).passed && (
+                    <ActionGate 
+                      requirement={checkTaskCanBeCompleted(task)}
+                      className="mb-3"
+                    >
+                      {null}
+                    </ActionGate>
+                  )}
+                  
                   <div className="flex flex-wrap gap-2">
                     {task.status === 'not_started' && (
                       <Button
@@ -289,13 +326,16 @@ export function TaskDetail({
                     )}
                     {task.status === 'needs_review' && (
                       <>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => onStatusChange('done')}
-                        >
-                          Mark Done
-                        </Button>
+                        <TooltipActionGate requirement={checkTaskCanBeCompleted(task)}>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => onStatusChange('done')}
+                          >
+                            <IconCheck className="h-4 w-4 mr-1" />
+                            Mark Done
+                          </Button>
+                        </TooltipActionGate>
                         <Button
                           size="sm"
                           variant="outline"

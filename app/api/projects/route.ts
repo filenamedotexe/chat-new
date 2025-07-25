@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth/auth.config';
 import { createProject, getProjects } from '@/features/projects/data/projects';
 import { getOrganizations } from '@/features/organizations/data/organizations';
+import { createActivityLog } from '@/features/timeline/data/activity';
+import { ActivityActions, EntityTypes } from '@/packages/database/src/schema/activity';
 import type { UserRole } from '@chat/shared-types';
 
 export async function GET() {
@@ -64,6 +66,30 @@ export async function POST(request: NextRequest) {
       startDate: body.startDate ? new Date(body.startDate) : undefined,
       endDate: body.endDate ? new Date(body.endDate) : undefined,
     });
+
+    // Log the activity
+    try {
+      await createActivityLog({
+        userId: session.user.id,
+        userRole: session.user.role,
+        userName: session.user.name,
+        action: ActivityActions.PROJECT_CREATED,
+        entityType: EntityTypes.PROJECT,
+        entityId: project.id,
+        entityName: project.name,
+        projectId: project.id,
+        organizationId: body.organizationId,
+        newValues: {
+          name: project.name,
+          description: project.description,
+          organizationId: project.organizationId,
+          status: project.status,
+        },
+      });
+    } catch (logError) {
+      console.error('Failed to log activity:', logError);
+      // Don't fail the request if logging fails
+    }
 
     return NextResponse.json(project);
   } catch (error) {

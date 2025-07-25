@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth/auth.config';
 import { createFile, getFilesForUser } from '@/features/files/data/files';
 import { validateFile, validateFileList } from '@/features/files/lib/client-utils';
+import { createActivityLog } from '@/features/timeline/data/activity';
+import { ActivityActions, EntityTypes } from '@/packages/database/src/schema/activity';
 import type { UserRole } from '@chat/shared-types';
 
 // Maximum request size (10MB)
@@ -107,6 +109,28 @@ export async function POST(request: NextRequest) {
           taskId: taskId || undefined,
           uploadedById: session.user.id,
         });
+
+        // Log the activity
+        try {
+          await createActivityLog({
+            userId: session.user.id,
+            userRole: session.user.role,
+            userName: session.user.name,
+            action: ActivityActions.FILE_UPLOADED,
+            entityType: EntityTypes.FILE,
+            entityId: uploadedFile.id,
+            entityName: uploadedFile.originalName,
+            projectId: projectId || undefined,
+            taskId: taskId || undefined,
+            metadata: {
+              fileSize: uploadedFile.fileSize,
+              fileType: uploadedFile.fileType,
+              mimeType: uploadedFile.mimeType,
+            },
+          });
+        } catch (logError) {
+          console.error('Failed to log activity:', logError);
+        }
 
         uploadedFiles.push({
           ...uploadedFile,

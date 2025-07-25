@@ -10,50 +10,321 @@ When starting work on this codebase:
 3. Look at `/features/` directory to understand the modular architecture
 4. Review recent test files in `/cypress/e2e/` to understand working patterns
 
-## Cypress Testing Guidelines
+## Cypress Testing Protocol (Complete Guide)
 
-### Test Credentials
-Always use these credentials for Cypress tests:
+### CRITICAL SETUP REQUIREMENTS
+
+#### 1. Environment Prerequisites
+**ALWAYS verify these before writing any tests:**
+
+```bash
+# 1. Check server is running on correct port
+lsof -i :3000  # Should show Next.js dev server
+
+# 2. Verify database is seeded
+node scripts/seed-users.js     # Creates test users
+node scripts/seed-features.js  # Creates feature flags
+
+# 3. Confirm cypress.config.js baseUrl
+# Must be: baseUrl: 'http://localhost:3000'
+
+# 4. Kill any conflicting processes
+pkill -f "next dev"
+```
+
+#### 2. Mandatory Test Credentials
+**NEVER use different credentials - these are seeded in database:**
 - Admin: `admin@example.com` / `admin123`
-- User: `user@example.com` / `user123`
+- Client: `user@example.com` / `user123`
 
-### Common Issues and Solutions
+### COMPONENT TESTING STANDARDS
 
-#### 1. Server Port Conflicts
-- Development server typically runs on port 3000
-- If port 3000 is busy, it may use 3001
-- Always check which port the server is running on
-- Update `cypress.config.js` baseUrl accordingly
+#### Data-TestId Requirements
+**EVERY interactive element MUST have data-testid:**
 
-#### 2. Route Conflicts
-- Next.js requires consistent parameter names across dynamic routes
-- If you have `/users/[id]` in one layout group, ALL user routes must use `[id]`
-- Common error: "You cannot use different slug names for the same dynamic path"
-- Solution: Rename parameters to match existing routes
+```tsx
+// ✅ CORRECT - Always add data-testid
+<Button data-testid="create-project-btn">Create Project</Button>
+<Card data-testid="project-card">...</Card>
+<div data-testid="feature-flags-manager">...</div>
 
-#### 3. Database Table Missing
-- If API returns 500 errors, check server logs for database errors
-- Common issue: "relation does not exist" means table is missing
-- Solution: Create and run migration files
-- Database connection available in `.env.local`
+// ❌ WRONG - No data-testid
+<Button>Create Project</Button>
+<Card>...</Card>
+```
 
-#### 4. Test Selectors
-- Always add `data-testid` attributes to components for reliable testing
-- Use semantic selectors when possible (e.g., `h1` for page titles)
-- Check actual rendered HTML if tests can't find elements
+#### Naming Convention for data-testid
+```tsx
+// Format: [component-type]-[identifier]-[action?]
+data-testid="project-card"           // List items
+data-testid="create-task-btn"        // Action buttons  
+data-testid="toggle-featureName"     // Toggle controls
+data-testid="task-detail-form"       // Forms
+data-testid="admin-dashboard"        // Page sections
+```
 
-#### 5. Authentication in Tests
-- Always clear cookies/session before auth tests
-- Use `cy.clearCookies()` for logout simulation
-- Wait for redirects after login with `cy.url().should('include', '/dashboard')`
+### AUTHENTICATION TESTING PROTOCOL
 
-### Writing Robust Tests
-
+#### Standard Login Pattern
 ```javascript
-// Good test structure
-describe('Feature Name', () => {
+describe('Feature Tests', () => {
   beforeEach(() => {
-    // Login first
+    // ALWAYS start with login - no exceptions
+    cy.visit('/login');
+    cy.get('#email').type('admin@example.com');
+    cy.get('#password').type('admin123');
+    cy.get('button[type="submit"]').click();
+    cy.url().should('include', '/dashboard');
+  });
+  
+  // Tests go here...
+});
+```
+
+#### Role-Based Testing
+```javascript
+// Admin Tests
+beforeEach(() => {
+  loginAsAdmin();
+});
+
+// Client Tests  
+beforeEach(() => {
+  loginAsClient();
+});
+
+function loginAsAdmin() {
+  cy.visit('/login');
+  cy.get('#email').type('admin@example.com');
+  cy.get('#password').type('admin123');
+  cy.get('button[type="submit"]').click();
+  cy.url().should('include', '/dashboard');
+}
+
+function loginAsClient() {
+  cy.visit('/login');
+  cy.get('#email').type('user@example.com');
+  cy.get('#password').type('user123');
+  cy.get('button[type="submit"]').click();
+  cy.url().should('include', '/dashboard');
+}
+```
+
+### CRITICAL ERROR PREVENTION
+
+#### 1. Server/Client Import Separation
+**NEVER import server-only code in client components:**
+
+```tsx
+// ✅ CORRECT - Separate constants file
+// /lib/features/constants.ts
+export const FEATURES = { CHAT: 'chat' };
+
+// Client component imports from constants
+import { FEATURES } from '@/lib/features/constants';
+
+// ❌ WRONG - Client importing server code
+import { FEATURES } from '@/lib/features/featureFlags'; // Has database imports!
+```
+
+#### 2. Environment Variable Issues
+```javascript
+// Common error: "DATABASE_URL environment variable is not set"
+// Solution: Only import database code on server side
+if (typeof window !== 'undefined') {
+  throw new Error('Database client should only be used on server side');
+}
+```
+
+#### 3. Component Import Conflicts
+```tsx
+// ✅ CORRECT - Check if function exists
+export async function getExtendedStats() { ... }
+
+// ❌ WRONG - Importing non-existent function
+import { getExtendedStats } from './stats-grid'; // Function doesn't exist
+```
+
+### SELECTOR HIERARCHY (Use in Order)
+
+#### 1. data-testid (Preferred)
+```javascript
+cy.get('[data-testid="feature-flags-manager"]')
+cy.get('[data-testid="toggle-betaFeatures"]').click()
+```
+
+#### 2. Semantic HTML
+```javascript
+cy.get('h1').should('contain', 'Admin Dashboard')
+cy.get('button[type="submit"]').click()
+```
+
+#### 3. Content-based (Last Resort)
+```javascript
+cy.contains('Create Project').click()
+cy.contains('button', 'Add Feature').click()
+```
+
+### API TESTING INTEGRATION
+
+#### Test API Endpoints Directly
+```javascript
+it('should handle feature flag API correctly', () => {
+  // Test API directly for reliability
+  cy.request('GET', '/api/features/chat/check').then((response) => {
+    expect(response.status).to.eq(200);
+    expect(response.body).to.have.property('enabled');
+    expect(response.body.enabled).to.be.a('boolean');
+  });
+  
+  // Test non-existent feature
+  cy.request('GET', '/api/features/nonExistentFeature/check').then((response) => {
+    expect(response.status).to.eq(200);
+    expect(response.body.enabled).to.be.false;
+  });
+});
+```
+
+### WAIT STRATEGIES
+
+#### Use Proper Waits
+```javascript
+// ✅ CORRECT - Wait for elements
+cy.get('[data-testid="feature-flags-manager"]', { timeout: 10000 }).should('be.visible');
+
+// ✅ CORRECT - Wait for state changes
+cy.get('[data-testid="toggle-betaFeatures"]').click();
+cy.wait(1000); // Allow server update
+cy.contains('Enabled').should('be.visible');
+
+// ❌ WRONG - No timeout
+cy.get('[data-testid="feature-flags-manager"]').should('be.visible');
+```
+
+### DEBUGGING FAILED TESTS
+
+#### 1. Check Screenshots First
+```bash
+# Screenshots saved on failure
+ls cypress/screenshots/
+```
+
+#### 2. Verify Component Rendering
+```javascript
+// Add debug logging
+cy.get('body').then($body => {
+  cy.log('Page content:', $body.text());
+});
+
+// Check if element exists
+cy.get('[data-testid="target"]').should('exist');
+```
+
+#### 3. Server-Side Errors
+```bash
+# Check server logs for errors
+# Look for database connection issues
+# Verify environment variables loaded
+```
+
+### COMMON PATTERNS BY FEATURE TYPE
+
+#### Feature Flag Testing
+```javascript
+describe('Feature Flags', () => {
+  beforeEach(() => {
+    loginAsAdmin();
+  });
+
+  it('should display feature flags manager', () => {
+    cy.visit('/admin');
+    cy.get('[data-testid="feature-flags-manager"]', { timeout: 10000 }).should('be.visible');
+  });
+
+  it('should toggle feature flags', () => {
+    cy.visit('/admin');
+    cy.get('[data-testid="toggle-betaFeatures"]').click();
+    cy.wait(1000);
+    cy.contains('Enabled').should('be.visible');
+  });
+});
+```
+
+#### CRUD Testing
+```javascript
+describe('Project CRUD', () => {
+  beforeEach(() => {
+    loginAsAdmin();
+  });
+
+  it('should create project', () => {
+    cy.visit('/projects');
+    cy.get('[data-testid="create-project-btn"]').click();
+    cy.get('#name').type('Test Project');
+    cy.get('#description').type('Test Description');
+    cy.get('button[type="submit"]').click();
+    cy.contains('Test Project').should('be.visible');
+  });
+});
+```
+
+### RUNNING TESTS PROTOCOL
+
+#### Mandatory Pre-Test Checklist
+```bash
+# 1. Kill existing processes
+pkill -f "next dev"
+
+# 2. Start fresh server
+npm run dev
+
+# 3. Wait for server ready (check port 3000)
+curl -s http://localhost:3000 | head -c 100
+
+# 4. Verify database seeded
+node scripts/seed-users.js
+node scripts/seed-features.js
+
+# 5. Run tests
+npx cypress run --spec "cypress/e2e/test-file.cy.js"
+```
+
+#### Test Execution Commands
+```bash
+# Single test file
+npx cypress run --spec "cypress/e2e/phase10-3-feature-flags.cy.js"
+
+# With reporter for better output
+npx cypress run --spec "cypress/e2e/test.cy.js" --reporter spec
+
+# Headed mode for debugging
+npx cypress run --spec "cypress/e2e/test.cy.js" --headed
+
+# Open interactive mode
+npx cypress open
+```
+
+### QUALITY ASSURANCE CHECKLIST
+
+#### Before Submitting Tests
+**Every test MUST pass this checklist:**
+
+1. ✅ Environment seeded (users + features)
+2. ✅ Server running on port 3000
+3. ✅ All interactive elements have data-testid
+4. ✅ Authentication handled in beforeEach
+5. ✅ Proper wait strategies used
+6. ✅ API endpoints tested directly
+7. ✅ Error scenarios covered
+8. ✅ No hardcoded selectors (use data-testid)
+9. ✅ Tests pass 3 times in a row
+10. ✅ No server/client import conflicts
+
+#### Test File Structure Template
+```javascript
+describe('Phase X.Y: Feature Name', () => {
+  beforeEach(() => {
+    // Always authenticate first
     cy.visit('/login');
     cy.get('#email').type('admin@example.com');
     cy.get('#password').type('admin123');
@@ -61,44 +332,53 @@ describe('Feature Name', () => {
     cy.url().should('include', '/dashboard');
   });
 
-  it('should do something specific', () => {
-    // Navigate to feature
-    cy.visit('/feature-page');
-    
-    // Wait for page load
-    cy.get('h1').should('contain', 'Expected Title');
-    
-    // Interact with elements
-    cy.get('[data-testid="specific-element"]').click();
-    
-    // Assert results
-    cy.get('[data-testid="result"]').should('be.visible');
+  describe('Core Functionality', () => {
+    it('should display feature UI correctly', () => {
+      cy.visit('/feature-page');
+      cy.get('[data-testid="main-component"]', { timeout: 10000 })
+        .should('be.visible');
+    });
+
+    it('should handle user interactions', () => {
+      cy.visit('/feature-page');
+      cy.get('[data-testid="action-button"]').click();
+      cy.wait(1000);
+      cy.get('[data-testid="result"]').should('be.visible');
+    });
+  });
+
+  describe('API Integration', () => {
+    it('should handle API endpoints correctly', () => {
+      cy.request('GET', '/api/feature/check').then((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.body).to.have.property('data');
+      });
+    });
+  });
+
+  describe('Error Scenarios', () => {
+    it('should handle errors gracefully', () => {
+      cy.intercept('GET', '/api/feature/*', { statusCode: 500 }).as('apiError');
+      cy.visit('/feature-page');
+      cy.wait('@apiError');
+      cy.contains('Error').should('be.visible');
+    });
   });
 });
 ```
 
-### Debugging Failed Tests
+### MANDATORY CLEANUP PROTOCOL
 
-1. **Check Screenshots**: Cypress saves screenshots on failure
-2. **Add Logging**: Use `cy.log()` to debug test flow
-3. **Check Network**: Use `cy.intercept()` to monitor API calls
-4. **Verify Selectors**: Use browser DevTools to check element selectors
-5. **Check Server Logs**: Tail the Next.js dev server output for errors
-
-### Running Tests
-
+#### After Each Test Session
 ```bash
-# Start dev server first
-npm run dev
+# 1. Reset feature flags to defaults
+node scripts/seed-features.js
 
-# Run all Cypress tests
-npx cypress run
+# 2. Clean up test data
+# (Add cleanup scripts as needed)
 
-# Run specific test file
-npx cypress run --spec "cypress/e2e/specific-test.cy.js"
-
-# Open Cypress UI for debugging
-npx cypress open
+# 3. Stop dev server
+pkill -f "next dev"
 ```
 
 ## File Management Testing

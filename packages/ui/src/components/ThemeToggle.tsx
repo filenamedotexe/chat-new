@@ -8,9 +8,10 @@ import { Button } from './Button';
 interface ThemeToggleProps {
   theme: 'light' | 'dark' | string;
   onToggle: () => void;
+  'data-testid'?: string;
 }
 
-export function ThemeToggle({ theme, onToggle }: ThemeToggleProps) {
+export function ThemeToggle({ theme, onToggle, 'data-testid': dataTestId }: ThemeToggleProps) {
   const isDark = theme === 'dark' || theme === 'ocean' || theme === 'forest';
 
   return (
@@ -19,6 +20,7 @@ export function ThemeToggle({ theme, onToggle }: ThemeToggleProps) {
       size="sm"
       onClick={onToggle}
       className="relative h-9 w-9 p-0"
+      data-testid={dataTestId}
     >
       <motion.div
         initial={false}

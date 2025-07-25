@@ -3,9 +3,45 @@ import { Main, PageContainer, Card, CardContent, CardDescription, CardHeader, Ca
 import { ChatInterface } from '@/components/chat/ChatInterface';
 import { IconFiles, IconEye } from '@tabler/icons-react';
 import Link from 'next/link';
+import { AdminDashboard } from '@/features/admin/components/admin-dashboard';
+import { getRecentActivity } from '@/features/timeline/data/activity';
+import { getAdminDashboardStats, getClientStatusOverview } from '@/features/admin/data/dashboard-simple';
 
 export default async function DashboardPage() {
   const session = await auth();
+  
+  // If admin, get stats and activity
+  if (session?.user.role === 'admin') {
+    try {
+      // Get all dashboard data in parallel
+      const [stats, recentActivity, clientStatuses] = await Promise.all([
+        getAdminDashboardStats(),
+        getRecentActivity(10),
+        getClientStatusOverview()
+      ]);
+      
+      return (
+        <Main>
+          <PageContainer>
+            <div className="mb-8">
+              <h1 className="text-4xl font-bold mb-2">Admin Dashboard</h1>
+              <p className="text-muted-foreground">
+                Platform overview and recent activity
+              </p>
+            </div>
+            
+            <AdminDashboard 
+              stats={stats} 
+              recentActivity={recentActivity} 
+              clientStatuses={clientStatuses} 
+            />
+          </PageContainer>
+        </Main>
+      );
+    } catch (error) {
+      console.error('Failed to load admin dashboard:', error);
+    }
+  }
   
   return (
     <Main>

@@ -2,12 +2,15 @@ import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth/auth.config';
 import { getProjectWithProgress } from '@/features/projects/data/projects';
 import { Button, Card } from '@chat/ui';
-import { IconArrowLeft, IconClipboardList, IconCalendar, IconBuilding, IconFiles, IconMessage } from '@tabler/icons-react';
+import { IconArrowLeft, IconClipboardList, IconCalendar, IconBuilding } from '@tabler/icons-react';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import type { UserRole } from '@chat/shared-types';
 import { ProgressBar } from '@/features/progress/components/progress-bar';
 import { ProgressChecklist } from '@/features/progress/components/progress-checklist';
+import { ProjectDetailActions } from '@/features/projects/components/project-detail-actions';
+import { checkFeature, FEATURES } from '@/lib/features/featureFlags';
+import { AnalyticsSection } from './analytics-section';
 
 interface ProjectPageProps {
   params: {
@@ -40,6 +43,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   const { project, organization, progress } = projectData;
   const canEdit = session.user.role === 'admin' || session.user.role === 'team_member';
+  const analyticsEnabled = await checkFeature(FEATURES.ADVANCED_ANALYTICS);
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -129,29 +133,19 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       </div>
 
       <div className="mt-8 grid gap-4">
-        <Card className="p-6">
-          <h3 className="font-semibold mb-4">Quick Actions</h3>
-          <div className="flex flex-wrap gap-3">
-            <Link href={`/projects/${params.id}/tasks`}>
-              <Button size="lg" className="flex-1">
-                <IconClipboardList className="h-5 w-5 mr-2" />
-                Manage Tasks
-              </Button>
-            </Link>
-            <Link href={`/projects/${params.id}/files`} className="flex-1">
-              <Button variant="outline" size="lg" className="w-full">
-                <IconFiles className="h-5 w-5 mr-2" />
-                View Files
-              </Button>
-            </Link>
-            <Link href={`/projects/${params.id}/chat`} className="flex-1">
-              <Button variant="outline" size="lg" className="w-full">
-                <IconMessage className="h-5 w-5 mr-2" />
-                Team Chat
-              </Button>
-            </Link>
+        <ProjectDetailActions 
+          project={project}
+          progress={progress}
+          canEdit={canEdit}
+        />
+
+        {/* Advanced Analytics Section */}
+        {analyticsEnabled && (
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Advanced Analytics</h3>
+            <AnalyticsSection project={project} progress={progress} />
           </div>
-        </Card>
+        )}
 
         {/* Detailed Progress Checklist */}
         <Card className="p-6">
