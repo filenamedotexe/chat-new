@@ -34,7 +34,7 @@ export default async function EditProjectPage({ params }: EditProjectPageProps) 
   const { project } = projectData;
 
   return (
-    <div className="mx-auto max-w-7xl py-8 px-4 max-w-2xl">
+    <div className="mx-auto max-w-2xl py-8 px-4">
       <div className="mb-6">
         <Link href={`/projects/${params.id}`}>
           <Button variant="ghost" size="sm" className="mb-4">

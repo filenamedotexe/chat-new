@@ -64,7 +64,7 @@ export function ProjectListEnhanced({ userId, userRole }: ProjectListEnhancedPro
 
   if (loading) {
     return (
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3" data-testid="projects-loading">
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3" data-testid="projects-loading">
         {[...Array(6)].map((_, i) => (
           <Card key={i} className="p-6 h-64">
             <div className="space-y-4">
@@ -133,7 +133,7 @@ export function ProjectListEnhanced({ userId, userRole }: ProjectListEnhancedPro
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       {projects.map((projectData) => {
         const { project, organization, taskCount, completedTaskCount, fileCount, progress: progressData } = projectData;
         const progress = progressData?.progressPercentage ?? getProgressPercentage(completedTaskCount, taskCount);
