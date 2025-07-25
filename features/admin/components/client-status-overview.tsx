@@ -3,29 +3,16 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chat/ui';
 import { 
-  IconCircleCheck,
-  IconAlertCircle,
-  IconClock,
   IconTrendingUp,
   IconCalendar,
   IconUser
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-
-export interface ClientStatus {
-  id: string;
-  name: string;
-  email: string;
-  status: 'active' | 'at-risk' | 'inactive';
-  activeProjects: number;
-  totalProjects: number;
-  completedTasks: number;
-  totalTasks: number;
-  lastActivity: Date;
-  upcomingDeadlines: number;
-  overdueItems: number;
-}
+import { StatusBadge } from '../../status/components/status-badge';
+import { getStatusPriority } from '../../status/lib/calculate-status';
+import type { ClientStatus } from '../../status/types/status';
+import { formatDistanceToNow } from 'date-fns';
 
 interface ClientStatusOverviewProps {
   clients: ClientStatus[];
@@ -35,35 +22,13 @@ interface ClientStatusOverviewProps {
 export function ClientStatusOverview({ clients, showLimit = 5 }: ClientStatusOverviewProps) {
   // Sort clients by status priority (at-risk first, then by activity)
   const sortedClients = [...clients].sort((a, b) => {
-    const statusPriority = { 'at-risk': 0, 'active': 1, 'inactive': 2 };
     if (a.status !== b.status) {
-      return statusPriority[a.status] - statusPriority[b.status];
+      return getStatusPriority(a.status) - getStatusPriority(b.status);
     }
     return b.lastActivity.getTime() - a.lastActivity.getTime();
   });
 
   const displayClients = showLimit ? sortedClients.slice(0, showLimit) : sortedClients;
-
-  const statusConfig = {
-    active: {
-      icon: IconCircleCheck,
-      color: 'text-green-600 dark:text-green-400',
-      bgColor: 'bg-green-100 dark:bg-green-900/30',
-      label: 'Active'
-    },
-    'at-risk': {
-      icon: IconAlertCircle,
-      color: 'text-amber-600 dark:text-amber-400',
-      bgColor: 'bg-amber-100 dark:bg-amber-900/30',
-      label: 'At Risk'
-    },
-    inactive: {
-      icon: IconClock,
-      color: 'text-gray-600 dark:text-gray-400',
-      bgColor: 'bg-gray-100 dark:bg-gray-900/30',
-      label: 'Inactive'
-    }
-  };
 
   const getClientHealth = (client: ClientStatus): number => {
     if (client.totalTasks === 0) return 100;
@@ -79,7 +44,7 @@ export function ClientStatusOverview({ clients, showLimit = 5 }: ClientStatusOve
   };
 
   return (
-    <Card>
+    <Card data-testid="client-status-overview">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
@@ -102,26 +67,16 @@ export function ClientStatusOverview({ clients, showLimit = 5 }: ClientStatusOve
       <CardContent>
         <div className="space-y-4">
           {displayClients.map((client) => {
-            const config = statusConfig[client.status];
-            const StatusIcon = config.icon;
             const health = getClientHealth(client);
             
             return (
-              <div key={client.id} className="flex items-center gap-4 p-4 rounded-lg border">
-                <div className={cn("p-2 rounded-full", config.bgColor)}>
-                  <StatusIcon className={cn("h-5 w-5", config.color)} />
-                </div>
+              <div key={client.id} className="flex items-center gap-4 p-4 rounded-lg border" data-testid={`client-status-${client.id}`}>
+                <StatusBadge status={client.status} size="lg" showText={false} />
                 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <h4 className="font-medium truncate">{client.name}</h4>
-                    <span className={cn(
-                      "text-xs px-2 py-0.5 rounded-full",
-                      config.bgColor,
-                      config.color
-                    )}>
-                      {config.label}
-                    </span>
+                    <StatusBadge status={client.status} size="sm" />
                   </div>
                   
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -183,22 +138,3 @@ export function ClientStatusOverview({ clients, showLimit = 5 }: ClientStatusOve
   );
 }
 
-function formatDistanceToNow(date: Date): string {
-  const now = new Date();
-  const diffInMilliseconds = now.getTime() - date.getTime();
-  const diffInMinutes = Math.floor(diffInMilliseconds / (1000 * 60));
-  const diffInHours = Math.floor(diffInMilliseconds / (1000 * 60 * 60));
-  const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
-
-  if (diffInMinutes < 60) {
-    return `${diffInMinutes} minutes ago`;
-  } else if (diffInHours < 24) {
-    return `${diffInHours} hours ago`;
-  } else if (diffInDays === 1) {
-    return 'yesterday';
-  } else if (diffInDays < 7) {
-    return `${diffInDays} days ago`;
-  } else {
-    return date.toLocaleDateString();
-  }
-}

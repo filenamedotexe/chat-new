@@ -2,7 +2,7 @@ import { db } from '@/packages/database/src/client';
 import { users, projects, tasks, files, organizations, activityLogs } from '@/packages/database/src';
 import { eq, and, gte, sql, desc, isNull, inArray, or } from 'drizzle-orm';
 import type { ExtendedStats } from '../components/stats-grid';
-import type { ClientStatus } from '../components/client-status-overview';
+import type { ClientStatus } from '../../status/types/status';
 
 export async function getAdminDashboardStats(): Promise<ExtendedStats> {
   const now = new Date();

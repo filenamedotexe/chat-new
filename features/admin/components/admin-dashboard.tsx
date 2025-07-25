@@ -18,7 +18,8 @@ import { TimelineCompact } from '@/features/timeline/components/timeline';
 import { getRecentActivity } from '@/features/timeline/data/activity';
 import Link from 'next/link';
 import { SimpleStatsGrid, type SimpleStatCard } from './simple-stats-grid';
-import { ClientStatusOverview, type ClientStatus } from './client-status-overview';
+import { ClientStatusOverview } from './client-status-overview';
+import type { ClientStatus } from '../../status/types/status';
 import { FeatureFlagsManager } from './feature-flags-manager';
 import type { ExtendedStats } from './stats-grid';
 

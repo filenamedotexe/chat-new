@@ -1,8 +1,9 @@
 import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth/auth.config';
-import { Main, PageContainer, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chat/ui';
-import { FeatureFlagsManager } from '@/features/admin/components/feature-flags-manager';
-import { sql } from '@chat/database';
+import { Main, PageContainer } from '@chat/ui';
+import { AdminDashboard } from '@/features/admin/components/admin-dashboard';
+import { getAdminDashboardStats, getClientStatusOverview } from '@/features/admin/data/dashboard';
+import { getRecentActivity } from '@/features/timeline/data/activity';
 
 export default async function AdminPage() {
   const session = await auth();
@@ -11,56 +12,21 @@ export default async function AdminPage() {
     redirect('/dashboard');
   }
 
-  // Get basic stats
-  const userCount = await sql`SELECT COUNT(*) as count FROM users`;
-  const featureCount = await sql`SELECT COUNT(*) as count FROM features`;
+  // Get all required data
+  const [stats, clientStatuses, recentActivity] = await Promise.all([
+    getAdminDashboardStats(),
+    getClientStatusOverview(),
+    getRecentActivity(10)
+  ]);
 
   return (
     <Main>
       <PageContainer>
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Admin Dashboard</h1>
-          <p className="text-muted-foreground">
-            Manage users, features, and system settings
-          </p>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Total Users</CardTitle>
-              <CardDescription>Registered users</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold">{userCount[0].count}</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Features</CardTitle>
-              <CardDescription>Feature flags</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold">{featureCount[0].count}</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>System Status</CardTitle>
-              <CardDescription>Overall health</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm font-medium text-green-600">Operational</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div>
-          <h2 className="text-lg font-semibold mb-4">Feature Management</h2>
-          <FeatureFlagsManager />
-        </div>
+        <AdminDashboard 
+          stats={stats}
+          clientStatuses={clientStatuses}
+          recentActivity={recentActivity}
+        />
       </PageContainer>
     </Main>
   );

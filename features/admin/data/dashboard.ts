@@ -2,7 +2,8 @@ import { db } from '@/packages/database/src/client';
 import { users, projects, tasks, files, organizations, activityLogs } from '@/packages/database/src';
 import { eq, and, gte, sql, desc, isNull, inArray } from 'drizzle-orm';
 import type { ExtendedStats } from '../components/stats-grid';
-import type { ClientStatus } from '../components/client-status-overview';
+import type { ClientStatus } from '../../status/types/status';
+import { getClientStatuses } from '../../status/data/client-status';
 
 export async function getAdminDashboardStats(): Promise<ExtendedStats> {
   const now = new Date();
@@ -140,103 +141,6 @@ export async function getAdminDashboardStats(): Promise<ExtendedStats> {
 }
 
 export async function getClientStatusOverview(): Promise<ClientStatus[]> {
-  // Get all client users
-  const clientUsers = await db
-    .select()
-    .from(users)
-    .where(eq(users.role, 'client'));
-
-  // Get all client organizations
-  const clientOrgs = await db
-    .select()
-    .from(organizations)
-    .where(eq(organizations.type, 'client'));
-
-  // Simple mapping - first client gets first org, etc.
-  const orgMap = new Map<string, any>();
-  clientUsers.forEach((client, index) => {
-    if (clientOrgs[index]) {
-      orgMap.set(client.id, clientOrgs[index]);
-    }
-  });
-
-  // Get projects and tasks for client organizations
-  const orgIds = clientOrgs.map(org => org.id);
-  const clientProjects = orgIds.length > 0 
-    ? await db
-        .select()
-        .from(projects)
-        .where(inArray(projects.organizationId, orgIds))
-    : [];
-
-  const projectIds = clientProjects.map(p => p.id);
-  const clientTasks = projectIds.length > 0 
-    ? await db
-        .select()
-        .from(tasks)
-        .where(inArray(tasks.projectId, projectIds))
-    : [];
-
-  // Get recent activities for clients
-  const recentActivities = clientUsers.length > 0 
-    ? await db
-        .select({
-          userId: activityLogs.userId,
-          createdAt: activityLogs.createdAt
-        })
-        .from(activityLogs)
-        .where(inArray(activityLogs.userId, clientUsers.map(u => u.id)))
-        .orderBy(desc(activityLogs.createdAt))
-    : [];
-
-  // Build client status for each client
-  return clientUsers.map(client => {
-    const org = orgMap.get(client.id);
-    const orgProjects = org ? clientProjects.filter(p => p.organizationId === org.id) : [];
-    const projectIds = orgProjects.map(p => p.id);
-    const orgTasks = clientTasks.filter(t => projectIds.includes(t.projectId!));
-    
-    const activeProjects = orgProjects.filter(p => p.status === 'active').length;
-    const completedTasks = orgTasks.filter(t => t.status === 'done').length;
-    const overdueTasks = orgTasks.filter(t => 
-      t.dueDate && new Date(t.dueDate) < new Date() && t.status !== 'done'
-    ).length;
-    
-    const upcomingDeadlines = orgTasks.filter(t => {
-      if (!t.dueDate || t.status === 'done') return false;
-      const dueDate = new Date(t.dueDate);
-      const now = new Date();
-      const weekFromNow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-      return dueDate >= now && dueDate <= weekFromNow;
-    }).length;
-
-    // Get last activity
-    const clientActivities = recentActivities.filter(a => a.userId === client.id);
-    const lastActivity = clientActivities.length > 0 
-      ? new Date(clientActivities[0].createdAt)
-      : client.createdAt ? new Date(client.createdAt) : new Date();
-
-    // Determine status
-    let status: ClientStatus['status'] = 'inactive';
-    if (activeProjects > 0) {
-      status = 'active';
-      if (overdueTasks > 0 || (orgTasks.length > 0 && completedTasks / orgTasks.length < 0.5)) {
-        status = 'at-risk';
-      }
-    }
-
-    return {
-      id: client.id,
-      name: client.name || client.email || 'Unknown',
-      email: client.email || '',
-      status,
-      activeProjects,
-      totalProjects: orgProjects.length,
-      completedTasks,
-      totalTasks: orgTasks.length,
-      lastActivity,
-      upcomingDeadlines,
-      overdueItems: overdueTasks
-    };
-  });
+  // Use the new centralized status system
+  return await getClientStatuses();
 }
