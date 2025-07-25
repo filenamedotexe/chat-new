@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Card, Button } from '@chat/ui';
+import { Card, Button, Skeleton } from '@chat/ui';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
@@ -63,9 +63,39 @@ export function ProjectListEnhanced({ userId, userRole }: ProjectListEnhancedPro
 
   if (loading) {
     return (
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3" data-testid="projects-loading">
         {[...Array(6)].map((_, i) => (
-          <Card key={i} className="h-64 animate-pulse bg-muted" />
+          <Card key={i} className="p-6 h-64">
+            <div className="space-y-4">
+              {/* Project name */}
+              <Skeleton className="h-6 w-3/4" />
+              
+              {/* Organization */}
+              <div className="flex items-center gap-2">
+                <Skeleton className="h-4 w-4" />
+                <Skeleton className="h-4 w-32" />
+              </div>
+              
+              {/* Stats row */}
+              <div className="flex items-center gap-4">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-4 w-20" />
+              </div>
+              
+              {/* Progress bar */}
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-2 w-full" />
+              </div>
+              
+              {/* Actions */}
+              <div className="flex gap-2 mt-4">
+                <Skeleton className="h-9 w-24" />
+                <Skeleton className="h-9 w-24" />
+              </div>
+            </div>
+          </Card>
         ))}
       </div>
     );

@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chat/ui';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Skeleton } from '@chat/ui';
 import { IconBuilding, IconEdit, IconTrash, IconUsers } from '@tabler/icons-react';
 import { Organization } from '../data/organizations';
 import Link from 'next/link';
@@ -9,9 +9,42 @@ interface OrgListProps {
   organizations: Organization[];
   onEdit?: (org: Organization) => void;
   onDelete?: (org: Organization) => void;
+  loading?: boolean;
 }
 
-export function OrgList({ organizations, onEdit, onDelete }: OrgListProps) {
+export function OrgList({ organizations, onEdit, onDelete, loading = false }: OrgListProps) {
+  if (loading) {
+    return (
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3" data-testid="organizations-loading">
+        {[...Array(6)].map((_, i) => (
+          <Card key={i}>
+            <CardHeader>
+              <div className="flex items-start justify-between">
+                <div className="space-y-2">
+                  <Skeleton className="h-5 w-32" />
+                  <Skeleton className="h-4 w-24" />
+                </div>
+                <div className="flex gap-2">
+                  <Skeleton className="h-8 w-8 rounded" />
+                  <Skeleton className="h-8 w-8 rounded" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2 mb-4">
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-3/4" />
+              </div>
+              <div className="flex items-center justify-between">
+                <Skeleton className="h-4 w-40" />
+                <Skeleton className="h-4 w-24" />
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    );
+  }
   if (organizations.length === 0) {
     return (
       <Card>

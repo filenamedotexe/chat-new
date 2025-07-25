@@ -160,7 +160,7 @@ export function ProjectForm({ organizations, userRole }: ProjectFormProps) {
       </div>
 
       <div className="flex gap-4">
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" loading={loading}>
           {loading ? 'Creating...' : 'Create Project'}
         </Button>
         <Button

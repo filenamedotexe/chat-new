@@ -53,15 +53,15 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         whileTap={{ scale: 0.98 }}
         {...props}
       >
-        {loading ? (
+        {loading && (
           <motion.div
-            className="h-4 w-4 border-2 border-current border-t-transparent rounded-full"
+            className="h-4 w-4 border-2 border-current border-t-transparent rounded-full mr-2"
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+            data-testid="button-spinner"
           />
-        ) : (
-          children
         )}
+        {children}
       </motion.button>
     );
   }

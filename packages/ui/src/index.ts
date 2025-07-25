@@ -7,4 +7,6 @@ export * from './components/Dropdown';
 export * from './components/Avatar';
 export * from './components/ChatBubble';
 export * from './components/Layout';
+export * from './components/Skeleton';
+export * from './components/Spinner';
 export * from './hooks/useTheme';

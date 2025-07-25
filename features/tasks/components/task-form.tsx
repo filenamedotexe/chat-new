@@ -228,7 +228,7 @@ export function TaskForm({ projectId, onSuccess, onCancel, existingTask }: TaskF
       </div>
 
       <div className="flex gap-4">
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" loading={loading}>
           {loading ? 'Saving...' : existingTask ? 'Update Task' : 'Create Task'}
         </Button>
         <Button

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { TaskCard } from './task-card';
-import { Card } from '@chat/ui';
+import { Card, Skeleton } from '@chat/ui';
 import { IconClipboardList } from '@tabler/icons-react';
 import type { TaskStatus } from '../data/tasks';
 
@@ -49,9 +49,29 @@ export function TaskList({
 
   if (loading) {
     return (
-      <div className="space-y-4">
-        {[...Array(3)].map((_, i) => (
-          <Card key={i} className="h-32 animate-pulse bg-muted" />
+      <div className="space-y-4" data-testid="tasks-loading">
+        {[...Array(5)].map((_, i) => (
+          <Card key={i} className="p-4">
+            <div className="flex items-start gap-4">
+              {/* Status indicator */}
+              <Skeleton className="h-6 w-6 rounded" />
+              
+              <div className="flex-1 space-y-2">
+                {/* Task title */}
+                <Skeleton className="h-5 w-3/4" />
+                
+                {/* Task metadata */}
+                <div className="flex items-center gap-4">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-4 w-20" />
+                </div>
+              </div>
+              
+              {/* Actions */}
+              <Skeleton className="h-8 w-20" />
+            </div>
+          </Card>
         ))}
       </div>
     );
