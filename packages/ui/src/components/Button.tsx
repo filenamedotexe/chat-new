@@ -32,9 +32,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const sizes = {
-      sm: 'h-11 px-3 text-sm min-h-[44px]',
-      md: 'h-11 px-4 py-2 min-h-[44px]',
-      lg: 'h-12 px-8 text-lg',
+      sm: 'text-sm min-h-[44px]',
+      md: 'min-h-[44px]',
+      lg: 'text-lg min-h-[48px]',
     };
 
     return (
@@ -49,7 +49,14 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           fullWidth && 'w-full',
           className
         )}
-        style={{ minHeight: '44px' }}
+        style={{ 
+          minHeight: '44px',
+          paddingLeft: size === 'sm' ? 'var(--space-3)' : size === 'lg' ? 'var(--space-6)' : 'var(--space-4)',
+          paddingRight: size === 'sm' ? 'var(--space-3)' : size === 'lg' ? 'var(--space-6)' : 'var(--space-4)',
+          paddingTop: 'var(--space-2)',
+          paddingBottom: 'var(--space-2)',
+          ...props.style
+        }}
         disabled={disabled || loading}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}

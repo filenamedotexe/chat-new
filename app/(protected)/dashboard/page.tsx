@@ -23,8 +23,8 @@ export default async function DashboardPage() {
       return (
         <Main>
           <PageContainer>
-            <div className="mb-8">
-              <h1 className="text-4xl font-bold mb-2">Admin Dashboard</h1>
+            <div style={{ marginBottom: 'var(--space-6)' }}>
+              <h1 className="text-4xl font-bold" style={{ marginBottom: 'var(--space-2)' }}>Admin Dashboard</h1>
               <p className="text-muted-foreground">
                 Platform overview and recent activity
               </p>
@@ -46,8 +46,8 @@ export default async function DashboardPage() {
   return (
     <Main>
       <PageContainer>
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">
+        <div style={{ marginBottom: 'var(--space-6)' }}>
+          <h1 className="text-4xl font-bold" style={{ marginBottom: 'var(--space-2)' }}>
             Welcome back, {session?.user.name || session?.user.email}!
           </h1>
           <p className="text-muted-foreground">
@@ -55,14 +55,14 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4" style={{ gap: 'var(--space-5)', marginBottom: 'var(--space-6)' }}>
           <Card hover>
             <CardHeader>
               <CardTitle>Profile</CardTitle>
               <CardDescription>View and edit your profile</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
                 <p className="text-sm">
                   <span className="font-medium">Email:</span> {session?.user.email}
                 </p>
@@ -106,7 +106,7 @@ export default async function DashboardPage() {
               <CardDescription>View and manage your uploaded files</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
                 <p className="text-sm text-muted-foreground">
                   Access all your files across projects
                 </p>

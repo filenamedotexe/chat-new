@@ -30,7 +30,8 @@ export const CardHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={clsx('flex flex-col space-y-1.5 p-6', className)}
+    className={clsx('flex flex-col', className)}
+    style={{ gap: 'var(--space-2)', padding: 'var(--space-5)', ...props.style }}
     {...props}
   />
 ));
@@ -64,7 +65,12 @@ export const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={clsx('p-6 pt-0', className)} {...props} />
+  <div 
+    ref={ref} 
+    className={clsx(className)} 
+    style={{ padding: 'var(--space-5)', paddingTop: 0, ...props.style }}
+    {...props} 
+  />
 ));
 CardContent.displayName = 'CardContent';
 
@@ -74,7 +80,8 @@ export const CardFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={clsx('flex items-center p-6 pt-0', className)}
+    className={clsx('flex items-center', className)}
+    style={{ padding: 'var(--space-5)', paddingTop: 0, ...props.style }}
     {...props}
   />
 ));
