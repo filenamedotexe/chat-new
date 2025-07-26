@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card } from '@chat/ui';
-import { IconFlask2, IconToggleLeft, IconToggleRight } from '@tabler/icons-react';
+import { Card, Toggle } from '@chat/ui';
+import { IconFlask2 } from '@tabler/icons-react';
 import { useFeature } from '@/lib/features/hooks/use-feature';
 import { FEATURES } from '@/lib/features/constants';
 
@@ -118,17 +118,13 @@ export function BetaFeaturesSection() {
                   <h3 className="font-medium">{feature.name}</h3>
                   <p className="text-sm text-muted-foreground">{feature.description}</p>
                 </div>
-                <button
-                  onClick={() => toggleBetaFeature(feature.id)}
-                  className="ml-4 p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+                <Toggle
+                  checked={feature.enabled}
+                  onChange={() => toggleBetaFeature(feature.id)}
                   disabled={feature.id === 'aiAssistant'}
-                >
-                  {feature.enabled ? (
-                    <IconToggleRight className="h-6 w-6 text-green-600 dark:text-green-400" />
-                  ) : (
-                    <IconToggleLeft className="h-6 w-6 text-gray-400" />
-                  )}
-                </button>
+                  size="md"
+                  data-testid={`toggle-beta-${feature.id}`}
+                />
               </div>
             ))}
           </div>
