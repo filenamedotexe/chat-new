@@ -13,11 +13,11 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
     <motion.div
       ref={ref}
       className={clsx(
-        'rounded-lg border bg-card text-card-foreground shadow-sm',
-        hover && 'transition-shadow hover:shadow-lg cursor-pointer',
+        'rounded-xl bg-card text-card-foreground shadow-md border-0',
+        hover && 'transition-all duration-200 hover:shadow-xl cursor-pointer',
         className
       )}
-      whileHover={hover ? { y: -2 } : undefined}
+      whileHover={hover ? { y: -4, transition: { duration: 0.2 } } : undefined}
       {...props}
     />
   )

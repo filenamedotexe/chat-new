@@ -510,20 +510,47 @@ Always verify role-based access in tests.
 # 1. Kill any existing servers
 pkill -f "next dev"
 
-# 2. Start fresh server
-npm run dev
+# 2. Start fresh server in background
+cd /path/to/project && npm run dev > /tmp/next-dev-fresh.log 2>&1 &
 
 # 3. Wait for it to fully start (check the port!)
 sleep 5
 
-# 4. Run specific test
+# 4. Verify server is running
+curl -s http://localhost:3000 > /dev/null && echo "Server running on 3000"
+
+# 5. Run specific test
 npx cypress run --spec "cypress/e2e/your-test.cy.js"
 
-# 5. If test fails, check:
+# 6. If test fails, check:
 #    - Screenshot in cypress/screenshots/
-#    - Server logs
+#    - Server logs: tail -50 /tmp/next-dev-fresh.log
 #    - Correct port in cypress.config.js
 ```
+
+### Cypress Login Pattern That Works (UI Modernization)
+
+When writing Cypress tests that require authentication, use this pattern:
+
+```javascript
+beforeEach(() => {
+  cy.viewport(1280, 720);
+  cy.visit('/login');
+  cy.get('input[type="email"]').type('admin@example.com');
+  cy.get('input[type="password"]').type('admin123');
+  cy.get('button[type="submit"]').click();
+  // Wait for redirect to dashboard
+  cy.url().should('include', '/dashboard');
+  cy.contains('Dashboard').should('be.visible');
+});
+```
+
+**Important notes:**
+- Use `input[type="email"]` and `input[type="password"]` selectors (not `#email` or `#password`)
+- Always wait for the dashboard redirect with `cy.url().should('include', '/dashboard')`
+- Add `cy.contains('Dashboard').should('be.visible')` to ensure page loaded
+- Set viewport for consistent testing
+- This pattern works better than the `#email` selector pattern shown earlier in this doc
 
 ### Performance Considerations
 

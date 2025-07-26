@@ -139,7 +139,7 @@ export function ProjectListEnhanced({ userId, userRole }: ProjectListEnhancedPro
         const progress = progressData?.progressPercentage ?? getProgressPercentage(completedTaskCount, taskCount);
         
         return (
-          <Card key={project.id} className="p-6 hover:shadow-lg transition-shadow h-full flex flex-col" data-testid="project-card">
+          <Card key={project.id} className="p-6 h-full flex flex-col" hover={true} data-testid="project-card">
             {/* Header */}
             <div className="flex-1">
               <div className="flex items-start justify-between mb-3">
@@ -154,10 +154,10 @@ export function ProjectListEnhanced({ userId, userRole }: ProjectListEnhancedPro
                 </div>
                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                   project.status === 'active' 
-                    ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                    ? 'bg-success text-success-foreground'
                     : project.status === 'completed'
-                    ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
-                    : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
+                    ? 'bg-info text-info-foreground'
+                    : 'bg-muted text-muted-foreground'
                 }`}>
                   {project.status}
                 </span>
@@ -204,7 +204,7 @@ export function ProjectListEnhanced({ userId, userRole }: ProjectListEnhancedPro
             </div>
 
             {/* Footer with Actions */}
-            <div className="mt-auto pt-4 border-t">
+            <div className="mt-auto pt-4">
               <div className="flex items-center justify-between mb-3">
                 {project.startDate && (
                   <div className="flex items-center gap-1 text-xs text-muted-foreground">

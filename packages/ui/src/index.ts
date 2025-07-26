@@ -14,4 +14,5 @@ export * from './components/ErrorBoundary';
 export * from './components/EmptyState';
 export * from './components/HamburgerButton';
 export * from './components/MobileMenu';
+export * from './components/Breadcrumbs';
 export * from './hooks/useTheme';

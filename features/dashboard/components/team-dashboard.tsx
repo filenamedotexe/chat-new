@@ -1,133 +1,211 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@chat/ui';
-import { 
-  IconChecklist, 
-  IconClock,
-  IconUsers,
-  IconMessage,
-  IconCalendar,
-  IconTrendingUp
-} from '@tabler/icons-react';
+'use client';
 
-export function TeamDashboard() {
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Button } from '@chat/ui';
+import { IconClipboardList, IconCalendar, IconProgress, IconPlus, IconEye, IconUsers, IconClock } from '@tabler/icons-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { RecentActivity } from './recent-activity';
+import type { ActivityLog } from '@/packages/database/src/schema/activity';
+
+interface TeamDashboardProps {
+  userId: string;
+  userName?: string | null;
+  userEmail?: string | null;
+  recentActivity?: ActivityLog[];
+}
+
+export function TeamDashboard({ userId, userName, userEmail, recentActivity = [] }: TeamDashboardProps) {
+  const router = useRouter();
+  
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Team Dashboard</h1>
-        <p className="text-muted-foreground mt-2">
-          Manage your tasks and collaborate with clients
+      <div style={{ marginBottom: 'var(--space-6)' }}>
+        <h1 className="text-4xl font-bold" style={{ marginBottom: 'var(--space-2)' }}>
+          Welcome back, {userName || userEmail}!
+        </h1>
+        <p className="text-muted-foreground">
+          Here&apos;s your task overview and project status
         </p>
       </div>
 
-      {/* Stats Overview */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">My Tasks</CardTitle>
-            <IconChecklist className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">15</div>
-            <p className="text-xs text-muted-foreground">5 due this week</p>
-          </CardContent>
-        </Card>
+      {/* Quick Actions */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Button onClick={() => router.push('/tasks/new')} className="h-auto py-4 flex-col gap-2">
+          <IconPlus className="h-6 w-6" />
+          <span>Create Task</span>
+        </Button>
+        <Button variant="secondary" onClick={() => router.push('/tasks')} className="h-auto py-4 flex-col gap-2">
+          <IconClipboardList className="h-6 w-6" />
+          <span>My Tasks</span>
+        </Button>
+        <Button variant="secondary" onClick={() => router.push('/projects')} className="h-auto py-4 flex-col gap-2">
+          <IconProgress className="h-6 w-6" />
+          <span>Projects</span>
+        </Button>
+        <Button variant="secondary" onClick={() => router.push('/calendar')} className="h-auto py-4 flex-col gap-2">
+          <IconCalendar className="h-6 w-6" />
+          <span>Calendar</span>
+        </Button>
+      </div>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">In Progress</CardTitle>
-            <IconClock className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">8</div>
-            <p className="text-xs text-muted-foreground">3 need updates</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Clients</CardTitle>
-            <IconUsers className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">6</div>
-            <p className="text-xs text-muted-foreground">4 with active projects</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Messages</CardTitle>
-            <IconMessage className="h-4 w-4 text-muted-foreground" />
+      {/* Stats Grid */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <Card hover>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-medium">My Open Tasks</CardTitle>
+              <IconClipboardList className="h-4 w-4 text-muted-foreground" />
+            </div>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">12</div>
-            <p className="text-xs text-muted-foreground">3 unread</p>
+            <p className="text-xs text-muted-foreground mt-1">3 due this week</p>
+          </CardContent>
+        </Card>
+
+        <Card hover>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-medium">In Progress</CardTitle>
+              <IconClock className="h-4 w-4 text-muted-foreground" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">8</div>
+            <p className="text-xs text-muted-foreground mt-1">3 need updates</p>
+          </CardContent>
+        </Card>
+
+        <Card hover>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-medium">Active Projects</CardTitle>
+              <IconProgress className="h-4 w-4 text-muted-foreground" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">5</div>
+            <p className="text-xs text-muted-foreground mt-1">2 near deadline</p>
+          </CardContent>
+        </Card>
+
+        <Card hover>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-medium">Active Clients</CardTitle>
+              <IconUsers className="h-4 w-4 text-muted-foreground" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">6</div>
+            <p className="text-xs text-muted-foreground mt-1">4 with active projects</p>
           </CardContent>
         </Card>
       </div>
 
+      {/* Today\'s Tasks */}
       <div className="grid gap-4 md:grid-cols-2">
-        {/* Today's Tasks */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <IconCalendar className="h-5 w-5" />
-              Today's Tasks
-            </CardTitle>
-            <CardDescription>Tasks scheduled for today</CardDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Today&apos;s Tasks</CardTitle>
+                <CardDescription>Tasks scheduled for today</CardDescription>
+              </div>
+              <Link href="/tasks">
+                <Button variant="ghost" size="sm">
+                  <IconEye className="h-4 w-4 mr-2" />
+                  View All
+                </Button>
+              </Link>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {[
-                { task: 'Review homepage mockup', client: 'Acme Corp', priority: 'high' },
-                { task: 'Update project timeline', client: 'TechStart', priority: 'medium' },
-                { task: 'Client call preparation', client: 'Global Solutions', priority: 'high' }
-              ].map((item, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                  <div>
-                    <p className="font-medium text-sm">{item.task}</p>
-                    <p className="text-xs text-muted-foreground">{item.client}</p>
-                  </div>
-                  <span className={`text-xs px-2 py-1 rounded-md ${
-                    item.priority === 'high' 
-                      ? 'bg-red-100 text-red-800' 
-                      : 'bg-yellow-100 text-yellow-800'
-                  }`}>
-                    {item.priority}
-                  </span>
+              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                <div className="space-y-1">
+                  <p className="text-sm font-medium">Review homepage mockup</p>
+                  <p className="text-xs text-muted-foreground">Acme Corp • Due in 2 hours</p>
                 </div>
-              ))}
+                <span className="px-2 py-1 text-xs rounded-full bg-destructive text-destructive-foreground">
+                  High
+                </span>
+              </div>
+              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                <div className="space-y-1">
+                  <p className="text-sm font-medium">Update project timeline</p>
+                  <p className="text-xs text-muted-foreground">TechStart • Due in 4 hours</p>
+                </div>
+                <span className="px-2 py-1 text-xs rounded-full bg-warning text-warning-foreground">
+                  Medium
+                </span>
+              </div>
+              <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                <div className="space-y-1">
+                  <p className="text-sm font-medium">Client call preparation</p>
+                  <p className="text-xs text-muted-foreground">Global Solutions • Due today</p>
+                </div>
+                <span className="px-2 py-1 text-xs rounded-full bg-destructive text-destructive-foreground">
+                  High
+                </span>
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Project Updates */}
+        {/* Project Deadlines */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <IconTrendingUp className="h-5 w-5" />
-              Recent Project Updates
-            </CardTitle>
-            <CardDescription>Latest activity across your projects</CardDescription>
+            <CardTitle>Upcoming Deadlines</CardTitle>
+            <CardDescription>Important project milestones</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {[
-                { update: 'Client approved logo design', project: 'Acme Rebrand', time: '2 hours ago' },
-                { update: 'New feedback on wireframes', project: 'TechStart Website', time: '4 hours ago' },
-                { update: 'Meeting notes added', project: 'Global Campaign', time: '1 day ago' }
-              ].map((item, index) => (
-                <div key={index} className="p-3 bg-muted rounded-lg">
-                  <p className="font-medium text-sm">{item.update}</p>
-                  <div className="flex items-center justify-between mt-1">
-                    <p className="text-xs text-muted-foreground">{item.project}</p>
-                    <p className="text-xs text-muted-foreground">{item.time}</p>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="h-2 w-2 rounded-full bg-destructive"></div>
+                  <div>
+                    <p className="text-sm font-medium">Acme Rebrand Phase 2</p>
+                    <p className="text-xs text-muted-foreground">3 days remaining</p>
                   </div>
                 </div>
-              ))}
+                <Link href="/projects/acme-rebrand">
+                  <Button variant="ghost" size="sm">View</Button>
+                </Link>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="h-2 w-2 rounded-full bg-warning"></div>
+                  <div>
+                    <p className="text-sm font-medium">TechStart Website Launch</p>
+                    <p className="text-xs text-muted-foreground">Next week</p>
+                  </div>
+                </div>
+                <Link href="/projects/techstart-website">
+                  <Button variant="ghost" size="sm">View</Button>
+                </Link>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="h-2 w-2 rounded-full bg-success"></div>
+                  <div>
+                    <p className="text-sm font-medium">Global Campaign Review</p>
+                    <p className="text-xs text-muted-foreground">2 weeks</p>
+                  </div>
+                </div>
+                <Link href="/projects/global-campaign">
+                  <Button variant="ghost" size="sm">View</Button>
+                </Link>
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
+
+      {/* Recent Activity */}
+      {recentActivity && recentActivity.length > 0 && (
+        <RecentActivity activities={recentActivity} role="team_member" />
+      )}
     </div>
   );
 }

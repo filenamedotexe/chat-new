@@ -4,26 +4,34 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 47.4% 11.2%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 47.4% 11.2%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 47.4% 11.2%;
-    --radius: 0.5rem;
+    --background: 0, 0%, 100%;
+    --foreground: 220, 13%, 13%;
+    --primary: 262, 80%, 50%;  /* Modern purple */
+    --primary-foreground: 0, 0%, 100%;
+    --secondary: 220, 14%, 96%;
+    --secondary-foreground: 220, 13%, 13%;
+    --muted: 220, 14%, 96%;
+    --muted-foreground: 220, 8%, 46%;
+    --accent: 262, 80%, 50%;
+    --accent-foreground: 0, 0%, 100%;
+    --destructive: 0, 84%, 60%;
+    --destructive-foreground: 0, 0%, 100%;
+    --border: 220, 13%, 91%;
+    --input: 220, 13%, 91%;
+    --ring: 262, 80%, 50%;
+    --card: 0, 0%, 100%;
+    --card-foreground: 220, 13%, 13%;
+    --popover: 0, 0%, 100%;
+    --popover-foreground: 220, 13%, 13%;
+    --radius: 0.75rem;  /* 12px - more modern rounded corners */
+    
+    /* Status colors - more vibrant */
+    --success: 142, 71%, 45%;
+    --success-foreground: 0, 0%, 100%;
+    --warning: 38, 92%, 50%;
+    --warning-foreground: 0, 0%, 100%;
+    --info: 199, 89%, 48%;
+    --info-foreground: 0, 0%, 100%;
     
     /* Spacing scale for consistent UI rhythm */
     --space-1: 0.25rem;  /* 4px */
@@ -37,25 +45,33 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --background: 224, 71%, 4%;
+    --foreground: 213, 31%, 91%;
+    --primary: 263, 70%, 65%;  /* Lighter purple for dark mode */
+    --primary-foreground: 224, 71%, 4%;
+    --secondary: 217, 33%, 17%;
+    --secondary-foreground: 213, 31%, 91%;
+    --muted: 217, 33%, 17%;
+    --muted-foreground: 215, 20%, 65%;
+    --accent: 263, 70%, 65%;
+    --accent-foreground: 224, 71%, 4%;
+    --destructive: 0, 72%, 65%;
+    --destructive-foreground: 224, 71%, 4%;
+    --border: 217, 33%, 17%;
+    --input: 217, 33%, 17%;
+    --ring: 263, 70%, 65%;
+    --card: 224, 71%, 4%;
+    --card-foreground: 213, 31%, 91%;
+    --popover: 224, 71%, 4%;
+    --popover-foreground: 213, 31%, 91%;
+    
+    /* Status colors for dark mode */
+    --success: 142, 71%, 55%;
+    --success-foreground: 224, 71%, 4%;
+    --warning: 38, 92%, 60%;
+    --warning-foreground: 224, 71%, 4%;
+    --info: 199, 89%, 58%;
+    --info-foreground: 224, 71%, 4%;
   }
 }
 
@@ -127,5 +143,55 @@
       --space-7: 2.5rem;   /* 40px - reduced from 48px */
       --space-8: 3rem;     /* 48px - reduced from 64px */
     }
+  }
+  
+  /* Status color utilities */
+  .text-success { color: hsl(var(--success)); }
+  .text-warning { color: hsl(var(--warning)); }
+  .text-info { color: hsl(var(--info)); }
+  
+  .bg-success { background-color: hsl(var(--success)); }
+  .bg-warning { background-color: hsl(var(--warning)); }
+  .bg-info { background-color: hsl(var(--info)); }
+  
+  /* Hover state improvements */
+  .hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Better focus states */
+  .focus-ring {
+    transition: box-shadow 0.2s ease;
+  }
+  .focus-ring:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.2);
+  }
+  
+  /* Modern shadow utilities */
+  .shadow-sm {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+  .shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  .shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  .shadow-xl {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  /* Card-specific styling */
+  .card-hover {
+    transition: all 0.2s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
 }
