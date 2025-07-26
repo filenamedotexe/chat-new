@@ -23,7 +23,9 @@ import {
   DropdownItem,
   DropdownSeparator,
   MobileMenu,
-  Avatar
+  Avatar,
+  ThemeToggle,
+  useTheme
 } from '@chat/ui';
 import { useMobileMenuContext } from '@/lib/contexts/mobile-menu-context';
 import type { UserRole } from '@chat/shared-types';
@@ -41,9 +43,14 @@ function NavigationHeader({ user }: NavigationProps) {
   const pathname = usePathname();
   const router = useRouter();
   const mobileMenu = useMobileMenuContext();
+  const { theme, setTheme } = useTheme();
   
   const handleSignOut = () => {
     signOut({ callbackUrl: '/login' });
+  };
+  
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
   };
   
   return (
@@ -120,6 +127,8 @@ function NavigationHeader({ user }: NavigationProps) {
           </Link>
         )}
         
+        <ThemeToggle theme={theme} onToggle={toggleTheme} data-testid="theme-toggle" />
+        
         <Dropdown
           align="right"
           trigger={
@@ -190,9 +199,14 @@ function NavigationHeader({ user }: NavigationProps) {
 export function Navigation({ user }: NavigationProps) {
   const mobileMenu = useMobileMenuContext();
   const pathname = usePathname();
+  const { theme, setTheme } = useTheme();
   
   const handleSignOut = () => {
     signOut({ callbackUrl: '/login' });
+  };
+  
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
   };
   
   return (
@@ -316,6 +330,15 @@ export function Navigation({ user }: NavigationProps) {
               <IconSettings className="h-5 w-5" />
               Settings
             </Link>
+          </div>
+        </div>
+        
+        {/* Theme Toggle */}
+        <div className="px-3 mb-4">
+          <h3 className="px-3 mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Appearance</h3>
+          <div className="flex items-center justify-between px-3 py-2">
+            <span className="text-sm">Theme</span>
+            <ThemeToggle theme={theme} onToggle={toggleTheme} data-testid="mobile-theme-toggle" />
           </div>
         </div>
         
