@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/lib/contexts/auth-context';
 import type { FeatureName } from './featureFlags';
 
 export function useFeature(featureName: FeatureName): boolean {
-  const { data: session } = useSession();
+  const { session, loading: authLoading } = useAuth();
   const [isEnabled, setIsEnabled] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -23,12 +23,16 @@ export function useFeature(featureName: FeatureName): boolean {
       }
     }
 
+    if (authLoading) {
+      return;
+    }
+
     if (session) {
       checkFeature();
     } else {
       setLoading(false);
     }
-  }, [featureName, session]);
+  }, [featureName, session, authLoading]);
 
   return !loading && isEnabled;
 }

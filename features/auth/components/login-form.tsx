@@ -1,11 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@chat/ui';
 import { Input } from '@chat/ui';
 import { Card } from '@chat/ui';
+import { signInWithPassword } from '@/lib/supabase/auth-browser';
+import { isFeatureEnabled } from '@/packages/database/src';
+import { FEATURES } from '@/lib/features/constants';
 
 export function LoginForm() {
   const router = useRouter();
@@ -13,6 +16,20 @@ export function LoginForm() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [useSupabaseAuth, setUseSupabaseAuth] = useState(false);
+
+  useEffect(() => {
+    async function checkSupabaseAuth() {
+      try {
+        const enabled = await isFeatureEnabled(FEATURES.SUPABASE_AUTH);
+        setUseSupabaseAuth(enabled);
+      } catch (error) {
+        console.error('Error checking Supabase auth feature:', error);
+        setUseSupabaseAuth(false);
+      }
+    }
+    checkSupabaseAuth();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,17 +37,28 @@ export function LoginForm() {
     setIsLoading(true);
 
     try {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      });
-
-      if (result?.error) {
-        setError('Invalid email or password');
+      if (useSupabaseAuth) {
+        const { data, error } = await signInWithPassword(email, password);
+        
+        if (error) {
+          setError(error.message || 'Invalid email or password');
+        } else if (data.user) {
+          router.push('/dashboard');
+          router.refresh();
+        }
       } else {
-        router.push('/dashboard');
-        router.refresh();
+        const result = await signIn('credentials', {
+          email,
+          password,
+          redirect: false,
+        });
+
+        if (result?.error) {
+          setError('Invalid email or password');
+        } else {
+          router.push('/dashboard');
+          router.refresh();
+        }
       }
     } catch (error) {
       setError('An error occurred. Please try again.');
@@ -44,6 +72,11 @@ export function LoginForm() {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <h2 className="text-2xl font-bold text-center mb-6">Sign In</h2>
+          {useSupabaseAuth && (
+            <div className="text-xs text-center text-blue-600 mb-2">
+              Using Supabase Auth
+            </div>
+          )}
         </div>
         
         {error && (

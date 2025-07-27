@@ -1,12 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { IconMail, IconLock, IconUser } from '@tabler/icons-react';
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Input } from '@chat/ui';
+import { signUp } from '@/lib/supabase/auth-browser';
+import { isFeatureEnabled } from '@/packages/database/src';
+import { FEATURES } from '@/lib/features/constants';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -16,6 +19,20 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [useSupabaseAuth, setUseSupabaseAuth] = useState(false);
+
+  useEffect(() => {
+    async function checkSupabaseAuth() {
+      try {
+        const enabled = await isFeatureEnabled(FEATURES.SUPABASE_AUTH);
+        setUseSupabaseAuth(enabled);
+      } catch (error) {
+        console.error('Error checking Supabase auth feature:', error);
+        setUseSupabaseAuth(false);
+      }
+    }
+    checkSupabaseAuth();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,27 +51,40 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, name }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || 'Registration failed');
-      } else {
-        // Auto sign in after registration
-        const result = await signIn('credentials', {
-          email,
-          password,
-          redirect: false,
+      if (useSupabaseAuth) {
+        const { data, error } = await signUp(email, password, {
+          name: name
         });
-
-        if (result?.ok) {
+        
+        if (error) {
+          setError(error.message || 'Registration failed');
+        } else if (data.user) {
           router.push('/dashboard');
           router.refresh();
+        }
+      } else {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, name }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          setError(data.error || 'Registration failed');
+        } else {
+          // Auto sign in after registration
+          const result = await signIn('credentials', {
+            email,
+            password,
+            redirect: false,
+          });
+
+          if (result?.ok) {
+            router.push('/dashboard');
+            router.refresh();
+          }
         }
       }
     } catch {
@@ -75,6 +105,11 @@ export default function RegisterPage() {
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold text-center">Create Account</CardTitle>
+            {useSupabaseAuth && (
+              <div className="text-xs text-center text-blue-600 mb-2">
+                Using Supabase Auth
+              </div>
+            )}
             <CardDescription className="text-center">
               Enter your details to create a new account
             </CardDescription>
