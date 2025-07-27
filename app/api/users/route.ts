@@ -4,6 +4,8 @@ import { db } from '@chat/database';
 import { users } from '@chat/database';
 import { eq } from 'drizzle-orm';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const session = await auth();

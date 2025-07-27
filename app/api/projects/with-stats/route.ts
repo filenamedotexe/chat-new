@@ -3,6 +3,8 @@ import { auth } from '@/lib/auth/auth.config';
 import { getProjectsWithStats } from '@/features/projects/data/projects';
 import type { UserRole } from '@chat/shared-types';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const session = await auth();
