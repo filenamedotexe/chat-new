@@ -1,15 +1,11 @@
-import { neon } from '@neondatabase/serverless';
+import { neon, NeonQueryFunction } from '@neondatabase/serverless';
 import type { User, Session, Feature } from '@chat/shared-types';
 
-// For build time, we'll use a dummy URL if DATABASE_URL is not set
-// The actual connection will fail at runtime if DATABASE_URL is not provided
+// Get database URL at initialization time
 const databaseUrl = process.env.DATABASE_URL || 'postgresql://dummy:dummy@dummy/dummy';
 
-if (!process.env.DATABASE_URL && process.env.NODE_ENV === 'production') {
-  console.warn('DATABASE_URL environment variable is not set. Database operations will fail at runtime.');
-}
-
-const sql = neon(databaseUrl);
+// Create and export the SQL client
+export const sql = neon(databaseUrl);
 
 export * from './client';
 export * from './schema/auth';
@@ -17,9 +13,8 @@ export * from './schema/organizations';
 export * from './schema/tasks';
 export * from './schema/files';
 export * from './schema/communications';
+export * from './schema/conversations';
 export * from './schema/activity';
-
-export { sql };
 
 export const schema = `
 CREATE TABLE IF NOT EXISTS users (

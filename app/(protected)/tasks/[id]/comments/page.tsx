@@ -7,13 +7,13 @@ import Link from 'next/link';
 import type { UserRole } from '@chat/shared-types';
 import { UniversalChat } from '@/components/chat/UniversalChat';
 
-interface TaskChatPageProps {
+interface TaskCommentsPageProps {
   params: {
     id: string;
   };
 }
 
-export default async function TaskChatPage({ params }: TaskChatPageProps) {
+export default async function TaskCommentsPage({ params }: TaskCommentsPageProps) {
   const session = await auth();
   
   if (!session) {
@@ -40,13 +40,13 @@ export default async function TaskChatPage({ params }: TaskChatPageProps) {
             </Button>
           </Link>
           
-          <h1 className="text-3xl font-bold">{task.title} - Discussion</h1>
+          <h1 className="text-3xl font-bold">{task.title} - Comments</h1>
           <p className="text-muted-foreground mt-2">
             Task-specific comments and updates
           </p>
         </div>
 
-        {/* Chat Container */}
+        {/* Comments Container */}
         <div className="flex-1 min-h-0">
           <UniversalChat
             type="task"

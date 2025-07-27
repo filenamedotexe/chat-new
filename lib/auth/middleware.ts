@@ -5,7 +5,8 @@ export async function authMiddleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   
   const isAuthPage = pathname.startsWith('/login') || pathname.startsWith('/register');
-  const isPublicPage = pathname === '/' || isAuthPage;
+  const isTestPage = pathname.startsWith('/test-');
+  const isPublicPage = pathname === '/' || isAuthPage || isTestPage;
   const isApiRoute = pathname.startsWith('/api');
   
   // For now, we'll use a simple cookie check

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Button, Card } from '@chat/ui';
-import { IconCheck, IconClipboardList, IconFiles, IconMessage } from '@tabler/icons-react';
+import { IconCheck, IconClipboardList, IconFiles } from '@tabler/icons-react';
 import Link from 'next/link';
 import { ActionGate, TooltipActionGate } from '@/features/requirements/components/action-gate';
 import { checkProjectCanBeCompleted } from '@/features/requirements/lib/requirements';
@@ -83,12 +83,6 @@ export function ProjectDetailActions({ project, progress, canEdit }: ProjectDeta
             <Button variant="outline" size="lg" className="w-full">
               <IconFiles className="h-5 w-5 mr-2" />
               View Files
-            </Button>
-          </Link>
-          <Link href={`/projects/${project.id}/chat`} className="flex-1">
-            <Button variant="outline" size="lg" className="w-full">
-              <IconMessage className="h-5 w-5 mr-2" />
-              Team Chat
             </Button>
           </Link>
         </div>

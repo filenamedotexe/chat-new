@@ -3,6 +3,7 @@
 import { Layout, Header, ErrorBoundary, Breadcrumbs, MobileBreadcrumbs } from '@chat/ui';
 import { Navigation } from './Navigation';
 import { MobileMenuProvider } from '@/lib/contexts/mobile-menu-context';
+import { ChatBubble } from '@/features/support-chat';
 import type { UserRole } from '@chat/shared-types';
 
 interface ProtectedLayoutClientProps {
@@ -39,6 +40,13 @@ export function ProtectedLayoutClient({ user, children }: ProtectedLayoutClientP
         <ErrorBoundary>
           {children}
         </ErrorBoundary>
+        
+        {/* Chat Bubble - Available for all authenticated users */}
+        <ChatBubble
+          isOnline={true}
+          unreadCount={3}
+          onClick={() => console.log('Chat bubble clicked')}
+        />
       </Layout>
     </MobileMenuProvider>
   );

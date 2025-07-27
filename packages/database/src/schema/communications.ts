@@ -21,6 +21,10 @@ export const messages = pgTable('messages', {
   deletedAt: timestamp('deleted_at'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  // Support chat columns
+  conversationId: uuid('conversation_id'),
+  isInternalNote: boolean('is_internal_note').default(false).notNull(),
+  readAt: timestamp('read_at'),
 }, (table) => {
   return {
     projectIdIdx: index('messages_project_id_idx').on(table.projectId),
@@ -29,6 +33,8 @@ export const messages = pgTable('messages', {
     recipientIdIdx: index('messages_recipient_id_idx').on(table.recipientId),
     createdAtIdx: index('messages_created_at_idx').on(table.createdAt),
     deletedAtIdx: index('messages_deleted_at_idx').on(table.deletedAt),
+    conversationIdIdx: index('messages_conversation_id_idx').on(table.conversationId),
+    readAtIdx: index('messages_read_at_idx').on(table.readAt),
   };
 });
 

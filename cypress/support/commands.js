@@ -14,6 +14,54 @@ Cypress.Commands.add('logout', () => {
   cy.url().should('include', '/login');
 });
 
+Cypress.Commands.add('loginAs', (email, options = {}) => {
+  // Import test UUIDs
+  const { TEST_UUIDS } = require('./uuid-utils');
+  
+  // For API testing, we'll set up session state
+  cy.session([email, options], () => {
+    // Map emails to consistent test user IDs
+    let userId = options.userId;
+    if (!userId) {
+      if (email === 'testclient@example.com') userId = TEST_UUIDS.CLIENT_1;
+      else if (email === 'testadmin@example.com') userId = TEST_UUIDS.ADMIN_1;
+      else if (email === 'client1@test.com') userId = TEST_UUIDS.CLIENT_1;
+      else if (email === 'client2@test.com') userId = TEST_UUIDS.CLIENT_2;
+      else if (email === 'admin@test.com') userId = TEST_UUIDS.ADMIN_1;
+      else if (email === 'team@test.com') userId = TEST_UUIDS.TEAM_1;
+      else userId = TEST_UUIDS.CLIENT_1; // Default fallback
+    }
+    
+    // Mock authentication for testing
+    const userData = {
+      id: userId,
+      email: email,
+      role: options.role || (email.includes('admin') ? 'admin' : 
+                           email.includes('team') ? 'team' : 'client'),
+      isActive: options.isActive !== false,
+      name: email.split('@')[0]
+    };
+    
+    // Store for later use
+    cy.window().then((win) => {
+      win.localStorage.setItem('test-user', JSON.stringify(userData));
+    });
+  });
+  
+  // Add auth header to all requests
+  cy.intercept('**', (req) => {
+    try {
+      const userData = JSON.parse(window.localStorage.getItem('test-user') || '{}');
+      if (userData.email && userData.id) {
+        req.headers['x-test-user'] = JSON.stringify(userData);
+        req.headers['authorization'] = `Bearer mock-token-${userData.id}`;
+      }
+    } catch (e) {
+      // Ignore JSON parse errors
+    }
+  }).as('authRequests');
+});
+
 Cypress.Commands.add('createProject', (name, description) => {
   cy.visit('/projects');
   cy.contains('New Project').click();

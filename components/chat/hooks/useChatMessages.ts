@@ -65,7 +65,7 @@ export function useChatMessages({
     } finally {
       setLoading(false);
     }
-  }, [type, projectId, taskId, recipientId, offset, limit, getApiEndpoint]);
+  }, [projectId, taskId, recipientId, offset, limit, getApiEndpoint]);
 
   // Initial load
   useEffect(() => {

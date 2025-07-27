@@ -136,10 +136,10 @@ export function TaskDetail({
           {chatEnabled && (
             <Button 
               variant="outline"
-              onClick={() => window.location.href = `/tasks/${task.id}/chat`}
+              onClick={() => window.location.href = `/tasks/${task.id}/comments`}
             >
               <IconMessage className="h-4 w-4 mr-2" />
-              Discussion
+              Comments
             </Button>
           )}
           

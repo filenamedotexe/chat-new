@@ -14,6 +14,10 @@ module.exports = defineConfig({
       on('task', {
         cleanupTestData: tasks.cleanupTestData,
         seedTestData: tasks.seedTestData,
+        'db:reset': tasks['db:reset'],
+        'db:seed': tasks['db:seed'],
+        'db:createConversation': tasks['db:createConversation'],
+        'db:createConversationWithMessages': tasks['db:createConversationWithMessages'],
       });
     },
   },

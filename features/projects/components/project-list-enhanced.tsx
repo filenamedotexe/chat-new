@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 import { 
   IconClipboardList, 
   IconFiles, 
-  IconMessage, 
   IconProgress,
   IconCalendar,
   IconBuilding,
@@ -244,18 +243,6 @@ export function ProjectListEnhanced({ userId, userRole }: ProjectListEnhancedPro
                 >
                   <IconFiles className="h-3 w-3" />
                   Files
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    router.push(`/projects/${project.id}/chat`);
-                  }}
-                  className="text-xs"
-                >
-                  <IconMessage className="h-3 w-3" />
-                  Chat
                 </Button>
               </div>
             </div>
