@@ -8,13 +8,14 @@ export * from './types';
 export * from './components/chat-bubble';
 export * from './components/chat-widget';
 export * from './components/message-list';
-// export * from './components/message-input';
+export * from './components/message-input';
 // export * from './components/conversation-list';
 // export * from './components/conversation-view';
 // export * from './components/conversation-actions';
 
 // Hooks (Phase 1.4 & 2)
 export * from './hooks/use-conversation-stream';
+export * from './hooks/use-file-upload';
 // export * from './hooks/use-conversation';
 
 // Utils & Data (Phase 1)

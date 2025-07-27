@@ -125,6 +125,61 @@ const mockMessages: SupportMessageWithSender[] = [
       email: 'sarah@company.com',
       role: 'admin'
     }
+  },
+  {
+    id: '9',
+    conversationId: 'conv-1',
+    senderId: 'current-user',
+    content: 'Actually, I have a screenshot of the error I was seeing. Let me share it with you:',
+    isInternalNote: false,
+    attachments: [
+      {
+        id: 'file-1',
+        originalName: 'error-screenshot.png',
+        fileSize: 245760, // 240KB
+        mimeType: 'image/png',
+        downloadUrl: '/api/files/file-1/download'
+      }
+    ],
+    createdAt: new Date(Date.now() - 20 * 60 * 1000), // 20 minutes ago
+    updatedAt: new Date(Date.now() - 20 * 60 * 1000),
+    sender: {
+      id: 'current-user',
+      name: 'Test User',
+      email: 'user@test.com',
+      role: 'client'
+    }
+  },
+  {
+    id: '10',
+    conversationId: 'conv-1',
+    senderId: 'support-1',
+    content: 'Thanks for the screenshot! I can see the issue clearly now. Here\'s a guide document that should help resolve this:',
+    isInternalNote: false,
+    attachments: [
+      {
+        id: 'file-2',
+        originalName: 'troubleshooting-guide.pdf',
+        fileSize: 1048576, // 1MB
+        mimeType: 'application/pdf',
+        downloadUrl: '/api/files/file-2/download'
+      },
+      {
+        id: 'file-3',
+        originalName: 'config-template.xlsx',
+        fileSize: 524288, // 512KB
+        mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        downloadUrl: '/api/files/file-3/download'
+      }
+    ],
+    createdAt: new Date(Date.now() - 15 * 60 * 1000), // 15 minutes ago
+    updatedAt: new Date(Date.now() - 15 * 60 * 1000),
+    sender: {
+      id: 'support-1',
+      name: 'Sarah Chen',
+      email: 'sarah@company.com',
+      role: 'admin'
+    }
   }
 ];
 
@@ -153,12 +208,13 @@ export default function TestChatWidgetPage() {
     setIsMinimized(false);
   };
 
-  const handleSendMessage = (content: string) => {
+  const handleSendMessage = (content: string, files?: File[]) => {
+    const fileInfo = files && files.length > 0 ? ` [${files.length} file(s) attached: ${files.map(f => f.name).join(', ')}]` : '';
     const newMessage: SupportMessageWithSender = {
       id: `msg-${Date.now()}`,
       conversationId: 'conv-1',
       senderId: 'current-user',
-      content,
+      content: content + fileInfo,
       isInternalNote: false,
       createdAt: new Date(),
       updatedAt: new Date(),

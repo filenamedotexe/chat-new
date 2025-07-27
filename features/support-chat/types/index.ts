@@ -30,12 +30,21 @@ export interface ConversationWithDetails extends Conversation {
   };
 }
 
+export interface MessageAttachment {
+  id: string;
+  originalName: string;
+  fileSize: number;
+  mimeType: string;
+  downloadUrl: string;
+}
+
 export interface SupportMessage {
   id: string;
   conversationId: string;
   senderId: string;
   content: string;
   isInternalNote: boolean;
+  attachments?: MessageAttachment[];
   readAt?: Date;
   createdAt: Date;
   updatedAt: Date;

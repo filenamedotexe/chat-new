@@ -43,8 +43,10 @@ export async function GET(request: NextRequest) {
 
   } catch (error) {
     console.error('Error fetching conversations:', error);
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
+    console.error('Error message:', error instanceof Error ? error.message : String(error));
     return NextResponse.json(
-      { error: 'Failed to fetch conversations' },
+      { error: 'Failed to fetch conversations', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }
@@ -62,8 +64,8 @@ export async function POST(request: NextRequest) {
     const userRole = session.user.role as UserRole;
     const userId = session.user.id;
 
-    // Only users and clients can create conversations
-    if (userRole !== 'user' && userRole !== 'client') {
+    // Only clients can create conversations
+    if (userRole !== 'client') {
       return NextResponse.json(
         { error: 'Only clients can initiate conversations' }, 
         { status: 403 }
@@ -81,8 +83,10 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Error creating conversation:', error);
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
+    console.error('Error message:', error instanceof Error ? error.message : String(error));
     return NextResponse.json(
-      { error: 'Failed to create conversation' },
+      { error: 'Failed to create conversation', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }

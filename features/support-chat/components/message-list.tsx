@@ -5,6 +5,7 @@ import { format, isToday, isYesterday } from 'date-fns';
 import { ChatBubble } from '@chat/ui';
 import { Loader2, AlertCircle, MessageCircle } from 'lucide-react';
 import { clsx } from 'clsx';
+import { MessageAttachments } from './message-attachments';
 import type { SupportMessageWithSender } from '../types';
 
 interface MessageListProps {
@@ -223,6 +224,16 @@ export function MessageList({
                       showAvatar={!isGrouped}
                       showSenderName={!isOwnMessage && !isGrouped}
                     />
+                    
+                    {/* Message attachments */}
+                    {msg.attachments && msg.attachments.length > 0 && (
+                      <div className={clsx(
+                        'mt-2',
+                        isOwnMessage ? 'mr-11' : 'ml-11'
+                      )}>
+                        <MessageAttachments attachments={msg.attachments} />
+                      </div>
+                    )}
                     
                     {/* Internal note indicator */}
                     {msg.isInternalNote && (

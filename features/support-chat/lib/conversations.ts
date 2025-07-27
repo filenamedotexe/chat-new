@@ -1,6 +1,7 @@
 import { db } from '@/packages/database/src/client';
 import { conversations, users, messages } from '@/packages/database/src';
 import { eq, and, desc, asc, count, sql } from 'drizzle-orm';
+import { getUserById } from '@/packages/database/src';
 import type { 
   Conversation, 
   ConversationWithDetails, 
@@ -252,6 +253,12 @@ export async function markMessageAsRead(messageId: string): Promise<void> {
 }
 
 export async function getOrCreateClientConversation(clientId: string): Promise<Conversation> {
+  // First, ensure the user exists
+  const user = await getUserById(clientId);
+  if (!user) {
+    throw new Error(`User with ID ${clientId} does not exist. Cannot create conversation without valid user.`);
+  }
+
   // Try to find existing active conversation
   const existing = await db
     .select()

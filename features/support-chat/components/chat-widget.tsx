@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Minimize2, X, Paperclip, Send, MessageCircle } from 'lucide-react';
+import { Minimize2, X, MessageCircle } from 'lucide-react';
 import { clsx } from 'clsx';
 import { MessageList } from './message-list';
+import { MessageInput } from './message-input';
 import type { SupportMessageWithSender } from '../types';
 
 interface ChatWidgetProps {
@@ -18,7 +19,7 @@ interface ChatWidgetProps {
   loading?: boolean;
   onLoadMore?: () => void;
   hasMore?: boolean;
-  onSendMessage?: (content: string) => void;
+  onSendMessage?: (content: string, files?: File[]) => void;
 }
 
 export function ChatWidget({
@@ -34,24 +35,21 @@ export function ChatWidget({
   hasMore = false,
   onSendMessage
 }: ChatWidgetProps) {
-  const [message, setMessage] = useState('');
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  const handleSendMessage = () => {
-    if (!message.trim()) return;
+  const handleSendMessage = (content: string, files?: File[]) => {
+    if (!content.trim() && !files?.length) return;
     
     if (onSendMessage) {
-      onSendMessage(message.trim());
+      onSendMessage(content, files);
     } else {
       // Default behavior for testing
-      console.log('Sending message:', message.trim());
+      console.log('Sending message:', content, files ? `with ${files.length} files` : '');
     }
-    
-    setMessage('');
   };
 
   if (!isMounted) return null;
@@ -161,69 +159,16 @@ export function ChatWidget({
             className="flex-1"
           />
 
-          {/* Input Area */}
-          <div className="border-t border-border p-4">
-            <div className="flex items-end gap-2">
-              {/* File upload button */}
-              <button
-                className={clsx(
-                  'p-2 rounded-md hover:bg-muted transition-colors',
-                  'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
-                  'self-end mb-1'
-                )}
-                aria-label="Attach file"
-                data-testid="attach-file-button"
-              >
-                <Paperclip className="w-4 h-4 text-muted-foreground" />
-              </button>
-              
-              {/* Message input */}
-              <div className="flex-1 relative">
-                <textarea
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Type your message..."
-                  className={clsx(
-                    'w-full resize-none rounded-md border border-input',
-                    'bg-background px-3 py-2 text-sm',
-                    'placeholder:text-muted-foreground',
-                    'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
-                    'min-h-[40px] max-h-[120px]'
-                  )}
-                  rows={1}
-                  data-testid="message-input"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSendMessage();
-                    }
-                  }}
-                />
-              </div>
-              
-              {/* Send button */}
-              <button
-                onClick={handleSendMessage}
-                disabled={!message.trim()}
-                className={clsx(
-                  'p-2 rounded-md transition-colors self-end mb-1',
-                  'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
-                  message.trim()
-                    ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                    : 'bg-muted text-muted-foreground cursor-not-allowed'
-                )}
-                aria-label="Send message"
-                data-testid="send-button"
-              >
-                <Send className="w-4 h-4" />
-              </button>
-            </div>
-            
-            {/* Character count / hints */}
-            <div className="mt-2 text-xs text-muted-foreground">
-              Press Enter to send, Shift+Enter for new line
-            </div>
-          </div>
+          {/* Message Input */}
+          <MessageInput
+            onSendMessage={handleSendMessage}
+            disabled={loading}
+            isOffline={!isOnline}
+            loading={loading}
+            placeholder="Type your message..."
+            maxLength={1000}
+            allowFileUpload={true}
+          />
         </motion.div>
       )}
     </AnimatePresence>

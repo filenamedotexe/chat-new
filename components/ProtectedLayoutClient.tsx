@@ -3,7 +3,8 @@
 import { Layout, Header, ErrorBoundary, Breadcrumbs, MobileBreadcrumbs } from '@chat/ui';
 import { Navigation } from './Navigation';
 import { MobileMenuProvider } from '@/lib/contexts/mobile-menu-context';
-import { ChatBubble } from '@/features/support-chat';
+import { useState } from 'react';
+import { ChatBubble, ChatWidget } from '@/features/support-chat';
 import type { UserRole } from '@chat/shared-types';
 
 interface ProtectedLayoutClientProps {
@@ -17,6 +18,16 @@ interface ProtectedLayoutClientProps {
 }
 
 export function ProtectedLayoutClient({ user, children }: ProtectedLayoutClientProps) {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  const handleChatBubbleClick = () => {
+    setIsChatOpen(!isChatOpen);
+  };
+
+  const handleChatClose = () => {
+    setIsChatOpen(false);
+  };
+
   return (
     <MobileMenuProvider>
       <Layout>
@@ -41,11 +52,58 @@ export function ProtectedLayoutClient({ user, children }: ProtectedLayoutClientP
           {children}
         </ErrorBoundary>
         
-        {/* Chat Bubble - Available for all authenticated users */}
+        {/* Chat System - Available for all authenticated users */}
         <ChatBubble
+          isOpen={isChatOpen}
           isOnline={true}
           unreadCount={3}
-          onClick={() => console.log('Chat bubble clicked')}
+          onClick={handleChatBubbleClick}
+        />
+
+        <ChatWidget
+          isOpen={isChatOpen}
+          onClose={handleChatClose}
+          onMinimize={handleChatClose}
+          isOnline={true}
+          messages={[]}
+          currentUserId={user.id}
+          loading={false}
+          onSendMessage={async (content: string, files?: File[]) => {
+            console.log('Message sent:', content, files ? `with ${files.length} files` : '');
+            
+            // For now, simulate message sending with file handling
+            if (files && files.length > 0) {
+              console.log('Files to upload:');
+              files.forEach((file, index) => {
+                console.log(`  ${index + 1}. ${file.name} (${Math.round(file.size / 1024)}KB, ${file.type})`);
+              });
+              
+              // Simulate file upload process
+              try {
+                console.log('Simulating file upload...');
+                
+                // Create a FormData to test the upload
+                const formData = new FormData();
+                files.forEach(file => {
+                  formData.append('files', file);
+                });
+                
+                // For demo purposes, just show success
+                console.log('✅ Files processed successfully!');
+                
+                // In Phase 2.5, this will be real API calls:
+                // const response = await fetch(`/api/conversations/${conversationId}/files`, {
+                //   method: 'POST',
+                //   body: formData
+                // });
+                
+              } catch (error) {
+                console.error('❌ File upload error:', error);
+              }
+            }
+            
+            // TODO: Implement actual message sending in Phase 2.5
+          }}
         />
       </Layout>
     </MobileMenuProvider>
