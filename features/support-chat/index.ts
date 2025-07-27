@@ -6,8 +6,8 @@ export * from './types';
 
 // Components (Phase 2)
 export * from './components/chat-bubble';
-// export * from './components/chat-widget';
-// export * from './components/message-list';
+export * from './components/chat-widget';
+export * from './components/message-list';
 // export * from './components/message-input';
 // export * from './components/conversation-list';
 // export * from './components/conversation-view';
