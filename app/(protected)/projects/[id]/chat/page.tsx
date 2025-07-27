@@ -5,7 +5,7 @@ import { Button } from '@chat/ui';
 import { IconArrowLeft } from '@tabler/icons-react';
 import Link from 'next/link';
 import type { UserRole } from '@chat/shared-types';
-import { ChatContainer } from '@/features/chat/components/chat-container';
+import { UniversalChat } from '@/components/chat/UniversalChat';
 
 interface ProjectChatPageProps {
   params: {
@@ -48,7 +48,8 @@ export default async function ProjectChatPage({ params }: ProjectChatPageProps) 
 
         {/* Chat Container */}
         <div className="flex-1 min-h-0">
-          <ChatContainer
+          <UniversalChat
+            type="project"
             projectId={params.id}
             currentUserId={session.user.id}
             title="Project Chat"

@@ -5,7 +5,7 @@ import { Button } from '@chat/ui';
 import { IconArrowLeft } from '@tabler/icons-react';
 import Link from 'next/link';
 import type { UserRole } from '@chat/shared-types';
-import { ChatContainer } from '@/features/chat/components/chat-container';
+import { UniversalChat } from '@/components/chat/UniversalChat';
 
 interface TaskChatPageProps {
   params: {
@@ -48,7 +48,8 @@ export default async function TaskChatPage({ params }: TaskChatPageProps) {
 
         {/* Chat Container */}
         <div className="flex-1 min-h-0">
-          <ChatContainer
+          <UniversalChat
+            type="task"
             taskId={params.id}
             currentUserId={session.user.id}
             title="Task Comments"

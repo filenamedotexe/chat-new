@@ -8,24 +8,32 @@ import remarkGfm from 'remark-gfm';
 import { Avatar } from './Avatar';
 
 interface ChatBubbleProps {
-  role: 'user' | 'assistant' | 'system';
   content: string;
-  timestamp?: Date;
-  avatar?: {
-    src?: string;
-    fallback?: string;
+  isOwnMessage: boolean;
+  sender?: {
+    id?: string;
+    name?: string | null;
+    email?: string;
   };
+  timestamp?: Date;
+  isGrouped?: boolean;
   isStreaming?: boolean;
+  showAvatar?: boolean;
+  showSenderName?: boolean;
 }
 
-export function ChatBubble({ 
-  role, 
-  content, 
-  timestamp, 
-  avatar,
-  isStreaming = false 
+export function ChatBubble({
+  content,
+  isOwnMessage,
+  sender,
+  timestamp,
+  isGrouped = false,
+  isStreaming = false,
+  showAvatar = true,
+  showSenderName = true,
 }: ChatBubbleProps) {
-  const isUser = role === 'user';
+  const senderName = sender?.name || sender?.email || 'Unknown';
+  const avatarFallback = senderName.charAt(0).toUpperCase();
 
   return (
     <motion.div
@@ -33,63 +41,104 @@ export function ChatBubble({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
       className={clsx(
-        'flex gap-3',
-        isUser ? 'flex-row-reverse' : 'flex-row'
+        'flex gap-3 mb-4',
+        isOwnMessage ? 'flex-row-reverse' : 'flex-row',
+        isGrouped && '-mt-2'
       )}
     >
-      <Avatar
-        src={avatar?.src}
-        fallback={avatar?.fallback || (isUser ? 'U' : 'AI')}
-        size="sm"
-        className="mt-1"
-      />
-      
-      <div className={clsx('flex-1', isUser && 'flex justify-end')}>
+      {/* Avatar */}
+      <div className="w-8 flex-shrink-0">
+        {showAvatar && !isGrouped && (
+          <Avatar
+            fallback={avatarFallback}
+            size="sm"
+            className="mt-1"
+          />
+        )}
+      </div>
+
+      {/* Message Content */}
+      <div className={clsx('flex-1 max-w-[70%]', isOwnMessage && 'flex justify-end')}>
+        {/* Sender Name */}
+        {!isOwnMessage && showSenderName && !isGrouped && (
+          <p className="text-xs text-muted-foreground mb-1 ml-1">
+            {senderName}
+          </p>
+        )}
+
+        {/* Message Bubble */}
         <div
           className={clsx(
-            'rounded-lg px-4 py-2 max-w-[80%] overflow-hidden',
-            isUser
-              ? 'bg-primary text-primary-foreground'
-              : 'bg-muted text-foreground'
+            'px-4 py-3 rounded-2xl transition-all shadow-sm hover:shadow-md',
+            // Corner rounding for grouping
+            isOwnMessage
+              ? isGrouped
+                ? 'rounded-br-md'
+                : 'rounded-br-md'
+              : isGrouped
+              ? 'rounded-bl-md'
+              : 'rounded-bl-md',
+            // Colors - using global utilities
+            isOwnMessage
+              ? 'chat-bubble-sent'
+              : 'chat-bubble-received'
           )}
         >
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            className={clsx(
-              'prose prose-sm max-w-none break-words overflow-wrap-anywhere',
-              isUser ? 'prose-invert' : 'dark:prose-invert'
-            )}
-            components={{
-              p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
-              ul: ({ children }) => <ul className="mb-2 ml-4 list-disc">{children}</ul>,
-              ol: ({ children }) => <ol className="mb-2 ml-4 list-decimal">{children}</ol>,
-              li: ({ children }) => <li className="mb-1">{children}</li>,
-              code: ({ children, ...props }) => {
-                const isInline = !props.className;
-                const bgClass = isUser ? 'bg-primary-foreground/20' : 'bg-muted';
-                return isInline ? (
-                  <code className={`px-1 py-0.5 rounded ${bgClass} text-sm`}>{children}</code>
-                ) : (
-                  <code className={`block p-3 rounded ${bgClass} text-sm overflow-x-auto whitespace-pre`}>
+          <div className="prose prose-sm max-w-none dark:prose-invert">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                a: ({ children, ...props }) => (
+                  <a {...props} className="underline hover:no-underline" target="_blank" rel="noopener noreferrer">
                     {children}
-                  </code>
-                );
-              },
-            }}
-          >
-            {content}
-          </ReactMarkdown>
-          {isStreaming && (
-            <motion.span
-              animate={{ opacity: [0.4, 1, 0.4] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="inline-block w-1 h-4 ml-1 bg-current"
-            />
-          )}
+                  </a>
+                ),
+                ul: ({ children }) => <ul className="list-disc pl-4 mb-2">{children}</ul>,
+                ol: ({ children }) => <ol className="list-decimal pl-4 mb-2">{children}</ol>,
+                code: ({ children, className }) => {
+                  const isInline = !className;
+                  return isInline ? (
+                    <code className={clsx(
+                      'px-1 py-0.5 rounded text-sm',
+                      isOwnMessage
+                        ? 'bg-primary-foreground/20 text-primary-foreground'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100'
+                    )}>
+                      {children}
+                    </code>
+                  ) : (
+                    <code className={clsx(
+                      'block p-2 rounded overflow-x-auto whitespace-pre text-sm',
+                      isOwnMessage
+                        ? 'bg-primary-foreground/20 text-primary-foreground'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100'
+                    )}>
+                      {children}
+                    </code>
+                  );
+                },
+              }}
+            >
+              {content}
+            </ReactMarkdown>
+            {isStreaming && (
+              <motion.span
+                animate={{ opacity: [0.4, 1, 0.4] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="inline-block w-1 h-4 ml-1 bg-current"
+              />
+            )}
+          </div>
         </div>
+
+        {/* Timestamp */}
         {timestamp && (
-          <div className="mt-1 text-xs text-muted-foreground px-4">
-            {timestamp.toLocaleTimeString()}
+          <div className={clsx(
+            'flex items-center gap-2 mt-1 text-xs text-muted-foreground',
+            isOwnMessage ? 'justify-end' : 'justify-start'
+          )}>
+            <span>{timestamp.toLocaleTimeString()}</span>
           </div>
         )}
       </div>

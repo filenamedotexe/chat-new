@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Card } from '@chat/ui';
 import { MessageList } from './message-list';
 import { MessageInput } from './message-input';
+import { TypingIndicator } from './typing-indicator';
 import type { MessageWithSender } from '../data/messages';
 
 interface ChatContainerProps {
@@ -30,6 +31,7 @@ export function ChatContainer({
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const [offset, setOffset] = useState(0);
+  const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const limit = 50;
 
   // Load messages
@@ -120,7 +122,7 @@ export function ChatContainer({
   return (
     <Card className={`flex flex-col h-full ${className}`}>
       {/* Header */}
-      <div className="border-b p-4">
+      <div className="border-b bg-background/50 backdrop-blur-sm p-4">
         <h2 className="text-lg font-semibold">{title}</h2>
         {subtitle && (
           <p className="text-sm text-muted-foreground">{subtitle}</p>
@@ -136,6 +138,9 @@ export function ChatContainer({
         onLoadMore={handleLoadMore}
         hasMore={hasMore}
       />
+
+      {/* Typing Indicator */}
+      <TypingIndicator users={typingUsers} />
 
       {/* Input */}
       <MessageInput

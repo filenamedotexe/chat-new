@@ -2,10 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { format, isToday, isYesterday } from 'date-fns';
-import { Card } from '@chat/ui';
+import { Card, ChatBubble } from '@chat/ui';
 import { IconLoader2, IconAlertCircle } from '@tabler/icons-react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import type { MessageWithSender } from '../data/messages';
 
 interface MessageListProps {
@@ -55,10 +53,6 @@ export function MessageList({
     return groups;
   }, {} as Record<string, MessageWithSender[]>);
 
-  const formatTime = (date: Date | string) => {
-    return format(new Date(date), 'h:mm a');
-  };
-
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
     
@@ -85,7 +79,7 @@ export function MessageList({
 
   return (
     <div 
-      className="flex-1 overflow-y-auto p-4 space-y-4"
+      className="flex-1 overflow-y-auto p-4"
       onScroll={handleScroll}
     >
       {/* Load more indicator */}
@@ -104,101 +98,46 @@ export function MessageList({
 
       {/* Messages grouped by date */}
       {Object.entries(groupedMessages).map(([date, dateMessages]) => (
-        <div key={date}>
+        <div key={date} className="mb-6">
           {/* Date separator */}
           <div className="flex items-center gap-4 my-4">
-            <div className="flex-1 border-t" />
-            <span className="text-xs text-muted-foreground font-medium">
+            <div className="flex-1 border-t border-border" />
+            <span className="text-xs text-muted-foreground font-medium px-3">
               {date}
             </span>
-            <div className="flex-1 border-t" />
+            <div className="flex-1 border-t border-border" />
           </div>
 
           {/* Messages for this date */}
-          <div className="space-y-3">
-            {dateMessages.map((msg) => {
+          <div className="space-y-1">
+            {dateMessages.map((msg, index) => {
               const isOwnMessage = msg.sender.id === currentUserId;
-              const time = formatTime(msg.message.createdAt);
+              
+              // Check if this message is from the same sender as the previous one
+              const prevMsg = index > 0 ? dateMessages[index - 1] : null;
+              const isSameSender = prevMsg && prevMsg.sender.id === msg.sender.id;
+              
+              // Check if messages are close in time (within 5 minutes)
+              const isCloseInTime = prevMsg && 
+                (new Date(msg.message.createdAt).getTime() - new Date(prevMsg.message.createdAt).getTime()) < 5 * 60 * 1000;
+              
+              const isGrouped = isSameSender && isCloseInTime;
+              
+              // Determine if timestamp should be shown
+              const showTimestamp = !isSameSender || index === dateMessages.length - 1 || 
+                (index < dateMessages.length - 1 && dateMessages[index + 1].sender.id !== msg.sender.id);
 
               return (
-                <div
+                <ChatBubble
                   key={msg.message.id}
-                  className={`flex gap-3 ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
-                >
-                  {/* Avatar placeholder - could add real avatars later */}
-                  {!isOwnMessage && (
-                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-                      <span className="text-xs font-medium">
-                        {msg.sender.name?.[0]?.toUpperCase() || msg.sender.email[0].toUpperCase()}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Message bubble */}
-                  <div className={`max-w-[70%] ${isOwnMessage ? 'items-end' : 'items-start'}`}>
-                    {!isOwnMessage && (
-                      <p className="text-xs text-muted-foreground mb-1">
-                        {msg.sender.name || msg.sender.email}
-                      </p>
-                    )}
-                    
-                    <div
-                      className={`rounded-lg px-4 py-2 overflow-hidden ${
-                        isOwnMessage
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-muted'
-                      }`}
-                    >
-                      <div className={`text-sm prose prose-sm max-w-none break-words overflow-wrap-anywhere ${
-                        isOwnMessage 
-                          ? 'prose-invert' 
-                          : 'dark:prose-invert'
-                      }`}>
-                        <ReactMarkdown 
-                          remarkPlugins={[remarkGfm]}
-                          components={{
-                            // Style links to be visible in messages
-                            a: ({ children, ...props }) => (
-                              <a {...props} className="underline hover:no-underline" target="_blank" rel="noopener noreferrer">
-                                {children}
-                              </a>
-                            ),
-                            // Ensure code blocks are styled properly
-                            code: ({ children, className, ...props }) => {
-                              const isInline = !className;
-                              return isInline 
-                                ? <code className={`px-1 py-0.5 rounded ${isOwnMessage ? 'bg-primary-foreground/20' : 'bg-muted'}`} {...props}>{children}</code>
-                                : <code className={`block p-2 rounded overflow-x-auto whitespace-pre ${isOwnMessage ? 'bg-primary-foreground/20' : 'bg-muted'}`} {...props}>{children}</code>
-                            },
-                            // Keep paragraphs compact
-                            p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
-                            // Style lists
-                            ul: ({ children }) => <ul className="list-disc pl-4 mb-2">{children}</ul>,
-                            ol: ({ children }) => <ol className="list-decimal pl-4 mb-2">{children}</ol>,
-                          }}
-                        >
-                          {msg.message.content}
-                        </ReactMarkdown>
-                      </div>
-                      {msg.message.isEdited && (
-                        <p className="text-xs opacity-70 mt-1">(edited)</p>
-                      )}
-                    </div>
-                    
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {time}
-                    </p>
-                  </div>
-
-                  {/* Avatar placeholder for own messages */}
-                  {isOwnMessage && (
-                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-                      <span className="text-xs font-medium text-primary-foreground">
-                        {msg.sender.name?.[0]?.toUpperCase() || msg.sender.email[0].toUpperCase()}
-                      </span>
-                    </div>
-                  )}
-                </div>
+                  content={msg.message.content}
+                  isOwnMessage={isOwnMessage}
+                  sender={msg.sender}
+                  timestamp={showTimestamp ? new Date(msg.message.createdAt) : undefined}
+                  isGrouped={isGrouped || false}
+                  showAvatar={true}
+                  showSenderName={true}
+                />
               );
             })}
           </div>
