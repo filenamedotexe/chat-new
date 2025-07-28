@@ -1,4 +1,4 @@
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { redirect } from 'next/navigation';
 import { getAllUserTasks } from '@/features/tasks/data/tasks';
 import { TaskList } from '@/features/tasks/components/task-list';
@@ -7,13 +7,13 @@ import { IconClipboardList } from '@tabler/icons-react';
 import type { UserRole } from '@chat/shared-types';
 
 export default async function TasksPage() {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session) {
+  if (!user) {
     redirect('/login');
   }
 
-  const tasks = await getAllUserTasks(session.user.id, session.user.role as UserRole);
+  const tasks = await getAllUserTasks(user.id, user.role as UserRole);
   
   // Transform tasks to match component interface
   const formattedTasks = tasks.map(({ task, assignee, fileCount }) => ({

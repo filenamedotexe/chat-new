@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth/auth.config';
+import { requireAuth } from '@/lib/auth/api-auth';
 import { updateTaskStatus, getTaskById, TASK_STATUS_TRANSITIONS, type TaskStatus } from '@/features/tasks/data/tasks';
 import { logTaskStatusChange } from '@/features/activities/data/activities';
 import type { UserRole } from '@chat/shared-types';
@@ -9,10 +9,10 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await auth();
+    const { user, error } = await requireAuth();
     
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (error) {
+      return error;
     }
 
     const body = await request.json();
@@ -23,14 +23,14 @@ export async function PATCH(
     }
 
     // Get the current task
-    const task = await getTaskById(params.id, session.user.id, session.user.role as UserRole);
+    const task = await getTaskById(params.id, user.id, user.role as UserRole);
     
     if (!task) {
       return NextResponse.json({ error: 'Task not found' }, { status: 404 });
     }
 
     // Check if user can update this task
-    if (session.user.role === 'client') {
+    if (user.role === 'client') {
       return NextResponse.json({ error: 'Clients cannot update tasks' }, { status: 403 });
     }
 
@@ -49,8 +49,8 @@ export async function PATCH(
     const updatedTask = await updateTaskStatus(
       params.id,
       status as TaskStatus,
-      session.user.id,
-      session.user.role as UserRole
+      user.id,
+      user.role as UserRole
     );
 
     if (!updatedTask) {
@@ -59,7 +59,7 @@ export async function PATCH(
 
     // Log activity
     await logTaskStatusChange(
-      session.user.id,
+      user.id,
       params.id,
       task.project?.id || '',
       currentStatus,

@@ -14,6 +14,7 @@ export default defineConfig({
     video: 'retain-on-failure',
   },
 
+
   projects: [
     {
       name: 'chromium',

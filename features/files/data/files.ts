@@ -1,8 +1,7 @@
 import { db } from '@chat/database';
 import { files, users, projects, tasks } from '@chat/database';
 import { eq, and, desc, isNull, ilike } from 'drizzle-orm';
-// DEPRECATED: Local storage functions - use Supabase Edge Functions instead
-import { saveFileToStorage, deleteFileFromStorage } from '../lib/storage';
+// DEPRECATED: Local storage functions removed - using Supabase Storage instead
 import { getFileTypeCategory } from '../lib/client-utils';
 import type { UserRole } from '@chat/shared-types';
 
@@ -40,13 +39,9 @@ export async function createFile(input: CreateFileInput): Promise<typeof files.$
   let uploadedFile: any;
   
   try {
-    // Save file to local storage first
-    uploadedFile = await saveFileToStorage(
-      input.buffer,
-      input.originalName,
-      input.mimeType,
-      input.uploadedById
-    );
+    // Files now handled by Supabase Storage via Edge Functions
+    // This function is deprecated - use Supabase file upload instead
+    throw new Error('Local file storage deprecated - use Supabase Storage instead');
     
     // Create database record
     const [fileRecord] = await db
@@ -72,7 +67,7 @@ export async function createFile(input: CreateFileInput): Promise<typeof files.$
     // If file was saved but database insert failed, try to clean up
     if (uploadedFile?.filePath) {
       try {
-        await deleteFileFromStorage(uploadedFile.filePath);
+        // File cleanup now handled by Supabase Storage
         console.log('[createFile] Cleaned up orphaned file:', uploadedFile.filePath);
       } catch (cleanupError) {
         console.error('[createFile] Failed to clean up file:', cleanupError);

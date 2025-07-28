@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getUnifiedAuth } from '@/lib/auth/unified-auth';
+import { authMiddleware } from '@/lib/auth/api-auth';
 import { createFile } from '@/features/files/data/files';
 import { validateFile } from '@/features/files/lib/client-utils';
 import { getConversation } from '@/features/support-chat/lib/conversations';
@@ -27,7 +27,7 @@ export async function POST(
     }
 
     // Get authenticated user
-    const auth = await getUnifiedAuth(request);
+    const auth = await authMiddleware();
     if (!auth || !auth.user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
@@ -46,7 +46,7 @@ export async function POST(
 
     // Check if user has access to this conversation
     const isClientOwner = auth.user.role === 'client' && conversation.clientId === auth.user.id;
-    const isAdminOrTeam = auth.user.role === 'admin' || auth.user.role === 'team';
+    const isAdminOrTeam = auth.user.role === 'admin' || auth.user.role === 'team_member';
     
     if (!isClientOwner && !isAdminOrTeam) {
       return NextResponse.json(

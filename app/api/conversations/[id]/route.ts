@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getUnifiedAuth } from '@/lib/auth/unified-auth';
+import { authMiddleware } from '@/lib/auth/api-auth';
 import { 
   getConversation, 
   getConversationMessages,
@@ -15,9 +15,9 @@ interface RouteParams {
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
-    const session = await getUnifiedAuth(request);
+    const session = await authMiddleware();
     
-    if (!session) {
+    if (!session || !session.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -66,9 +66,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
-    const session = await getUnifiedAuth(request);
+    const session = await authMiddleware();
     
-    if (!session) {
+    if (!session || !session.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

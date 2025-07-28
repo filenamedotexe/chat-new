@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth/auth.config';
+import { requireAuth } from '@/lib/auth/api-auth';
 import { createMessage, getProjectMessages, getTaskMessages, getDirectMessages } from '@/features/chat/data/messages';
 import type { UserRole } from '@chat/shared-types';
 
@@ -8,9 +8,9 @@ import type { UserRole } from '@chat/shared-types';
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, error } = await requireAuth();
+    if (error) {
+      return error;
     }
 
     const { searchParams } = new URL(request.url);
@@ -26,22 +26,22 @@ export async function GET(request: NextRequest) {
       // Get project messages
       messages = await getProjectMessages(
         projectId,
-        session.user.id,
-        session.user.role as UserRole,
+        user.id,
+        user.role as UserRole,
         { limit, offset }
       );
     } else if (taskId) {
       // Get task messages
       messages = await getTaskMessages(
         taskId,
-        session.user.id,
-        session.user.role as UserRole,
+        user.id,
+        user.role as UserRole,
         { limit, offset }
       );
     } else if (recipientId) {
       // Get direct messages
       messages = await getDirectMessages(
-        session.user.id,
+        user.id,
         recipientId,
         { limit, offset }
       );
@@ -67,9 +67,9 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, error } = await requireAuth();
+    if (error) {
+      return error;
     }
 
     const body = await request.json();
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
       taskId,
       recipientId,
       parentMessageId,
-      senderId: session.user.id,
+      senderId: user.id,
       type: type || 'text',
     });
 

@@ -1,10 +1,8 @@
 'use client';
 
 import { useFeature } from './useFeature';
-import type { FeatureName } from './featureFlags';
-
 interface FeatureFlagProps {
-  feature: FeatureName;
+  feature: string;
   children: React.ReactNode;
   fallback?: React.ReactNode;
 }

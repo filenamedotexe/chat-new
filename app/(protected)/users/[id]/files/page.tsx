@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { Button } from '@chat/ui';
 import { IconArrowLeft, IconFiles } from '@tabler/icons-react';
 import Link from 'next/link';
@@ -12,14 +12,14 @@ interface UserFilesPageProps {
 }
 
 export default async function UserFilesPage({ params }: UserFilesPageProps) {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session) {
+  if (!user) {
     redirect('/login');
   }
 
   // Permission check: users can only see their own files unless they're admin
-  if (session.user.role !== 'admin' && session.user.id !== params.id) {
+  if (user.role !== 'admin' && user.id !== params.id) {
     return (
       <div className="mx-auto max-w-7xl py-8 px-4">
         <div className="text-center">
@@ -38,8 +38,8 @@ export default async function UserFilesPage({ params }: UserFilesPageProps) {
     );
   }
 
-  const isOwnFiles = session.user.id === params.id;
-  const userName = isOwnFiles ? 'Your' : session.user.name || 'User';
+  const isOwnFiles = user.id === params.id;
+  const userName = isOwnFiles ? 'Your' : user.name || 'User';
 
   return (
     <div className="mx-auto max-w-7xl py-8 px-4">
@@ -85,7 +85,7 @@ export default async function UserFilesPage({ params }: UserFilesPageProps) {
               View Projects
             </Button>
           </Link>
-          {session.user.role !== 'client' && (
+          {user.role !== 'client' && (
             <Link href="/tasks">
               <Button variant="outline">
                 View All Tasks

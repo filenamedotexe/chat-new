@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getUnifiedAuth } from '@/lib/auth/unified-auth';
+import { authMiddleware } from '@/lib/auth/api-auth';
 import { 
   getActiveConversations, 
   getOrCreateClientConversation
@@ -9,9 +9,9 @@ import type { UserRole } from '@chat/shared-types';
 export async function GET(request: NextRequest) {
   try {
     // Get the authenticated user
-    const session = await getUnifiedAuth(request);
+    const session = await authMiddleware();
     
-    if (!session) {
+    if (!session || !session.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -55,9 +55,9 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     // Get the authenticated user
-    const session = await getUnifiedAuth(request);
+    const session = await authMiddleware();
     
-    if (!session) {
+    if (!session || !session.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

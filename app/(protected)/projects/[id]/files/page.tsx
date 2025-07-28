@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { getProjectById } from '@/features/projects/data/projects';
 import { Button, Card } from '@chat/ui';
 import { IconArrowLeft, IconDownload, IconTrash, IconFile } from '@tabler/icons-react';
@@ -18,20 +18,20 @@ interface ProjectFilesPageProps {
 }
 
 export default async function ProjectFilesPage({ params }: ProjectFilesPageProps) {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session) {
+  if (!user) {
     redirect('/login');
   }
 
-  const projectData = await getProjectById(params.id, session.user.id, session.user.role as UserRole);
+  const projectData = await getProjectById(params.id, user.id, user.role as UserRole);
   
   if (!projectData) {
     redirect('/projects');
   }
 
   const { project } = projectData;
-  const canUpload = session.user.role === 'admin' || session.user.role === 'team_member';
+  const canUpload = user.role === 'admin' || user.role === 'team_member';
 
   // Get all files for this project
   const projectFiles = await db

@@ -1,11 +1,15 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@/lib/auth/auth.config';
+import { requireAuth } from '@/lib/auth/api-auth';
 import { getAllFeatures, createFeature } from '@/packages/database/src';
 
 export async function GET() {
-  const session = await auth();
+  const { user, error } = await requireAuth();
   
-  if (!session?.user || session.user.role !== 'admin') {
+  if (error) {
+    return error;
+  }
+  
+  if (user.role !== 'admin') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -19,9 +23,13 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const session = await auth();
+  const { user, error } = await requireAuth();
   
-  if (!session?.user || session.user.role !== 'admin') {
+  if (error) {
+    return error;
+  }
+  
+  if (user.role !== 'admin') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

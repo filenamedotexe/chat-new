@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@/lib/auth/auth.config';
+import { requireAuth } from '@/lib/auth/api-auth';
 import { db } from '@chat/database';
 import { users } from '@chat/database';
 import { eq } from 'drizzle-orm';
@@ -8,17 +8,17 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const session = await auth();
+    const { user, error } = await requireAuth();
     
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (error) {
+      return error;
     }
 
     // Only admins and team members can see all users
     // Clients can only see themselves
     let userList;
     
-    if (session.user.role === 'admin' || session.user.role === 'team_member') {
+    if (user.role === 'admin' || user.role === 'team_member') {
       // Get all users
       userList = await db
         .select({
@@ -39,7 +39,7 @@ export async function GET() {
           role: users.role,
         })
         .from(users)
-        .where(eq(users.id, session.user.id));
+        .where(eq(users.id, user.id));
     }
 
     return NextResponse.json(userList);

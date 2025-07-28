@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth/auth.config';
+import { requireAuth } from '@/lib/auth/api-auth';
 import { 
   getFilesUploadedByUser, 
   getUserFileSummary,
@@ -15,9 +15,9 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, error } = await requireAuth();
+    if (error) {
+      return error;
     }
 
     const { searchParams } = new URL(request.url);
@@ -25,7 +25,7 @@ export async function GET(
     const targetUserId = params.id;
 
     // Permission check: users can only see their own files unless they're admin
-    if (session.user.role !== 'admin' && session.user.id !== targetUserId) {
+    if (user.role !== 'admin' && user.id !== targetUserId) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
@@ -33,7 +33,7 @@ export async function GET(
       case 'summary':
         const summary = await getUserFileSummary(
           targetUserId,
-          session.user.role as UserRole
+          user.role as UserRole
         );
         return NextResponse.json(summary);
 
@@ -41,7 +41,7 @@ export async function GET(
         const targetProjectId = searchParams.get('projectId') || undefined;
         const shareableFiles = await getShareableFiles(
           targetUserId,
-          session.user.role as UserRole,
+          user.role as UserRole,
           targetProjectId
         );
         return NextResponse.json(shareableFiles);
@@ -55,7 +55,7 @@ export async function GET(
 
         const files = await getFilesUploadedByUser(
           targetUserId,
-          session.user.role as UserRole,
+          user.role as UserRole,
           { limit, offset, fileType, searchTerm }
         );
 

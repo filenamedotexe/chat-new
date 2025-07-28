@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth/auth.config';
+import { requireAuth } from '@/lib/auth/api-auth';
 import { db } from '@chat/database';
 import { tasks } from '@chat/database';
 import { eq } from 'drizzle-orm';
@@ -9,14 +9,14 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await auth();
+    const { user, error } = await requireAuth();
     
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (error) {
+      return error;
     }
 
     // Only admins and team members can update tasks
-    if (session.user.role === 'client') {
+    if (user.role === 'client') {
       return NextResponse.json({ error: 'Clients cannot update tasks' }, { status: 403 });
     }
 
@@ -56,14 +56,14 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await auth();
+    const { user, error } = await requireAuth();
     
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (error) {
+      return error;
     }
 
     // Only admins and team members can delete tasks
-    if (session.user.role === 'client') {
+    if (user.role === 'client') {
       return NextResponse.json({ error: 'Clients cannot delete tasks' }, { status: 403 });
     }
 

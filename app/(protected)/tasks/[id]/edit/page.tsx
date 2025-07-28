@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { getTaskById } from '@/features/tasks/data/tasks';
 import { TaskForm } from '@/features/tasks/components/task-form';
 import { Button, Card } from '@chat/ui';
@@ -14,21 +14,21 @@ interface EditTaskPageProps {
 }
 
 export default async function EditTaskPage({ params }: EditTaskPageProps) {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session) {
+  if (!user) {
     redirect('/login');
   }
 
   // Only admins and team members can edit tasks
-  if (session.user.role === 'client') {
+  if (user.role === 'client') {
     redirect(`/tasks/${params.id}`);
   }
 
   const taskData = await getTaskById(
     params.id,
-    session.user.id,
-    session.user.role as UserRole
+    user.id,
+    user.role as UserRole
   );
   
   if (!taskData) {

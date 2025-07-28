@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth/auth.config';
+import { requireAuth } from '@/lib/auth/api-auth';
 import { updateFileAssociations, getFileById } from '@/features/files/data/files';
 import type { UserRole } from '@chat/shared-types';
 
@@ -11,9 +11,9 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, error } = await requireAuth();
+    if (error) {
+      return error;
     }
 
     const body = await request.json();
@@ -29,8 +29,8 @@ export async function POST(
     // Get the file to check permissions
     const file = await getFileById(
       params.id,
-      session.user.id,
-      session.user.role as UserRole
+      user.id,
+      user.role as UserRole
     );
 
     if (!file) {
@@ -39,8 +39,8 @@ export async function POST(
 
     // Permission check: Only file owners and admins can share files
     if (
-      session.user.role !== 'admin' && 
-      file.file.uploadedById !== session.user.id
+      user.role !== 'admin' && 
+      file.file.uploadedById !== user.id
     ) {
       return NextResponse.json(
         { error: 'You can only share files you uploaded' },
@@ -52,8 +52,8 @@ export async function POST(
     const updatedFile = await updateFileAssociations(
       params.id,
       { projectId, taskId },
-      session.user.id,
-      session.user.role as UserRole
+      user.id,
+      user.role as UserRole
     );
 
     if (!updatedFile) {
@@ -86,16 +86,16 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, error } = await requireAuth();
+    if (error) {
+      return error;
     }
 
     // Get the file to check permissions
     const file = await getFileById(
       params.id,
-      session.user.id,
-      session.user.role as UserRole
+      user.id,
+      user.role as UserRole
     );
 
     if (!file) {
@@ -104,8 +104,8 @@ export async function DELETE(
 
     // Permission check: Only file owners and admins can unshare files
     if (
-      session.user.role !== 'admin' && 
-      file.file.uploadedById !== session.user.id
+      user.role !== 'admin' && 
+      file.file.uploadedById !== user.id
     ) {
       return NextResponse.json(
         { error: 'You can only unshare files you uploaded' },
@@ -117,8 +117,8 @@ export async function DELETE(
     const updatedFile = await updateFileAssociations(
       params.id,
       { projectId: null, taskId: null },
-      session.user.id,
-      session.user.role as UserRole
+      user.id,
+      user.role as UserRole
     );
 
     if (!updatedFile) {

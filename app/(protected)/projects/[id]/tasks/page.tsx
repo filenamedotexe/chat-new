@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { getTasksByProject } from '@/features/tasks/data/tasks';
 import { getProjectById } from '@/features/projects/data/projects';
 import { TaskBoardWrapper } from '@/features/tasks/components/task-board-wrapper';
@@ -15,13 +15,13 @@ interface TasksPageProps {
 }
 
 export default async function TasksPage({ params }: TasksPageProps) {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session) {
+  if (!user) {
     redirect('/login');
   }
 
-  const project = await getProjectById(params.id, session.user.id, session.user.role as UserRole);
+  const project = await getProjectById(params.id, user.id, user.role as UserRole);
   
   if (!project) {
     return (
@@ -39,11 +39,11 @@ export default async function TasksPage({ params }: TasksPageProps) {
 
   const tasks = await getTasksByProject(
     params.id, 
-    session.user.id, 
-    session.user.role as UserRole
+    user.id, 
+    user.role as UserRole
   );
 
-  const canCreateTasks = session.user.role === 'admin' || session.user.role === 'team_member';
+  const canCreateTasks = user.role === 'admin' || user.role === 'team_member';
 
   // Transform tasks to match component interface
   const formattedTasks = tasks.map(({ task, assignee, fileCount }) => ({

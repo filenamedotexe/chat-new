@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth/auth.config';
+import { requireAuth } from '@/lib/auth/api-auth';
 import { updateMessage, deleteMessage } from '@/features/chat/data/messages';
 import type { UserRole } from '@chat/shared-types';
 
@@ -11,9 +11,9 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, error } = await requireAuth();
+    if (error) {
+      return error;
     }
 
     const body = await request.json();
@@ -28,7 +28,7 @@ export async function PATCH(
 
     const updated = await updateMessage(
       params.id,
-      session.user.id,
+      user.id,
       content
     );
 
@@ -60,15 +60,15 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, error } = await requireAuth();
+    if (error) {
+      return error;
     }
 
     const success = await deleteMessage(
       params.id,
-      session.user.id,
-      session.user.role as UserRole
+      user.id,
+      user.role as UserRole
     );
 
     if (!success) {

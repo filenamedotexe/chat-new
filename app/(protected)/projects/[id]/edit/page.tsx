@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { getProjectById } from '@/features/projects/data/projects';
 import { Button, Card } from '@chat/ui';
 import { IconArrowLeft } from '@tabler/icons-react';
@@ -14,18 +14,18 @@ interface EditProjectPageProps {
 }
 
 export default async function EditProjectPage({ params }: EditProjectPageProps) {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session) {
+  if (!user) {
     redirect('/login');
   }
 
   // Only admins and team members can edit projects
-  if (session.user.role === 'client') {
+  if (user.role === 'client') {
     redirect('/projects');
   }
 
-  const projectData = await getProjectById(params.id, session.user.id, session.user.role as UserRole);
+  const projectData = await getProjectById(params.id, user.id, user.role as UserRole);
   
   if (!projectData) {
     redirect('/projects');

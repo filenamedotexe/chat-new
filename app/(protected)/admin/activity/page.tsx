@@ -1,4 +1,4 @@
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { redirect } from 'next/navigation';
 import { Main, PageContainer, Card } from '@chat/ui';
 import { TimelineFull } from '@/features/timeline/components/timeline';
@@ -8,10 +8,10 @@ import Link from 'next/link';
 import { IconArrowLeft } from '@tabler/icons-react';
 
 export default async function ActivityPage() {
-  const session = await auth();
+  const user = await getUser();
   
   // Only admins can view this page
-  if (session?.user.role !== 'admin') {
+  if (user?.role !== 'admin') {
     redirect('/dashboard');
   }
   

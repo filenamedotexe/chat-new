@@ -1,16 +1,16 @@
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { redirect } from 'next/navigation';
 import { OrganizationForm } from './organization-form';
 
 export default async function NewOrganizationPage() {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session) {
+  if (!user) {
     redirect('/login');
   }
 
   // Only admins can create organizations
-  if (session.user.role !== 'admin') {
+  if (user.role !== 'admin') {
     redirect('/organizations');
   }
 

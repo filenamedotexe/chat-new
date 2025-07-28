@@ -1,14 +1,14 @@
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { Main, PageContainer } from '@chat/ui';
 import { AdminDashboard } from '@/features/admin/components/admin-dashboard';
 import { getAdminDashboardStats, getClientStatusOverview } from '@/features/admin/data/dashboard';
 import { getRecentActivity } from '@/features/timeline/data/activity';
 
 export default async function AdminPage() {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session || session.user?.role !== 'admin') {
+  if (!user || user?.role !== 'admin') {
     redirect('/dashboard');
   }
 

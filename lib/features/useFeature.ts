@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/contexts/auth-context';
-import type { FeatureName } from './featureFlags';
+// Feature types now handled inline
 
-export function useFeature(featureName: FeatureName): boolean {
+export function useFeature(featureName: string): boolean {
   const { session, loading: authLoading } = useAuth();
   const [isEnabled, setIsEnabled] = useState(false);
   const [loading, setLoading] = useState(true);

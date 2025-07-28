@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { getOrganizationById } from '@/features/organizations/data/organizations';
 import { getProjectsByOrganization } from '@/features/projects/data/projects';
 import { Button, Card } from '@chat/ui';
@@ -17,14 +17,14 @@ interface OrganizationPageProps {
 }
 
 export default async function OrganizationPage({ params }: OrganizationPageProps) {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session) {
+  if (!user) {
     redirect('/login');
   }
 
   // Clients shouldn't access organization pages
-  if (session.user.role === 'client') {
+  if (user.role === 'client') {
     redirect('/dashboard');
   }
 

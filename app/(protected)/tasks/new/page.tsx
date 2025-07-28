@@ -1,23 +1,23 @@
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { redirect } from 'next/navigation';
 import { getProjects } from '@/features/projects/data/projects';
 import { UserRole } from '@chat/shared-types';
 import { TaskFormWithGate } from '@/features/tasks/components/task-form-with-gate';
 
 export default async function NewTaskPage() {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session) {
+  if (!user) {
     redirect('/login');
   }
 
   // Only admins and team members can create tasks
-  if (session.user.role !== 'admin' && session.user.role !== 'team_member') {
+  if (user.role !== 'admin' && user.role !== 'team_member') {
     redirect('/tasks');
   }
 
   // Get projects for the project selector
-  const projects = await getProjects(session.user.id, session.user.role as UserRole);
+  const projects = await getProjects(user.id, user.role as UserRole);
 
   return (
     <div className="mx-auto max-w-2xl py-8 px-4">

@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { getProjectWithProgress } from '@/features/projects/data/projects';
 import { Button, Card } from '@chat/ui';
 import { IconArrowLeft, IconClipboardList, IconCalendar, IconBuilding } from '@tabler/icons-react';
@@ -9,7 +9,7 @@ import type { UserRole } from '@chat/shared-types';
 import { ProgressBar } from '@/features/progress/components/progress-bar';
 import { ProgressChecklist } from '@/features/progress/components/progress-checklist';
 import { ProjectDetailActions } from '@/features/projects/components/project-detail-actions';
-import { checkFeature, FEATURES } from '@/lib/features/featureFlags';
+// Removed feature flag import - using direct feature checking
 import { AnalyticsSection } from './analytics-section';
 
 interface ProjectPageProps {
@@ -19,13 +19,13 @@ interface ProjectPageProps {
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session) {
+  if (!user) {
     redirect('/login');
   }
 
-  const projectData = await getProjectWithProgress(params.id, session.user.id, session.user.role as UserRole);
+  const projectData = await getProjectWithProgress(params.id, user.id, user.role as UserRole);
   
   if (!projectData) {
     return (
@@ -42,8 +42,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
 
   const { project, organization, progress } = projectData;
-  const canEdit = session.user.role === 'admin' || session.user.role === 'team_member';
-  const analyticsEnabled = await checkFeature(FEATURES.ADVANCED_ANALYTICS);
+  const canEdit = user.role === 'admin' || user.role === 'team_member';
+  // Analytics enabled by default with Supabase
+  const analyticsEnabled = true;
 
   return (
     <div className="mx-auto max-w-7xl py-8 px-4">

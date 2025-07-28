@@ -1,143 +1,119 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { IconMail, IconLock } from '@tabler/icons-react';
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Input } from '@chat/ui';
+import { signInWithPassword } from '@/lib/supabase/auth-browser';
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSupabaseLogin = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
-    setMessage('');
 
     try {
-      // Dynamic import to avoid SSR issues
-      const { signInWithPassword } = await import('@/lib/supabase/auth-browser');
-      
-      console.log('🔐 Attempting Supabase login...');
       const { data, error } = await signInWithPassword(email, password);
       
       if (error) {
-        setMessage(`❌ Login failed: ${error.message}`);
+        setError(error.message || 'Invalid email or password');
       } else if (data.user) {
-        setMessage(`✅ Login successful! User: ${data.user.email}`);
-        
-        // Redirect to dashboard after successful login
-        setTimeout(() => {
-          window.location.href = '/dashboard';
-        }, 1500);
+        router.push('/dashboard');
+        router.refresh();
       }
-    } catch (error) {
-      console.error('Login error:', error);
-      setMessage(`❌ Unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } catch {
+      setError('An error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      padding: '1rem',
-      backgroundColor: '#f5f5f5'
-    }}>
-      <div style={{
-        padding: '2rem',
-        backgroundColor: 'white',
-        borderRadius: '8px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-        maxWidth: '400px',
-        width: '100%'
-      }}>
-        <h1 style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          🔐 Supabase Auth Login
-        </h1>
-        
-        {message && (
-          <div style={{ 
-            marginBottom: '1rem',
-            padding: '1rem',
-            backgroundColor: message.includes('✅') ? '#e6f7ff' : '#fff2f0',
-            color: message.includes('✅') ? '#0369a1' : '#dc2626',
-            borderRadius: '4px',
-            fontSize: '0.875rem'
-          }}>
-            {message}
-          </div>
-        )}
-        
-        <form onSubmit={handleSupabaseLogin}>
-          <div style={{ marginBottom: '1rem' }}>
-            <input
-              type="email"
-              placeholder="Email (test@example.com)"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #ccc',
-                borderRadius: '4px',
-                fontSize: '1rem'
-              }}
-              required
-              disabled={loading}
-            />
-          </div>
-          
-          <div style={{ marginBottom: '1.5rem' }}>
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #ccc',
-                borderRadius: '4px',
-                fontSize: '1rem'
-              }}
-              required
-              disabled={loading}
-            />
-          </div>
-          
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              backgroundColor: loading ? '#94a3b8' : '#2563eb',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              fontSize: '1rem',
-              fontWeight: '500'
-            }}
-          >
-            {loading ? '🔄 Signing in...' : '🚀 Sign In with Supabase'}
-          </button>
-        </form>
-        
-        <div style={{ 
-          marginTop: '1.5rem',
-          fontSize: '0.875rem',
-          textAlign: 'center',
-          color: '#666'
-        }}>
-          <p>Test credentials needed:</p>
-          <p>Create a user in Supabase Auth first</p>
-        </div>
-      </div>
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md"
+      >
+        <Card>
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl font-bold text-center">Welcome Back</CardTitle>
+            <CardDescription className="text-center">
+              Enter your credentials to access your account
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium" htmlFor="email">
+                  Email
+                </label>
+                <div className="relative">
+                  <IconMail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="name@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-14"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium" htmlFor="password">
+                  Password
+                </label>
+                <div className="relative">
+                  <IconLock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="pl-14"
+                    required
+                  />
+                </div>
+              </div>
+              {error && (
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-sm text-destructive"
+                >
+                  {error}
+                </motion.p>
+              )}
+              <Button
+                type="submit"
+                fullWidth
+                loading={loading}
+                disabled={loading}
+              >
+                Sign In
+              </Button>
+            </form>
+            <div className="mt-4 text-center text-sm">
+              Don't have an account?{' '}
+              <Link href="/register" className="text-primary underline">
+                Create one
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
   );
 }

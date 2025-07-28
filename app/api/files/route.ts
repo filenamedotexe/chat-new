@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth/auth.config';
+import { requireAuth } from '@/lib/auth/api-auth';
 import { createFile, getFilesForUser } from '@/features/files/data/files';
 import { validateFile, validateFileList } from '@/features/files/lib/client-utils';
 import { createActivityLog } from '@/features/timeline/data/activity';
@@ -15,9 +15,9 @@ export const maxDuration = 60;
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, error } = await requireAuth();
+    if (error) {
+      return error;
     }
 
     const { searchParams } = new URL(request.url);
@@ -26,8 +26,8 @@ export async function GET(request: NextRequest) {
     const fileType = searchParams.get('fileType') || undefined;
 
     const files = await getFilesForUser(
-      session.user.id,
-      session.user.role as UserRole,
+      user.id,
+      user.role as UserRole,
       { projectId, taskId, fileType }
     );
 
@@ -46,13 +46,13 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, error } = await requireAuth();
+    if (error) {
+      return error;
     }
 
     // Only admin and team_member can upload files
-    if (session.user.role === 'client') {
+    if (user.role === 'client') {
       return NextResponse.json(
         { error: 'Clients cannot upload files' },
         { status: 403 }
@@ -107,15 +107,15 @@ export async function POST(request: NextRequest) {
           buffer,
           projectId: projectId || undefined,
           taskId: taskId || undefined,
-          uploadedById: session.user.id,
+          uploadedById: user.id,
         });
 
         // Log the activity
         try {
           await createActivityLog({
-            userId: session.user.id,
-            userRole: session.user.role,
-            userName: session.user.name,
+            userId: user.id,
+            userRole: user.role,
+            userName: user.name,
             action: ActivityActions.FILE_UPLOADED,
             entityType: EntityTypes.FILE,
             entityId: uploadedFile.id,

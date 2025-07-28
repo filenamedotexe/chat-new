@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { getOrganizationById } from '@/features/organizations/data/organizations';
 import { Button, Card } from '@chat/ui';
 import { IconArrowLeft } from '@tabler/icons-react';
@@ -13,14 +13,14 @@ interface EditOrganizationPageProps {
 }
 
 export default async function EditOrganizationPage({ params }: EditOrganizationPageProps) {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session) {
+  if (!user) {
     redirect('/login');
   }
 
   // Only admins can edit organizations
-  if (session.user.role !== 'admin') {
+  if (user.role !== 'admin') {
     redirect('/organizations');
   }
 

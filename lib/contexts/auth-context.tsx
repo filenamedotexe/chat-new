@@ -2,14 +2,10 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
-import { useSession as useNextAuthSession } from 'next-auth/react';
-import { Session as NextAuthSession } from 'next-auth';
 import { getSupabaseBrowserClient } from '@/lib/supabase/auth-browser';
-import { isFeatureEnabled } from '@/packages/database/src';
-import { FEATURES } from '@/lib/features/constants';
 
-type AuthUser = User | NextAuthSession['user'] | null;
-type AuthSession = Session | NextAuthSession | null;
+type AuthUser = User | null;
+type AuthSession = Session | null;
 
 interface AuthContextType {
   user: AuthUser;
@@ -26,33 +22,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser>(null);
   const [session, setSession] = useState<AuthSession>(null);
   const [loading, setLoading] = useState(true);
-  const [useSupabaseAuth, setUseSupabaseAuth] = useState(false);
-  const [featureCheckDone, setFeatureCheckDone] = useState(false);
+  const useSupabaseAuth = true; // Always use Supabase
 
-  // NextAuth session fallback
-  const { data: nextAuthSession, status: nextAuthStatus } = useNextAuthSession();
-
-  // Check feature flag for auth system
-  useEffect(() => {
-    async function checkAuthSystem() {
-      try {
-        const enabled = await isFeatureEnabled(FEATURES.SUPABASE_AUTH);
-        setUseSupabaseAuth(enabled);
-      } catch (error) {
-        console.error('Error checking Supabase auth feature:', error);
-        setUseSupabaseAuth(false);
-      } finally {
-        setFeatureCheckDone(true);
-      }
-    }
-    checkAuthSystem();
-  }, []);
 
   // Supabase auth effect
   useEffect(() => {
-    if (!featureCheckDone || !useSupabaseAuth) {
-      return;
-    }
 
     const supabase = getSupabaseBrowserClient();
 
@@ -93,31 +67,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => {
       subscription.unsubscribe();
     };
-  }, [featureCheckDone, useSupabaseAuth]);
+  }, []);
 
-  // NextAuth fallback effect
-  useEffect(() => {
-    if (!featureCheckDone) {
-      return;
-    }
-
-    if (!useSupabaseAuth) {
-      // Use NextAuth session
-      setUser(nextAuthSession?.user ?? null);
-      setSession(nextAuthSession);
-      setLoading(nextAuthStatus === 'loading');
-    }
-  }, [featureCheckDone, useSupabaseAuth, nextAuthSession, nextAuthStatus]);
+  // NextAuth no longer used
 
   const signOut = async () => {
-    if (useSupabaseAuth) {
-      const supabase = getSupabaseBrowserClient();
-      await supabase.auth.signOut();
-    } else {
-      // Use NextAuth signOut
-      const { signOut: nextAuthSignOut } = await import('next-auth/react');
-      await nextAuthSignOut();
-    }
+    const supabase = getSupabaseBrowserClient();
+    await supabase.auth.signOut();
   };
 
   const isAuthenticated = Boolean(user && session);
@@ -125,7 +81,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const value: AuthContextType = {
     user,
     session,
-    loading: loading || !featureCheckDone,
+    loading,
     isAuthenticated,
     signOut,
     useSupabaseAuth,

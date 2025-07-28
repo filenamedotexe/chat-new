@@ -1,11 +1,11 @@
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
-import { auth } from '@/lib/auth/auth.config';
+import { requireAuth } from '@/lib/auth/api-auth';
 
 export async function POST(req: Request) {
-  const session = await auth();
+  const { error } = await requireAuth();
   
-  if (!session) {
+  if (error) {
     return new Response('Unauthorized', { status: 401 });
   }
 

@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { getUnifiedAuth } from '@/lib/auth/unified-auth';
+import { authMiddleware } from '@/lib/auth/api-auth';
 import { getConversation, getConversationMessages } from '@/features/support-chat/lib/conversations';
 import type { UserRole } from '@chat/shared-types';
 
@@ -12,9 +12,9 @@ interface RouteParams {
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     // Get the authenticated user
-    const session = await getUnifiedAuth(request);
+    const session = await authMiddleware();
     
-    if (!session) {
+    if (!session || !session.user) {
       return new Response(
         JSON.stringify({ error: 'Unauthorized' }),
         { 

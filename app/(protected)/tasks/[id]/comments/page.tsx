@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { getTaskById } from '@/features/tasks/data/tasks';
 import { Button } from '@chat/ui';
 import { IconArrowLeft } from '@tabler/icons-react';
@@ -14,13 +14,13 @@ interface TaskCommentsPageProps {
 }
 
 export default async function TaskCommentsPage({ params }: TaskCommentsPageProps) {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session) {
+  if (!user) {
     redirect('/login');
   }
 
-  const taskData = await getTaskById(params.id, session.user.id, session.user.role as UserRole);
+  const taskData = await getTaskById(params.id, user.id, user.role as UserRole);
   
   if (!taskData) {
     redirect('/projects');
@@ -51,7 +51,7 @@ export default async function TaskCommentsPage({ params }: TaskCommentsPageProps
           <UniversalChat
             type="task"
             taskId={params.id}
-            currentUserId={session.user.id}
+            currentUserId={user.id}
             title="Task Comments"
             subtitle="Discuss progress and updates"
             className="h-full"

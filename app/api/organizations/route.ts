@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth/auth.config';
+import { requireAuth } from '@/lib/auth/api-auth';
 import { createOrganization, getOrganizations } from '@/features/organizations/data/organizations';
 import type { UserRole } from '@chat/shared-types';
 
 export async function GET() {
   try {
-    const session = await auth();
+    const { user, error } = await requireAuth();
     
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (error) {
+      return error;
     }
 
-    const organizations = await getOrganizations(session.user.id, session.user.role as UserRole);
+    const organizations = await getOrganizations(user.id, user.role as UserRole);
     return NextResponse.json(organizations);
   } catch (error) {
     console.error('Failed to fetch organizations:', error);
@@ -24,14 +24,14 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
+    const { user, error } = await requireAuth();
     
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (error) {
+      return error;
     }
 
     // Only admins can create organizations
-    if (session.user.role !== 'admin') {
+    if (user.role !== 'admin') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 

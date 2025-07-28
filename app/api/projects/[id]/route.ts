@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth/auth.config';
+import { requireAuth } from '@/lib/auth/api-auth';
 import { updateProject, getProjectById } from '@/features/projects/data/projects';
 import { UserRole } from '@chat/shared-types';
 
@@ -8,14 +8,14 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await auth();
+    const { user, error } = await requireAuth();
     
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (error) {
+      return error;
     }
 
     // Only admins and team members can update projects
-    if (session.user.role !== 'admin' && session.user.role !== 'team_member') {
+    if (user.role !== 'admin' && user.role !== 'team_member') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -28,7 +28,7 @@ export async function PATCH(
     }
 
     // Get the project to check ownership
-    const project = await getProjectById(params.id, session.user.id, session.user.role as UserRole);
+    const project = await getProjectById(params.id, user.id, user.role as UserRole);
     
     if (!project) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 });

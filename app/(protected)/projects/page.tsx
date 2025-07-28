@@ -1,4 +1,4 @@
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { ProjectListEnhanced } from '@/features/projects/components/project-list-enhanced';
 import { Button } from '@chat/ui';
 import Link from 'next/link';
@@ -6,13 +6,13 @@ import { redirect } from 'next/navigation';
 import { IconPlus } from '@tabler/icons-react';
 
 export default async function ProjectsPage() {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session) {
+  if (!user) {
     redirect('/login');
   }
 
-  const canCreateProjects = session.user.role === 'admin' || session.user.role === 'team_member';
+  const canCreateProjects = user.role === 'admin' || user.role === 'team_member';
 
   return (
     <div className="mx-auto max-w-7xl py-8 px-4">
@@ -33,7 +33,7 @@ export default async function ProjectsPage() {
         )}
       </div>
       
-      <ProjectListEnhanced userId={session.user.id} userRole={session.user.role} />
+      <ProjectListEnhanced userId={user.id} userRole={user.role} />
     </div>
   );
 }

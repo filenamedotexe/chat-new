@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth/auth.config';
+import { requireAuth } from '@/lib/auth/api-auth';
 import { getFileById } from '@/features/files/data/files';
 import { readFile } from 'fs/promises';
 import { existsSync } from 'fs';
@@ -14,16 +14,16 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, error } = await requireAuth();
+    if (error) {
+      return error;
     }
 
     // Get file record with permission check
     const fileRecord = await getFileById(
       params.id,
-      session.user.id,
-      session.user.role as UserRole
+      user.id,
+      user.role as UserRole
     );
 
     if (!fileRecord) {
@@ -55,7 +55,7 @@ export async function GET(
     headers.set('Cache-Control', 'private, max-age=3600'); // Cache for 1 hour
 
     // Log the download (could be enhanced for analytics)
-    console.log(`File downloaded: ${file.originalName} by ${session.user.email}`);
+    console.log(`File downloaded: ${file.originalName} by ${user.email}`);
 
     return new NextResponse(fileBuffer, {
       status: 200,
@@ -78,15 +78,15 @@ export async function HEAD(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await auth();
-    if (!session) {
+    const { user, error } = await requireAuth();
+    if (error) {
       return new NextResponse(null, { status: 401 });
     }
 
     const fileRecord = await getFileById(
       params.id,
-      session.user.id,
-      session.user.role as UserRole
+      user.id,
+      user.role as UserRole
     );
 
     if (!fileRecord) {

@@ -1,4 +1,4 @@
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { redirect } from 'next/navigation';
 import { 
   ProfileTab, 
@@ -15,9 +15,9 @@ export default async function SettingsPage({
 }: {
   searchParams: { tab?: string };
 }) {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session) {
+  if (!user) {
     redirect('/login');
   }
 
@@ -26,7 +26,7 @@ export default async function SettingsPage({
   const TabContent = () => {
     switch(currentTab) {
       case 'profile':
-        return <ProfileTab session={session} />;
+        return <ProfileTab session={{ user }} />;
       case 'appearance':
         return <AppearanceTab />;
       case 'notifications':
@@ -38,7 +38,7 @@ export default async function SettingsPage({
       case 'beta':
         return <BetaFeaturesSection />;
       default:
-        return <ProfileTab session={session} />;
+        return <ProfileTab session={{ user }} />;
     }
   };
 

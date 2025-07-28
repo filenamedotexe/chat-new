@@ -1,9 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { signOut } from 'next-auth/react';
 import { signOut as supabaseSignOut } from '@/lib/supabase/auth-browser';
-import { useEffect, useState } from 'react';
 import { 
   IconMessage, 
   IconDashboard, 
@@ -46,25 +44,11 @@ function NavigationHeader({ user }: NavigationProps) {
   const router = useRouter();
   const mobileMenu = useMobileMenuContext();
   const { theme, setTheme } = useTheme();
-  const [useSupabaseAuth, setUseSupabaseAuth] = useState(false);
-  
-  useEffect(() => {
-    // Check feature flag on client side
-    fetch('/api/features/supabaseAuth/check')
-      .then(res => res.json())
-      .then(data => setUseSupabaseAuth(data.enabled))
-      .catch(() => setUseSupabaseAuth(false));
-  }, []);
   
   const handleSignOut = async () => {
-    if (useSupabaseAuth) {
-      // Use Supabase sign out
-      await supabaseSignOut();
-      router.push('/login');
-    } else {
-      // Use NextAuth sign out
-      signOut({ callbackUrl: '/login' });
-    }
+    // Always use Supabase sign out
+    await supabaseSignOut();
+    router.push('/login');
   };
   
   const toggleTheme = () => {
@@ -217,12 +201,14 @@ function NavigationHeader({ user }: NavigationProps) {
 }
 
 export function Navigation({ user }: NavigationProps) {
+  const router = useRouter();
   const mobileMenu = useMobileMenuContext();
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   
-  const handleSignOut = () => {
-    signOut({ callbackUrl: '/login' });
+  const handleSignOut = async () => {
+    await supabaseSignOut();
+    router.push('/login');
   };
   
   const toggleTheme = () => {

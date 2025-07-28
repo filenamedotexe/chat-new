@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { getTaskById } from '@/features/tasks/data/tasks';
 import { TaskDetailWrapper } from './task-detail-wrapper';
 import type { UserRole } from '@chat/shared-types';
@@ -11,16 +11,16 @@ interface TaskPageProps {
 }
 
 export default async function TaskPage({ params }: TaskPageProps) {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session) {
+  if (!user) {
     redirect('/login');
   }
 
   const taskData = await getTaskById(
     params.id,
-    session.user.id,
-    session.user.role as UserRole
+    user.id,
+    user.role as UserRole
   );
   
   if (!taskData) {
@@ -36,7 +36,7 @@ export default async function TaskPage({ params }: TaskPageProps) {
     );
   }
 
-  const canEdit = session.user.role === 'admin' || session.user.role === 'team_member';
+  const canEdit = user.role === 'admin' || user.role === 'team_member';
 
   // Transform the data to match TaskDetail interface
   const task = {

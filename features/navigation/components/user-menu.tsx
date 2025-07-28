@@ -1,6 +1,6 @@
 'use client';
 
-import { signOut } from 'next-auth/react';
+import { signOut as supabaseSignOut } from '@/lib/supabase/auth-browser';
 import { IconLogout, IconUser, IconSettings } from '@tabler/icons-react';
 import { Avatar, Dropdown, DropdownItem, DropdownSeparator } from '@chat/ui';
 import Link from 'next/link';
@@ -47,7 +47,10 @@ export function UserMenu({ user }: UserMenuProps) {
       </DropdownItem>
       <DropdownSeparator />
       <DropdownItem
-        onClick={() => signOut({ callbackUrl: '/login' })}
+        onClick={async () => {
+          await supabaseSignOut();
+          window.location.href = '/login';
+        }}
         destructive
       >
         <IconLogout className="h-4 w-4 mr-2" />

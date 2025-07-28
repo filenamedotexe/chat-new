@@ -1,22 +1,22 @@
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { redirect } from 'next/navigation';
 import { ProjectForm } from '@/features/projects/components/project-form';
 import { getOrganizations } from '@/features/organizations/data/organizations';
 import type { UserRole } from '@chat/shared-types';
 
 export default async function NewProjectPage() {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session) {
+  if (!user) {
     redirect('/login');
   }
 
   // Only admins and team members can create projects
-  if (session.user.role !== 'admin' && session.user.role !== 'team_member') {
+  if (user.role !== 'admin' && user.role !== 'team_member') {
     redirect('/projects');
   }
 
-  const organizations = await getOrganizations(session.user.id, session.user.role as UserRole);
+  const organizations = await getOrganizations(user.id, user.role as UserRole);
 
   return (
     <div className="mx-auto max-w-2xl py-8 px-4">
@@ -24,7 +24,7 @@ export default async function NewProjectPage() {
       
       <ProjectForm 
         organizations={organizations} 
-        userRole={session.user.role}
+        userRole={user.role}
       />
     </div>
   );

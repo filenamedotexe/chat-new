@@ -1,26 +1,21 @@
-import { auth } from '@/lib/auth/auth.config';
+import { getUser } from '@/lib/auth/get-user';
 import { Main, PageContainer } from '@chat/ui';
 import { AdminDashboard } from '@/features/admin/components/admin-dashboard';
 import { TeamDashboard } from '@/features/dashboard/components/team-dashboard';
 import { ClientDashboard } from '@/features/dashboard/components/client-dashboard';
 import { getRecentActivity } from '@/features/timeline/data/activity';
 import { getAdminDashboardStats, getClientStatusOverview } from '@/features/admin/data/dashboard-simple';
+import { redirect } from 'next/navigation';
 
 export default async function DashboardPage() {
-  const session = await auth();
+  const user = await getUser();
   
-  if (!session?.user) {
-    return (
-      <Main>
-        <PageContainer>
-          <p>Please log in to view your dashboard.</p>
-        </PageContainer>
-      </Main>
-    );
+  if (!user) {
+    redirect('/login');
   }
 
   // Admin Dashboard
-  if (session.user.role === 'admin') {
+  if (user.role === 'admin') {
     try {
       const [stats, recentActivity, clientStatuses] = await Promise.all([
         getAdminDashboardStats(),
@@ -52,15 +47,15 @@ export default async function DashboardPage() {
   }
   
   // Team Member Dashboard
-  if (session.user.role === 'team_member') {
+  if (user.role === 'team_member') {
     const recentActivity = await getRecentActivity(10);
     return (
       <Main>
         <PageContainer>
           <TeamDashboard 
-            userId={session.user.id}
-            userName={session.user.name}
-            userEmail={session.user.email}
+            userId={user.id}
+            userName={user.name}
+            userEmail={user.email}
             recentActivity={recentActivity}
           />
         </PageContainer>
@@ -69,15 +64,15 @@ export default async function DashboardPage() {
   }
   
   // Client Dashboard
-  if (session.user.role === 'client') {
+  if (user.role === 'client') {
     const recentActivity = await getRecentActivity(10);
     return (
       <Main>
         <PageContainer>
           <ClientDashboard
-            userId={session.user.id}
-            userName={session.user.name}
-            userEmail={session.user.email}
+            userId={user.id}
+            userName={user.name}
+            userEmail={user.email}
             recentActivity={recentActivity}
           />
         </PageContainer>
@@ -91,10 +86,10 @@ export default async function DashboardPage() {
       <PageContainer>
         <div style={{ marginBottom: 'var(--space-6)' }}>
           <h1 className="text-4xl font-bold" style={{ marginBottom: 'var(--space-2)' }}>
-            Welcome back, {session.user.name || session.user.email}!
+            Welcome back, {user.name || user.email}!
           </h1>
           <p className="text-muted-foreground">
-            You&apos;re logged in as a {session.user.role} user.
+            You&apos;re logged in as a {user.role} user.
           </p>
         </div>
         <p className="text-muted-foreground">
