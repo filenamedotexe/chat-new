@@ -1,606 +1,676 @@
 # Claude Development Guide
 
-This document contains important information for Claude (or other AI assistants) when working on this codebase.
+This document contains everything you need to know about this codebase. All information is self-contained - no need to reference other docs.
 
-## Quick Context Understanding
+## 🏗️ Project Overview
 
-When starting work on this codebase:
-1. First read `/upgrade.md` to understand the project structure and current status
-2. Check `package.json` for available scripts and dependencies
-3. Look at `/features/` directory to understand the modular architecture
-4. Review recent test files in `/cypress/e2e/` to understand working patterns
+This is a **Next.js 14** project management application with real-time chat, file management, and team collaboration features.
 
-## Cypress Testing Protocol (Complete Guide)
+### Tech Stack
+- **Framework**: Next.js 14 (App Router)
+- **Authentication**: Supabase Auth
+- **Database**: PostgreSQL (via Supabase)
+- **Real-time**: Supabase Realtime
+- **File Storage**: Supabase Storage
+- **Styling**: Tailwind CSS + Framer Motion
+- **UI Components**: Custom `@chat/ui` package
+- **Testing**: Playwright
+- **Type Safety**: TypeScript (strict mode)
+- **Package Manager**: npm
 
-### CRITICAL SETUP REQUIREMENTS
+### Key Features
+- Role-based access control (Admin, Team Member, Client)
+- Project and task management
+- Real-time support chat system
+- File upload and management
+- Activity tracking and timeline
+- Organization management
+- Admin dashboard with analytics
 
-#### 1. Environment Prerequisites
-**ALWAYS verify these before writing any tests:**
+## 🗂️ Complete Project Structure
 
-```bash
-# 1. Check server is running on correct port
-lsof -i :3000  # Should show Next.js dev server
-
-# 2. Verify database is seeded
-node scripts/seed-users.js     # Creates test users
-node scripts/seed-features.js  # Creates feature flags
-
-# 3. Confirm cypress.config.js baseUrl
-# Must be: baseUrl: 'http://localhost:3000'
-
-# 4. Kill any conflicting processes
-pkill -f "next dev"
+```
+chat-new/
+├── app/                          # Next.js App Router
+│   ├── (auth)/                   # Public auth pages
+│   │   ├── login/                # Login page
+│   │   └── register/             # Registration page
+│   ├── (protected)/              # Authenticated pages
+│   │   ├── admin/                # Admin-only pages
+│   │   │   ├── activity/         # Activity logs
+│   │   │   └── page.tsx          # Admin dashboard
+│   │   ├── dashboard/            # Main dashboard
+│   │   ├── files/                # File management
+│   │   ├── organizations/        # Organization CRUD
+│   │   ├── projects/             # Project management
+│   │   ├── settings/             # User settings
+│   │   ├── tasks/                # Task management
+│   │   └── users/                # User file management
+│   ├── api/                      # API routes
+│   │   ├── admin/                # Admin endpoints
+│   │   ├── chat/                 # AI chat endpoint
+│   │   ├── conversations/        # Support chat API
+│   │   ├── files/                # File operations
+│   │   ├── messages/             # Messaging API
+│   │   ├── organizations/        # Org API
+│   │   ├── projects/             # Project API
+│   │   ├── tasks/                # Task API
+│   │   └── users/                # User API
+│   ├── globals.css               # Global styles
+│   ├── layout.tsx                # Root layout
+│   └── page.tsx                  # Landing page
+├── components/                   # Shared components
+│   ├── Navigation.tsx            # Main navigation
+│   ├── ProtectedLayoutClient.tsx # Auth wrapper
+│   └── chat/                     # Chat components
+├── features/                     # Feature modules
+│   ├── admin/                    # Admin features
+│   ├── auth/                     # Auth components
+│   ├── chat/                     # Chat implementation
+│   ├── files/                    # File management
+│   ├── messages/                 # Messaging system
+│   ├── navigation/               # Nav components
+│   ├── organizations/            # Org features
+│   ├── progress/                 # Progress tracking
+│   ├── projects/                 # Project features
+│   ├── support-chat/             # Customer support chat
+│   ├── tasks/                    # Task features
+│   ├── timeline/                 # Activity timeline
+│   └── users/                    # User features
+├── lib/                          # Core utilities
+│   ├── api/                      # API utilities
+│   │   └── adapters/             # Auth adapters
+│   ├── auth/                     # Auth helpers
+│   │   ├── api-auth.ts           # API auth utils
+│   │   ├── get-user.ts           # User helpers
+│   │   └── middleware.ts         # Auth middleware
+│   ├── contexts/                 # React contexts
+│   │   └── auth-context.tsx      # Auth provider
+│   ├── features/                 # Feature flags
+│   ├── supabase/                 # Supabase setup
+│   │   ├── auth-browser.ts       # Client auth
+│   │   ├── auth-server.ts        # Server auth
+│   │   ├── client.ts             # Browser client
+│   │   ├── middleware.ts         # Session refresh
+│   │   └── server.ts             # Server client
+│   └── utils/                    # Utilities
+├── packages/                     # Internal packages
+│   ├── database/                 # DB schemas
+│   ├── shared-types/             # TypeScript types
+│   └── ui/                       # Component library
+├── public/                       # Static assets
+├── scripts/                      # Utility scripts
+│   └── set-user-roles.ts         # Role management
+├── tests/                        # Playwright tests
+├── .claude/                      # Claude AI config
+│   ├── agents/                   # AI agents
+│   ├── commands/                 # Custom commands
+│   ├── settings.json             # Settings
+│   └── CLAUDE.md                 # This file
+├── middleware.ts                 # Next.js middleware
+├── next.config.js                # Next.js config
+├── package.json                  # Dependencies
+├── playwright.config.ts          # Test config
+├── tailwind.config.js            # Tailwind config
+└── tsconfig.json                 # TypeScript config
 ```
 
-#### 2. Mandatory Test Credentials
-**NEVER use different credentials - these are seeded in database:**
-- Admin: `admin@example.com` / `admin123`
-- Client: `user@example.com` / `user123`
-
-### COMPONENT TESTING STANDARDS
-
-#### Data-TestId Requirements
-**EVERY interactive element MUST have data-testid:**
-
-```tsx
-// ✅ CORRECT - Always add data-testid
-<Button data-testid="create-project-btn">Create Project</Button>
-<Card data-testid="project-card">...</Card>
-<div data-testid="feature-flags-manager">...</div>
-
-// ❌ WRONG - No data-testid
-<Button>Create Project</Button>
-<Card>...</Card>
-```
-
-#### Naming Convention for data-testid
-```tsx
-// Format: [component-type]-[identifier]-[action?]
-data-testid="project-card"           // List items
-data-testid="create-task-btn"        // Action buttons  
-data-testid="toggle-featureName"     // Toggle controls
-data-testid="task-detail-form"       // Forms
-data-testid="admin-dashboard"        // Page sections
-```
-
-### AUTHENTICATION TESTING PROTOCOL
-
-#### Standard Login Pattern
-```javascript
-describe('Feature Tests', () => {
-  beforeEach(() => {
-    // ALWAYS start with login - no exceptions
-    cy.visit('/login');
-    cy.get('#email').type('admin@example.com');
-    cy.get('#password').type('admin123');
-    cy.get('button[type="submit"]').click();
-    cy.url().should('include', '/dashboard');
-  });
-  
-  // Tests go here...
-});
-```
-
-#### Role-Based Testing
-```javascript
-// Admin Tests
-beforeEach(() => {
-  loginAsAdmin();
-});
-
-// Client Tests  
-beforeEach(() => {
-  loginAsClient();
-});
-
-function loginAsAdmin() {
-  cy.visit('/login');
-  cy.get('#email').type('admin@example.com');
-  cy.get('#password').type('admin123');
-  cy.get('button[type="submit"]').click();
-  cy.url().should('include', '/dashboard');
-}
-
-function loginAsClient() {
-  cy.visit('/login');
-  cy.get('#email').type('user@example.com');
-  cy.get('#password').type('user123');
-  cy.get('button[type="submit"]').click();
-  cy.url().should('include', '/dashboard');
-}
-```
-
-### CRITICAL ERROR PREVENTION
-
-#### 1. Server/Client Import Separation
-**NEVER import server-only code in client components:**
-
-```tsx
-// ✅ CORRECT - Separate constants file
-// /lib/features/constants.ts
-export const FEATURES = { CHAT: 'chat' };
-
-// Client component imports from constants
-import { FEATURES } from '@/lib/features/constants';
-
-// ❌ WRONG - Client importing server code
-import { FEATURES } from '@/lib/features/featureFlags'; // Has database imports!
-```
-
-#### 2. Environment Variable Issues
-```javascript
-// Common error: "DATABASE_URL environment variable is not set"
-// Solution: Only import database code on server side
-if (typeof window !== 'undefined') {
-  throw new Error('Database client should only be used on server side');
-}
-```
-
-#### 3. Component Import Conflicts
-```tsx
-// ✅ CORRECT - Check if function exists
-export async function getExtendedStats() { ... }
-
-// ❌ WRONG - Importing non-existent function
-import { getExtendedStats } from './stats-grid'; // Function doesn't exist
-```
-
-### SELECTOR HIERARCHY (Use in Order)
-
-#### 1. data-testid (Preferred)
-```javascript
-cy.get('[data-testid="feature-flags-manager"]')
-cy.get('[data-testid="toggle-betaFeatures"]').click()
-```
-
-#### 2. Semantic HTML
-```javascript
-cy.get('h1').should('contain', 'Admin Dashboard')
-cy.get('button[type="submit"]').click()
-```
-
-#### 3. Content-based (Last Resort)
-```javascript
-cy.contains('Create Project').click()
-cy.contains('button', 'Add Feature').click()
-```
-
-### API TESTING INTEGRATION
-
-#### Test API Endpoints Directly
-```javascript
-it('should handle feature flag API correctly', () => {
-  // Test API directly for reliability
-  cy.request('GET', '/api/features/chat/check').then((response) => {
-    expect(response.status).to.eq(200);
-    expect(response.body).to.have.property('enabled');
-    expect(response.body.enabled).to.be.a('boolean');
-  });
-  
-  // Test non-existent feature
-  cy.request('GET', '/api/features/nonExistentFeature/check').then((response) => {
-    expect(response.status).to.eq(200);
-    expect(response.body.enabled).to.be.false;
-  });
-});
-```
-
-### WAIT STRATEGIES
-
-#### Use Proper Waits
-```javascript
-// ✅ CORRECT - Wait for elements
-cy.get('[data-testid="feature-flags-manager"]', { timeout: 10000 }).should('be.visible');
-
-// ✅ CORRECT - Wait for state changes
-cy.get('[data-testid="toggle-betaFeatures"]').click();
-cy.wait(1000); // Allow server update
-cy.contains('Enabled').should('be.visible');
-
-// ❌ WRONG - No timeout
-cy.get('[data-testid="feature-flags-manager"]').should('be.visible');
-```
-
-### DEBUGGING FAILED TESTS
-
-#### 1. Check Screenshots First
-```bash
-# Screenshots saved on failure
-ls cypress/screenshots/
-```
-
-#### 2. Verify Component Rendering
-```javascript
-// Add debug logging
-cy.get('body').then($body => {
-  cy.log('Page content:', $body.text());
-});
-
-// Check if element exists
-cy.get('[data-testid="target"]').should('exist');
-```
-
-#### 3. Server-Side Errors
-```bash
-# Check server logs for errors
-# Look for database connection issues
-# Verify environment variables loaded
-```
-
-### COMMON PATTERNS BY FEATURE TYPE
-
-#### Feature Flag Testing
-```javascript
-describe('Feature Flags', () => {
-  beforeEach(() => {
-    loginAsAdmin();
-  });
-
-  it('should display feature flags manager', () => {
-    cy.visit('/admin');
-    cy.get('[data-testid="feature-flags-manager"]', { timeout: 10000 }).should('be.visible');
-  });
-
-  it('should toggle feature flags', () => {
-    cy.visit('/admin');
-    cy.get('[data-testid="toggle-betaFeatures"]').click();
-    cy.wait(1000);
-    cy.contains('Enabled').should('be.visible');
-  });
-});
-```
-
-#### CRUD Testing
-```javascript
-describe('Project CRUD', () => {
-  beforeEach(() => {
-    loginAsAdmin();
-  });
-
-  it('should create project', () => {
-    cy.visit('/projects');
-    cy.get('[data-testid="create-project-btn"]').click();
-    cy.get('#name').type('Test Project');
-    cy.get('#description').type('Test Description');
-    cy.get('button[type="submit"]').click();
-    cy.contains('Test Project').should('be.visible');
-  });
-});
-```
-
-### RUNNING TESTS PROTOCOL
-
-#### Mandatory Pre-Test Checklist
-```bash
-# 1. Kill existing processes
-pkill -f "next dev"
-
-# 2. Start fresh server
-npm run dev
-
-# 3. Wait for server ready (check port 3000)
-curl -s http://localhost:3000 | head -c 100
-
-# 4. Verify database seeded
-node scripts/seed-users.js
-node scripts/seed-features.js
-
-# 5. Run tests
-npx cypress run --spec "cypress/e2e/test-file.cy.js"
-```
-
-#### Test Execution Commands
-```bash
-# Single test file
-npx cypress run --spec "cypress/e2e/phase10-3-feature-flags.cy.js"
-
-# With reporter for better output
-npx cypress run --spec "cypress/e2e/test.cy.js" --reporter spec
-
-# Headed mode for debugging
-npx cypress run --spec "cypress/e2e/test.cy.js" --headed
-
-# Open interactive mode
-npx cypress open
-```
-
-### QUALITY ASSURANCE CHECKLIST
-
-#### Before Submitting Tests
-**Every test MUST pass this checklist:**
-
-1. ✅ Environment seeded (users + features)
-2. ✅ Server running on port 3000
-3. ✅ All interactive elements have data-testid
-4. ✅ Authentication handled in beforeEach
-5. ✅ Proper wait strategies used
-6. ✅ API endpoints tested directly
-7. ✅ Error scenarios covered
-8. ✅ No hardcoded selectors (use data-testid)
-9. ✅ Tests pass 3 times in a row
-10. ✅ No server/client import conflicts
-
-#### Test File Structure Template
-```javascript
-describe('Phase X.Y: Feature Name', () => {
-  beforeEach(() => {
-    // Always authenticate first
-    cy.visit('/login');
-    cy.get('#email').type('admin@example.com');
-    cy.get('#password').type('admin123');
-    cy.get('button[type="submit"]').click();
-    cy.url().should('include', '/dashboard');
-  });
-
-  describe('Core Functionality', () => {
-    it('should display feature UI correctly', () => {
-      cy.visit('/feature-page');
-      cy.get('[data-testid="main-component"]', { timeout: 10000 })
-        .should('be.visible');
-    });
-
-    it('should handle user interactions', () => {
-      cy.visit('/feature-page');
-      cy.get('[data-testid="action-button"]').click();
-      cy.wait(1000);
-      cy.get('[data-testid="result"]').should('be.visible');
-    });
-  });
-
-  describe('API Integration', () => {
-    it('should handle API endpoints correctly', () => {
-      cy.request('GET', '/api/feature/check').then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body).to.have.property('data');
-      });
-    });
-  });
-
-  describe('Error Scenarios', () => {
-    it('should handle errors gracefully', () => {
-      cy.intercept('GET', '/api/feature/*', { statusCode: 500 }).as('apiError');
-      cy.visit('/feature-page');
-      cy.wait('@apiError');
-      cy.contains('Error').should('be.visible');
-    });
-  });
-});
-```
-
-### MANDATORY CLEANUP PROTOCOL
-
-#### After Each Test Session
-```bash
-# 1. Reset feature flags to defaults
-node scripts/seed-features.js
-
-# 2. Clean up test data
-# (Add cleanup scripts as needed)
-
-# 3. Stop dev server
-pkill -f "next dev"
-```
-
-## File Management Testing
-
-When testing file uploads:
-1. Ensure the `files` table exists in the database
-2. Check that `/public/uploads` directory is writable
-3. Use Cypress file fixtures for test uploads
-4. Remember to test both empty states and populated states
-
-## Database Migrations
-
-When adding new features that require database changes:
-1. Create migration file in `/migrations/` directory
-2. Use sequential numbering (e.g., `003_add_files_table.sql`)
-3. Apply migrations with psql:
-   ```bash
-   psql $DATABASE_URL -f migrations/xxx_migration_name.sql
+## 🔐 Authentication System (Supabase)
+
+### How It Works
+
+1. **Login Flow**:
+   - User enters credentials at `/login`
+   - `signInWithPassword()` calls Supabase Auth
+   - Supabase sets secure httpOnly cookies
+   - Middleware refreshes session automatically
+   - User redirected to `/dashboard`
+
+2. **Session Management**:
+   - Every request goes through `/middleware.ts`
+   - Uses `@supabase/ssr` for cookie management
+   - Sessions auto-refresh before expiry
+   - No manual token handling needed
+
+3. **User Roles**:
+   ```typescript
+   type UserRole = 'admin' | 'team_member' | 'client';
+   
+   // Stored in user.user_metadata.role
+   // Access levels:
+   admin        → Full system access
+   team_member  → Project/task management
+   client       → View-only + support chat
    ```
 
-## Common Commands
+### Test Users
 
 ```bash
-# Check build errors
-npm run build
-
-# Type checking
-npm run typecheck
-
-# Lint checking
-npm run lint
-
-# Database operations
-npm run db:generate  # Generate Drizzle migrations
-npm run db:push     # Push schema to database
+# All passwords: password123
+admin@test.com     # Admin access
+team@test.com      # Team member access
+client@test.com    # Client access
 ```
 
-## Architecture Notes
+### Auth Code Patterns
 
-- Using Next.js 14 App Router
-- Authentication: NextAuth v5
-- Database: PostgreSQL with Drizzle ORM
-- UI Components: Custom components in `@chat/ui`
-- File Storage: Local storage in `/public/uploads`
-- Testing: Cypress for E2E tests
+**Client Component**:
+```typescript
+'use client';
+import { useAuth } from '@/lib/contexts/auth-context';
 
-## Current Test Users in Database
+export function MyComponent() {
+  const { user, session, loading } = useAuth();
+  
+  if (loading) return <div>Loading...</div>;
+  if (!user) return <div>Not authenticated</div>;
+  
+  return <div>Hello {user.email} ({user.user_metadata.role})</div>;
+}
+```
 
-The database is seeded with test users that have proper role assignments:
-- Admin users can access all features
-- Client users have restricted access
-- Team members have intermediate access
+**Server Component**:
+```typescript
+import { getUser } from '@/lib/auth/get-user';
+import { redirect } from 'next/navigation';
 
-Always verify role-based access in tests.
+export default async function Page() {
+  const user = await getUser();
+  
+  if (!user) {
+    redirect('/login');
+  }
+  
+  // User is guaranteed here
+  return <div>Welcome {user.email}</div>;
+}
+```
 
-## Critical Workflow Tips
+**API Route**:
+```typescript
+import { requireAuth, requireRole } from '@/lib/auth/api-auth';
 
-### When Making Changes
+// Basic auth check
+export async function GET(request: Request) {
+  const { user, error } = await requireAuth();
+  if (error) return error; // Returns 401
+  
+  return Response.json({ user });
+}
 
-1. **Always run tests first**: Before making any changes, ensure existing tests pass
-2. **Check for route conflicts**: Use `find` to check for existing dynamic routes before creating new ones
-3. **Verify database state**: Check if tables exist before assuming they do
-4. **Use TodoWrite**: Track your progress with todos, especially for multi-step tasks
+// Role-based auth
+export async function POST(request: Request) {
+  const { user, error } = await requireRole(['admin', 'team_member']);
+  if (error) return error; // Returns 401 or 403
+  
+  // Perform admin/team operation
+  return Response.json({ success: true });
+}
+```
 
-### Efficient Debugging Process
+### Creating Supabase Clients
 
-1. **Server errors (500)**: Always check `/tmp/next-dev.log` or server console first
-2. **Route not found (404)**: Check for route conflicts in app directory structure
-3. **API failures**: Look at Network tab and server logs together
-4. **Test failures**: Check screenshots first, then look at the specific error
+**Browser (Client Components)**:
+```typescript
+import { createClient } from '@/lib/supabase/client';
 
-### Common Gotchas
+const supabase = createClient();
+// Use for: auth, realtime, client queries
+```
 
-1. **Import paths**: Always use `@/` for app imports, `@chat/` for package imports
-2. **Client/Server separation**: Don't import server-only code (fs, database) in client components
-3. **Auth in API routes**: Use `auth()` from auth.config, not `getServerSession`
-4. **File paths**: Always use absolute paths in server code, never relative
-5. **Event handlers**: Use `e.stopPropagation()` on nested interactive elements
+**Server (Server Components/Routes)**:
+```typescript
+import { createServerSupabaseClient } from '@/lib/supabase/server';
 
-### Code Generation Best Practices
+const supabase = await createServerSupabaseClient();
+// Use for: server-side queries, admin operations
+```
 
-1. **Follow existing patterns**: Check similar files in the same directory first
-2. **Use TypeScript strictly**: This project has strict mode enabled
-3. **Add data-testid**: Always add these for Cypress testing
-4. **Export types**: Put shared types in `@chat/shared-types`
-5. **Modular structure**: Keep features self-contained in `/features/` directory
+## 🎭 Playwright Testing
 
-### Next.js App Router Specifics
-
-1. **Layout groups**: `(auth)` and `(protected)` don't create URL segments
-2. **Loading states**: Use `loading.tsx` for better UX
-3. **Error boundaries**: Use `error.tsx` for error handling
-4. **Server Components**: Default in app directory, use 'use client' directive when needed
-5. **Metadata**: Export metadata object for SEO
-
-### Database Workflow
+### Setup & Run
 
 ```bash
-# When you encounter "relation does not exist" error:
-1. Check what tables exist:
-   psql $DATABASE_URL -c "\dt"
+# Install Playwright
+npm install -D @playwright/test
+npx playwright install chromium
 
-2. Create missing migration:
-   echo "CREATE TABLE ..." > migrations/00X_description.sql
-
-3. Run migration:
-   psql $DATABASE_URL -f migrations/00X_description.sql
-
-4. Restart dev server to clear connection pool
+# Run tests
+npm run test:e2e          # Headless mode
+npm run test:e2e:headed   # With browser
+npm run test:e2e:ui       # Interactive UI
 ```
 
-### File Upload Debugging
+### Test Structure
 
-1. **Check directory exists**: `mkdir -p public/uploads`
-2. **Verify permissions**: File system must be writable
-3. **Check file size limits**: Default is 10MB in client-utils.ts
-4. **MIME type validation**: Ensure file type is allowed
+```typescript
+import { test, expect } from '@playwright/test';
 
-### Authentication Flow
+test.describe('Feature Name', () => {
+  // Login before each test
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/login');
+    await page.fill('input[type="email"]', 'admin@test.com');
+    await page.fill('input[type="password"]', 'password123');
+    await page.click('button[type="submit"]');
+    await page.waitForURL('**/dashboard');
+  });
 
-1. **Login**: `/api/auth/callback/credentials` → session cookie → redirect
-2. **Protected routes**: middleware.ts checks session → redirect if not authenticated
-3. **Role checks**: Use `session.user.role` in components and API routes
-4. **Logout**: Clear NextAuth session with `/api/auth/signout`
-
-### Testing Workflow That Actually Works
-
-```bash
-# 1. Kill any existing servers
-pkill -f "next dev"
-
-# 2. Start fresh server in background
-cd /path/to/project && npm run dev > /tmp/next-dev-fresh.log 2>&1 &
-
-# 3. Wait for it to fully start (check the port!)
-sleep 5
-
-# 4. Verify server is running
-curl -s http://localhost:3000 > /dev/null && echo "Server running on 3000"
-
-# 5. Run specific test
-npx cypress run --spec "cypress/e2e/your-test.cy.js"
-
-# 6. If test fails, check:
-#    - Screenshot in cypress/screenshots/
-#    - Server logs: tail -50 /tmp/next-dev-fresh.log
-#    - Correct port in cypress.config.js
-```
-
-### Cypress Login Pattern That Works (UI Modernization)
-
-When writing Cypress tests that require authentication, use this pattern:
-
-```javascript
-beforeEach(() => {
-  cy.viewport(1280, 720);
-  cy.visit('/login');
-  cy.get('input[type="email"]').type('admin@example.com');
-  cy.get('input[type="password"]').type('admin123');
-  cy.get('button[type="submit"]').click();
-  // Wait for redirect to dashboard
-  cy.url().should('include', '/dashboard');
-  cy.contains('Dashboard').should('be.visible');
+  test('should perform action', async ({ page }) => {
+    await page.goto('/projects');
+    await expect(page.locator('h1')).toContainText('Projects');
+    
+    // Test interactions
+    await page.click('button:has-text("Create Project")');
+    await page.fill('input[name="name"]', 'Test Project');
+    await page.click('button[type="submit"]');
+    
+    // Verify results
+    await expect(page.locator('text=Test Project')).toBeVisible();
+  });
 });
 ```
 
-**Important notes:**
-- Use `input[type="email"]` and `input[type="password"]` selectors (not `#email` or `#password`)
-- Always wait for the dashboard redirect with `cy.url().should('include', '/dashboard')`
-- Add `cy.contains('Dashboard').should('be.visible')` to ensure page loaded
-- Set viewport for consistent testing
-- This pattern works better than the `#email` selector pattern shown earlier in this doc
+### Common Test Patterns
 
-### Performance Considerations
+**Page Object Model**:
+```typescript
+// tests/pages/LoginPage.ts
+export class LoginPage {
+  constructor(private page: Page) {}
+  
+  async goto() {
+    await this.page.goto('/login');
+  }
+  
+  async login(email: string, password: string) {
+    await this.page.fill('input[type="email"]', email);
+    await this.page.fill('input[type="password"]', password);
+    await this.page.click('button[type="submit"]');
+    await this.page.waitForURL('**/dashboard');
+  }
+}
 
-1. **Use dynamic imports**: For large components not needed immediately
-2. **Image optimization**: Use Next.js Image component
-3. **Database queries**: Use proper indexes (already set up in migrations)
-4. **Client-side state**: Minimize to reduce re-renders
-
-### Security Notes
-
-1. **Environment variables**: Never commit `.env.local`
-2. **API routes**: Always validate input and check authentication
-3. **File uploads**: Validate MIME types and sizes
-4. **SQL injection**: Drizzle ORM prevents this, but be careful with raw SQL
-5. **CORS**: Configured in Next.js config if needed
-
-### Useful Debugging Commands
-
-```bash
-# See what's running on ports
-lsof -i :3000
-
-# Check TypeScript errors
-npm run typecheck
-
-# See all routes in app directory
-find app -name "page.tsx" -o -name "route.ts" | sort
-
-# Check database connection
-psql $DATABASE_URL -c "SELECT current_database()"
-
-# Clear Next.js cache
-rm -rf .next
-
-# See recent git changes
-git log --oneline -10
+// Usage in test
+const loginPage = new LoginPage(page);
+await loginPage.login('admin@test.com', 'password123');
 ```
 
-### When Things Go Wrong
+**Auth Fixture**:
+```typescript
+// tests/fixtures/auth.ts
+import { test as base } from '@playwright/test';
 
-1. **"Module not found"**: Run `npm install` and check import paths
-2. **"Hydration mismatch"**: Check for client-only code in server components
-3. **"Invalid hook call"**: Ensure hooks are only in client components
-4. **Build failures**: Run `npm run typecheck` first to see all errors
-5. **Mysterious 500 errors**: Check for missing await keywords
+export const test = base.extend({
+  authenticatedPage: async ({ page }, use) => {
+    // Login
+    await page.goto('/login');
+    await page.fill('input[type="email"]', 'admin@test.com');
+    await page.fill('input[type="password"]', 'password123');
+    await page.click('button[type="submit"]');
+    await page.waitForURL('**/dashboard');
+    
+    // Use authenticated page
+    await use(page);
+  },
+});
+```
 
-### Remember
+### Debugging Tests
 
-- This is a production-grade codebase - maintain high quality
-- Always test your changes with Cypress
-- Follow the existing patterns and conventions
-- When in doubt, check how similar features are implemented
-- Use the upgrade.md as your guide for phased implementation
+```bash
+# Debug mode
+npx playwright test --debug
+
+# Slow motion
+npx playwright test --slow-mo=1000
+
+# Save traces
+npx playwright test --trace on
+
+# View traces
+npx playwright show-trace trace.zip
+```
+
+## 🛠️ Development Workflow
+
+### Starting Development
+
+```bash
+# 1. Clean start
+lsof -i :3000 | grep LISTEN | awk '{print $2}' | xargs kill -9 2>/dev/null
+rm -rf .next
+
+# 2. Start server
+npm run dev
+
+# 3. Verify running
+curl http://localhost:3000
+```
+
+### Environment Variables
+
+```bash
+# .env.local (required)
+NEXT_PUBLIC_SUPABASE_URL=https://ixcsflqtipcfscbloahx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
+```
+
+### Build & Deploy
+
+```bash
+# Type check
+npm run typecheck
+
+# Lint
+npm run lint
+
+# Build
+npm run build
+
+# Start production
+npm start
+```
+
+## 📝 Code Patterns & Best Practices
+
+### Server vs Client Components
+
+**Server Component (default)**:
+```typescript
+// No 'use client' directive = Server Component
+// ✅ Can fetch data directly
+// ✅ Can use async/await at top level
+// ✅ Better performance & SEO
+// ❌ No hooks, state, or browser APIs
+
+export default async function ProjectsPage() {
+  const projects = await getProjects(); // Direct DB call
+  
+  return (
+    <div>
+      {projects.map(p => <ProjectCard key={p.id} project={p} />)}
+    </div>
+  );
+}
+```
+
+**Client Component**:
+```typescript
+'use client'; // Required directive
+
+// ✅ Can use hooks, state, effects
+// ✅ Can handle interactions
+// ✅ Access to browser APIs
+// ❌ No direct async data fetching
+
+export function InteractiveForm() {
+  const [data, setData] = useState('');
+  
+  return (
+    <form onSubmit={handleSubmit}>
+      <input value={data} onChange={e => setData(e.target.value)} />
+    </form>
+  );
+}
+```
+
+### Data Fetching Patterns
+
+**Server Component**:
+```typescript
+// Direct in component
+async function Page() {
+  const data = await supabase.from('projects').select();
+  return <div>{/* render data */}</div>;
+}
+```
+
+**Client Component**:
+```typescript
+// Using SWR or React Query
+import useSWR from 'swr';
+
+function Component() {
+  const { data, error } = useSWR('/api/projects', fetcher);
+  if (error) return <div>Error</div>;
+  if (!data) return <div>Loading...</div>;
+  return <div>{/* render data */}</div>;
+}
+```
+
+### Error Handling
+
+**Try-Catch Pattern**:
+```typescript
+try {
+  const result = await riskyOperation();
+  return Response.json({ data: result });
+} catch (error) {
+  console.error('Operation failed:', error);
+  return Response.json(
+    { error: 'Operation failed' },
+    { status: 500 }
+  );
+}
+```
+
+**Error Boundaries**:
+```typescript
+// app/error.tsx
+'use client';
+
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error;
+  reset: () => void;
+}) {
+  return (
+    <div>
+      <h2>Something went wrong!</h2>
+      <button onClick={() => reset()}>Try again</button>
+    </div>
+  );
+}
+```
+
+### Form Handling
+
+**Server Actions (Recommended)**:
+```typescript
+// app/actions.ts
+'use server';
+
+export async function createProject(formData: FormData) {
+  const name = formData.get('name') as string;
+  
+  // Validate
+  if (!name) {
+    return { error: 'Name required' };
+  }
+  
+  // Create
+  const { data, error } = await supabase
+    .from('projects')
+    .insert({ name })
+    .select()
+    .single();
+    
+  if (error) return { error: error.message };
+  
+  revalidatePath('/projects');
+  return { data };
+}
+
+// In component
+<form action={createProject}>
+  <input name="name" required />
+  <button type="submit">Create</button>
+</form>
+```
+
+### Type Safety
+
+**Shared Types**:
+```typescript
+// packages/shared-types/src/index.ts
+export interface Project {
+  id: string;
+  name: string;
+  description?: string;
+  createdAt: Date;
+}
+
+// Use everywhere
+import type { Project } from '@chat/shared-types';
+```
+
+**API Response Types**:
+```typescript
+// Consistent API responses
+type ApiResponse<T> = 
+  | { data: T; error?: never }
+  | { data?: never; error: string };
+
+// Usage
+export async function GET(): Promise<Response> {
+  const response: ApiResponse<Project[]> = { data: projects };
+  return Response.json(response);
+}
+```
+
+## 🚨 Common Issues & Solutions
+
+### Authentication Problems
+
+**"Auth session missing!"**:
+```bash
+# Solution 1: Clear cookies
+# In browser DevTools > Application > Cookies > Clear All
+
+# Solution 2: Check middleware logs
+# Look for [MIDDLEWARE] entries in console
+
+# Solution 3: Verify env vars
+console.log(process.env.NEXT_PUBLIC_SUPABASE_URL); // Should not be undefined
+```
+
+**User role not working**:
+```typescript
+// Run role update script
+npm run tsx scripts/set-user-roles.ts
+
+// Or manually in Supabase dashboard
+// Authentication > Users > Edit user > Raw JSON metadata
+{
+  "role": "admin",
+  "name": "Admin User"
+}
+```
+
+### Build Errors
+
+**"Module not found"**:
+```bash
+# Clean install
+rm -rf node_modules package-lock.json
+npm install
+```
+
+**TypeScript errors**:
+```bash
+# See all errors
+npm run typecheck
+
+# Common fixes:
+# 1. Add missing types
+# 2. Use 'as' for type assertions
+# 3. Add // @ts-ignore for unfixable issues
+```
+
+### Database Issues
+
+**"relation does not exist"**:
+```sql
+-- Check tables in Supabase SQL Editor
+SELECT table_name FROM information_schema.tables 
+WHERE table_schema = 'public';
+```
+
+**RLS (Row Level Security) errors**:
+```sql
+-- Disable RLS for development (Supabase dashboard)
+ALTER TABLE your_table DISABLE ROW LEVEL SECURITY;
+```
+
+## 🔧 Utility Scripts
+
+### Update User Roles
+```bash
+# scripts/set-user-roles.ts
+npm run tsx scripts/set-user-roles.ts
+```
+
+### Clear Test Data
+```sql
+-- Run in Supabase SQL Editor
+DELETE FROM messages WHERE created_at < NOW() - INTERVAL '7 days';
+DELETE FROM files WHERE created_at < NOW() - INTERVAL '30 days';
+```
+
+## 📋 Pre-Commit Checklist
+
+Before committing code:
+
+- [ ] `npm run build` - Must pass
+- [ ] `npm run typecheck` - No errors
+- [ ] `npm run lint` - No errors
+- [ ] Test auth flow manually
+- [ ] No console.log() in production code
+- [ ] No hardcoded secrets
+- [ ] Update types if APIs changed
+- [ ] Add to changelog if significant
+
+## 🎯 Quick Command Reference
+
+```bash
+# Development
+npm run dev                    # Start dev server
+npm run build                  # Production build
+npm run start                  # Start production
+
+# Code Quality  
+npm run typecheck              # TypeScript check
+npm run lint                   # ESLint
+npm run lint:fix               # Fix lint issues
+
+# Testing
+npm run test:e2e               # Run all tests
+npm run test:e2e:headed        # With browser
+npm run test:e2e:ui            # Interactive mode
+
+# Database
+npm run db:generate            # Generate types
+npm run db:push                # Push schema
+
+# Utilities
+npm run tsx <script>           # Run TypeScript files
+```
+
+## 💡 Pro Tips
+
+1. **Always use Server Components by default** - Only add 'use client' when needed
+2. **Prefetch data in layouts** - Pass to pages as props
+3. **Use Suspense boundaries** - Better loading states
+4. **Cache API responses** - Use Next.js caching
+5. **Validate early** - Use zod schemas
+6. **Log errors properly** - Include context
+7. **Test edge cases** - Empty states, errors, loading
+8. **Use TypeScript strictly** - Avoid 'any' type
+9. **Component composition** - Small, focused components
+10. **Performance first** - Measure with Lighthouse
+
+Remember: This is a production application. Write clean, tested, type-safe code.

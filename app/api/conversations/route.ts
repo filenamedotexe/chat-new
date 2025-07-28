@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { authMiddleware } from '@/lib/auth/api-auth';
 import { 
   getActiveConversations, 
@@ -6,7 +6,7 @@ import {
 } from '@/features/support-chat/lib/conversations';
 import type { UserRole } from '@chat/shared-types';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Get the authenticated user
     const session = await authMiddleware();
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     // Get the authenticated user
     const session = await authMiddleware();

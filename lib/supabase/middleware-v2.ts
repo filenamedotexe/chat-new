@@ -20,7 +20,7 @@ export async function updateSession(request: NextRequest) {
         get(name: string) {
           return request.cookies.get(name)?.value;
         },
-        set(name: string, value: string, options: any) {
+        set(name: string, value: string, options: Record<string, unknown>) {
           // Set cookie on both request and response
           request.cookies.set({
             name,
@@ -38,7 +38,7 @@ export async function updateSession(request: NextRequest) {
             ...options,
           });
         },
-        remove(name: string, options: any) {
+        remove(name: string, options: Record<string, unknown>) {
           // Remove cookie from both request and response
           request.cookies.set({
             name,

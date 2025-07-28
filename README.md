@@ -1,68 +1,75 @@
-# Agency Client Platform - Next.js 14 Production App
+# Agency Client Platform - Supabase-Powered Production App
 
-A complete agency management platform built with Next.js 14, featuring project management, file sharing, task tracking, and real-time collaboration. Currently in Phase 6 of development with comprehensive testing.
+A complete agency management platform built with Next.js 14 and Supabase, featuring project management, file sharing, task tracking, real-time collaboration, and a comprehensive support chat system.
 
-> **Quick Start**: Clone → Install → Set up `.env.local` → Run migrations → `npm run dev` → Login with `admin@example.com` / `admin123`
+> **Quick Start**: Clone → Install → Set up `.env.local` → Run migrations → `npm run dev` → Login with `admin@test.com` / `password123`
 
-## What's Built So Far
+## What's Built
 
-### ✅ Completed Features (Phases 0-6)
-- **Authentication System**: Email/password login with role-based access (admin, client, team_member)
+### ✅ Core Features
+- **Supabase Authentication**: Email/password login with role-based access (admin, client, team_member)
 - **Organizations**: Full CRUD with client isolation
 - **Projects**: Multi-org projects with team assignments
-- **Tasks**: Kanban board with drag-drop, status workflows
-- **File Management**: Upload, preview, download, cross-project sharing
+- **Tasks**: Kanban board with drag-drop, status workflows, and comment system
+- **File Management**: Supabase Storage integration with cross-project sharing
+- **Support Chat**: Real-time customer support with floating widget and admin dashboard
 - **Dashboard**: Role-specific views with quick actions
-- **Testing**: Comprehensive Cypress E2E test suite
+- **Testing**: Playwright E2E test suite (migrated from Cypress)
 
-### 🚧 Coming Next (Phase 8)
-- Real-time chat system
-- Progress tracking
-- Admin analytics
-
-## Key Features
-
+### 🏗️ Architecture Highlights
 - **Next.js 14 App Router** with Server Components
+- **Supabase Backend**: Auth, Database (PostgreSQL), Storage, and Realtime
 - **TypeScript** with strict mode for type safety
-- **Role-Based Access**: Admin, Client, Team Member roles
-- **Drag & Drop**: Smooth Kanban board with Framer Motion
-- **File Sharing**: Cross-project file management
-- **Real Database**: PostgreSQL via Neon (not SQLite!)
-- **Modular Architecture**: Feature-based organization
-- **Production Ready**: Error handling, loading states, auth middleware
+- **Modular Architecture**: Feature-based organization in `/features/`
+- **Server-Sent Events**: Real-time updates without WebSocket complexity
+- **Cookie-Based Sessions**: Using @supabase/ssr for secure auth
 
-## Why This Architecture?
+## Tech Stack
 
-This isn't just another boilerplate. It's designed for real agency work:
-
-- **Feature-based structure**: Each feature is self-contained in `/features/`
-- **Monorepo packages**: Shared code lives in `@chat/*` packages
-- **Real PostgreSQL**: No SQLite compromises, using Neon for production
-- **Phased implementation**: Built following a detailed plan (`upgrade.md`)
-- **Comprehensive testing**: Every feature has Cypress tests
-- **Production patterns**: Error boundaries, loading states, proper auth
+- **Framework**: Next.js 14 (App Router)
+- **Authentication**: Supabase Auth with @supabase/ssr
+- **Database**: PostgreSQL via Supabase
+- **File Storage**: Supabase Storage
+- **Real-time**: Supabase Realtime + SSE for chat
+- **UI Library**: Custom component library (@chat/ui)
+- **Styling**: Tailwind CSS with custom theme system
+- **Testing**: Playwright (E2E)
+- **Type Safety**: TypeScript with strict mode
+- **Validation**: Zod for runtime validation
 
 ## Project Structure
 
 ```
 agency-client-platform/
-├── app/                    # Next.js 14 app router
-│   ├── (auth)/            # Public routes (login, register)
-│   ├── (protected)/       # Auth-required routes
-│   └── api/               # API endpoints
-├── features/              # Feature modules (the meat of the app!)
-│   ├── auth/             # Authentication components
-│   ├── organizations/    # Org management
-│   ├── projects/         # Project CRUD
-│   ├── tasks/            # Kanban board & tasks
-│   └── files/            # File upload & sharing
+├── app/                      # Next.js 14 app router
+│   ├── (auth)/              # Public routes (login, register)
+│   ├── (protected)/         # Auth-required routes
+│   │   ├── dashboard/       # Role-based dashboards
+│   │   ├── projects/        # Project management
+│   │   ├── tasks/           # Task management with comments
+│   │   ├── files/           # File management
+│   │   └── admin/           # Admin-only areas
+│   └── api/                 # API endpoints
+│       ├── auth/            # Supabase auth endpoints
+│       ├── conversations/   # Support chat API
+│       └── files/           # File operations
+├── features/                # Feature modules
+│   ├── auth/               # Authentication components
+│   ├── organizations/      # Org management
+│   ├── projects/          # Project CRUD
+│   ├── tasks/             # Kanban board & tasks
+│   ├── files/             # File upload & sharing
+│   └── support-chat/      # Customer support chat
+├── lib/                    # Core utilities
+│   ├── supabase/          # Supabase client configs
+│   ├── auth/              # Auth helpers
+│   └── contexts/          # React contexts
 ├── packages/              # Internal packages (monorepo)
 │   ├── @chat/ui          # Reusable UI components
-│   ├── @chat/auth        # Auth utilities
-│   ├── @chat/database    # Database schema & client
-│   └── @chat/shared-types # TypeScript types
-├── lib/                   # Core utilities
-├── cypress/e2e/          # E2E tests (all passing!)
+│   ├── @chat/database    # Database schema & types
+│   └── @chat/shared-types # Shared TypeScript types
+├── tests/                 # Playwright tests
+│   └── e2e/              # End-to-end tests
 └── migrations/           # SQL migrations
 ```
 
@@ -71,8 +78,8 @@ agency-client-platform/
 ### Prerequisites
 
 - Node.js 18+ and npm
-- Neon PostgreSQL database
-- OpenAI API key (for AI chat features)
+- Supabase account and project
+- OpenAI API key (optional, for AI features)
 
 ### 1. Clone and Install
 
@@ -87,42 +94,58 @@ npm install
 Create a `.env.local` file:
 
 ```env
-# Database
-DATABASE_URL=postgresql://username:password@your-neon-database.neon.tech/dbname?sslmode=require
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
-# NextAuth
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your-secret-key-here-change-in-production
-
-# OpenAI (for chat features)
+# OpenAI (optional)
 OPENAI_API_KEY=your-openai-api-key
 
 # App
-NEXT_PUBLIC_APP_NAME=Chat App
+NEXT_PUBLIC_APP_NAME=Agency Platform
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-### 3. Database Setup
+### 3. Supabase Setup
 
-Run the migrations to set up your database schema:
+1. **Configure Auth Settings** in Supabase Dashboard:
+   - Enable email auth
+   - Disable email confirmations (for development)
+   - Set Site URL: `http://localhost:3000`
+   - Add redirect URLs: 
+     - `http://localhost:3000/auth/callback`
+     - `http://localhost:3000/dashboard`
 
-```bash
-# Using psql
-psql $DATABASE_URL -f migrations/001_initial_schema.sql
-psql $DATABASE_URL -f migrations/002_seed_data.sql
-psql $DATABASE_URL -f migrations/003_add_files_table.sql
+2. **Run Database Migrations**:
+   ```bash
+   # Using psql (get connection string from Supabase Dashboard)
+   psql "postgresql://postgres:[password]@[host]/postgres" -f migrations/001_initial_schema.sql
+   psql "postgresql://postgres:[password]@[host]/postgres" -f migrations/002_auth_tables.sql
+   psql "postgresql://postgres:[password]@[host]/postgres" -f migrations/003_add_files_table.sql
+   psql "postgresql://postgres:[password]@[host]/postgres" -f migrations/004_add_user_roles.sql
+   psql "postgresql://postgres:[password]@[host]/postgres" -f migrations/005_auth_improvements.sql
+   psql "postgresql://postgres:[password]@[host]/postgres" -f migrations/006_add_support_chat_tables.sql
+   psql "postgresql://postgres:[password]@[host]/postgres" -f migrations/007_fix_message_constraints.sql
+   ```
 
-# Or push schema using Drizzle (requires env setup)
-npm run db:push
-```
+3. **Create Test Users** (for development):
+   ```sql
+   -- Run in Supabase SQL Editor
+   INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, created_at, updated_at)
+   VALUES 
+     (gen_random_uuid(), 'admin@test.com', crypt('password123', gen_salt('bf')), now(), now(), now()),
+     (gen_random_uuid(), 'team@test.com', crypt('password123', gen_salt('bf')), now(), now(), now()),
+     (gen_random_uuid(), 'client@test.com', crypt('password123', gen_salt('bf')), now(), now(), now());
+   
+   -- Then update their roles in public.users table
+   ```
 
-### 4. Create Upload Directory
+4. **Configure Storage Buckets**:
+   - Create a `files` bucket in Supabase Storage
+   - Set it to public or configure RLS policies as needed
 
-```bash
-mkdir -p public/uploads
-```
-
-### 5. Run Development Server
+### 4. Run Development Server
 
 ```bash
 npm run dev
@@ -130,13 +153,12 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to see the app.
 
-> **Note**: If port 3000 is busy, the server will use 3001. Check the console output!
+## Default Test Credentials
 
-## Default Credentials
-
-After running the seed script:
-- **Admin**: admin@example.com / admin123
-- **User**: user@example.com / user123
+For development:
+- **Admin**: admin@test.com / password123
+- **Team Member**: team@test.com / password123
+- **Client**: client@test.com / password123
 
 ## Available Scripts
 
@@ -145,47 +167,77 @@ After running the seed script:
 - `npm start` - Start production server
 - `npm run lint` - Run ESLint
 - `npm run typecheck` - Run TypeScript type checking
-- `npm run db:generate` - Generate Drizzle migrations
-- `npm run db:push` - Push database schema changes
+- `npm run test` - Run Playwright tests
+- `npm run test:ui` - Open Playwright UI
 
 ## Authentication
 
-The app uses NextAuth.js with the following features:
+The app uses Supabase Auth with:
 - Email/password authentication
-- Session management with JWT
-- Role-based access control (admin/user)
+- Cookie-based session management via @supabase/ssr
+- Role-based access control (admin/team_member/client)
 - Protected routes with middleware
+- Automatic session refresh
+
+## Key Features
+
+### Support Chat System
+- **Client Widget**: Floating chat bubble on all pages
+- **Real-time Messaging**: Using SSE for instant updates
+- **Admin Dashboard**: Conversation management at `/admin/conversations`
+- **Internal Notes**: Admin-only notes within conversations
+- **File Attachments**: Support for images, PDFs, and documents
+
+### File Management
+- **Supabase Storage**: Secure file hosting
+- **Cross-Project Sharing**: Share files between projects
+- **Preview Support**: Images, PDFs, and text files
+- **Role-Based Access**: Control who can upload/view files
+
+### Task Management
+- **Kanban Board**: Drag-and-drop task management
+- **Comments System**: Discussion threads on tasks
+- **Status Workflows**: Customizable task statuses
+- **Real-time Updates**: Live status changes
 
 ## Theme System
 
 The app includes a sophisticated theme system:
 - **Light/Dark mode** with system preference detection
-- **Custom themes**: Ocean, Forest
+- **Custom themes**: Ocean, Forest  
 - **CSS variables** for easy customization
 - **Theme persistence** in localStorage
 
-## UI Components
+## Testing
 
-The `@chat/ui` package includes:
-- Button (with loading states)
-- Card (with hover effects)
-- Input (with error states)
-- Avatar
-- Dropdown
-- ThemeToggle
-- ChatBubble
-- Layout components
+### Running Playwright Tests
 
-## Feature Flags
+```bash
+# Install Playwright browsers (first time only)
+npx playwright install
 
-Control feature availability with the built-in feature flag system:
+# Run all tests
+npm run test
+
+# Run tests in UI mode
+npm run test:ui
+
+# Run specific test file
+npx playwright test tests/e2e/auth.spec.ts
+```
+
+### Writing Tests
 
 ```typescript
-import { FeatureFlag, FEATURES } from '@/lib/features';
+import { test, expect } from '@playwright/test';
 
-<FeatureFlag feature={FEATURES.CHAT}>
-  <ChatInterface />
-</FeatureFlag>
+test('user can login', async ({ page }) => {
+  await page.goto('/login');
+  await page.fill('input[type="email"]', 'admin@test.com');
+  await page.fill('input[type="password"]', 'password123');
+  await page.click('button[type="submit"]');
+  await expect(page).toHaveURL('/dashboard');
+});
 ```
 
 ## Deployment
@@ -194,202 +246,82 @@ import { FeatureFlag, FEATURES } from '@/lib/features';
 
 1. Push your code to GitHub
 2. Import project in Vercel
-3. Add environment variables
+3. Add environment variables:
+   - All Supabase variables from `.env.local`
+   - Set `NODE_ENV=production`
 4. Deploy
 
-### Environment Variables for Production
+### Railway / Render
 
-- `DATABASE_URL` - Neon PostgreSQL connection string
-- `NEXTAUTH_URL` - Your production URL
-- `NEXTAUTH_SECRET` - Generate with `openssl rand -base64 32`
-- `OPENAI_API_KEY` - Your OpenAI API key
+Similar process - ensure all environment variables are set and the build command is `npm run build`.
 
-## Security Considerations
+## Security Best Practices
 
-- Always use HTTPS in production
-- Keep `NEXTAUTH_SECRET` secure and unique
-- Use environment variables for sensitive data
-- Enable Neon's connection pooling for production
-- Implement rate limiting for API routes
-- Regular security updates for dependencies
-
-## Extending the App
-
-### Adding New Features
-
-1. Create a new directory in `features/`
-2. Add pages, components, and API routes
-3. Use the internal packages for shared functionality
-
-### Adding OAuth Providers
-
-Update `packages/auth/src/index.ts`:
-
-```typescript
-import GoogleProvider from "next-auth/providers/google";
-
-providers: [
-  GoogleProvider({
-    clientId: process.env.GOOGLE_CLIENT_ID!,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-  }),
-  // ... existing providers
-]
-```
-
-### Custom Themes
-
-Add new themes in `lib/theme/themes.ts`:
-
-```typescript
-export const customTheme: Theme = {
-  name: 'custom',
-  colors: {
-    // ... your color values
-  }
-};
-```
-
-## Testing
-
-The project uses Cypress for end-to-end testing.
-
-### Running Tests
-
-```bash
-# Start the development server first
-npm run dev
-
-# In another terminal, run all tests
-npx cypress run
-
-# Or open Cypress UI for interactive testing
-npx cypress open
-```
-
-### Test Coverage
-
-- Authentication flows (login, register, logout)
-- Role-based access control
-- Organization and Project CRUD operations
-- Task management with Kanban board
-- File upload and management
-- Cross-project file sharing
-
-### Writing Tests
-
-See `CLAUDE.md` for detailed testing guidelines and common issues.
+- Always use environment variables for secrets
+- Enable RLS (Row Level Security) in Supabase
+- Use Supabase service role key only in server-side code
+- Implement rate limiting on API routes
+- Validate all user inputs with Zod
+- Keep dependencies updated
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Port conflicts**: If port 3000 is in use, the dev server will use 3001. Update `cypress.config.js` accordingly.
+1. **Authentication Errors**:
+   - Check Supabase Auth settings
+   - Ensure redirect URLs are configured
+   - Clear cookies and try again
 
-2. **Database errors**: Ensure all migrations have been run. Check for missing tables with:
-   ```bash
-   psql $DATABASE_URL -c "\dt"
-   ```
+2. **Database Connection Issues**:
+   - Verify DATABASE_URL format
+   - Check if migrations have been run
+   - Ensure Supabase project is active
 
-3. **Authentication issues**: Clear browser cookies or use incognito mode when testing auth flows.
+3. **File Upload Errors**:
+   - Check Supabase Storage bucket exists
+   - Verify storage policies allow uploads
+   - Check file size limits (25MB default)
 
-4. **File upload errors**: Ensure `/public/uploads` directory exists and is writable.
+4. **Real-time Features Not Working**:
+   - Ensure Supabase Realtime is enabled
+   - Check browser console for WebSocket errors
+   - Verify anon key has proper permissions
 
-## Quick Development Tips
+## Development Tips
 
-### First Time Setup Checklist
-```bash
-# 1. Install dependencies
-npm install
+### Adding New Features
 
-# 2. Copy env example
-cp .env.example .env.local  # Edit with your database URL
-
-# 3. Run all migrations in order
-psql $DATABASE_URL -f migrations/001_initial_schema.sql
-psql $DATABASE_URL -f migrations/002_seed_data.sql
-psql $DATABASE_URL -f migrations/003_add_files_table.sql
-
-# 4. Create uploads directory
-mkdir -p public/uploads
-
-# 5. Start dev server
-npm run dev
-
-# 6. Run tests to verify
-npm run test:e2e
-```
-
-### Common Workflows
-
-#### Adding a New Feature
 1. Create feature directory: `/features/your-feature/`
-2. Add components, data layer, and types
-3. Create page in `/app/(protected)/your-feature/page.tsx`
-4. Add navigation link in sidebar
-5. Write Cypress tests
-6. Update `upgrade.md` with progress
+2. Add components, hooks, and types
+3. Create API routes if needed
+4. Add to navigation/routing
+5. Write Playwright tests
+6. Update documentation
 
-#### Testing Your Changes
-```bash
-# Quick test for specific phase
-npm run cypress:phase6  # or phase1-2, phase3, etc.
+### Database Changes
 
-# Test everything
-npm run test:e2e
+1. Create migration file in `/migrations/`
+2. Run migration against Supabase
+3. Update TypeScript types
+4. Test thoroughly
 
-# Debug with UI
-npm run test:e2e:open
-```
+### Performance Optimization
 
-#### Debugging Issues
-```bash
-# Type errors?
-npm run typecheck
+- Use React Server Components by default
+- Implement proper loading states
+- Use Suspense boundaries
+- Optimize images with Next.js Image
+- Enable caching where appropriate
 
-# Build errors?
-npm run build
+## Contributing
 
-# Database issues?
-psql $DATABASE_URL -c "\dt"  # List all tables
-
-# Port conflicts?
-lsof -i :3000  # See what's using port 3000
-```
-
-### Project Conventions
-
-- **File naming**: `kebab-case.tsx` for files, `PascalCase` for components
-- **Imports**: Use `@/` for app code, `@chat/` for packages
-- **Types**: Export from feature folders or `@chat/shared-types`
-- **API Routes**: Always check auth with `const session = await auth()`
-- **Client Components**: Add `'use client'` directive when using hooks/events
-- **Testing**: Add `data-testid` to all interactive elements
-
-### VS Code Recommended Extensions
-
-- ESLint
-- Prettier
-- Tailwind CSS IntelliSense
-- Prisma (for database schema)
-- GitLens
-- Error Lens
-
-### Deployment Notes
-
-This app is ready for Vercel deployment:
-1. Push to GitHub
-2. Import in Vercel
-3. Add environment variables
-4. Deploy (automatic builds on push)
-
-### Contributing
-
-1. Check `upgrade.md` for current phase and planned features
-2. Create feature branch from `main`
-3. Follow existing patterns in codebase
+1. Fork the repository
+2. Create feature branch
+3. Follow existing code patterns
 4. Write tests for new features
 5. Update documentation
+6. Submit pull request
 
 ## License
 

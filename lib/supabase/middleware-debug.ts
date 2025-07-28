@@ -5,7 +5,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 export async function updateSession(request: NextRequest) {
   console.log(`[MIDDLEWARE] Processing: ${request.nextUrl.pathname}`);
   
-  let response = NextResponse.next({
+  const response = NextResponse.next({
     request: {
       headers: request.headers,
     },
@@ -21,7 +21,7 @@ export async function updateSession(request: NextRequest) {
           console.log(`[MIDDLEWARE] Cookie get: ${name} = ${value ? 'exists' : 'missing'}`);
           return value;
         },
-        set(name: string, value: string, options: any) {
+        set(name: string, value: string, options: Record<string, unknown>) {
           console.log(`[MIDDLEWARE] Cookie set: ${name}`);
           request.cookies.set({
             name,
@@ -34,7 +34,7 @@ export async function updateSession(request: NextRequest) {
             ...options,
           });
         },
-        remove(name: string, options: any) {
+        remove(name: string, options: Record<string, unknown>) {
           console.log(`[MIDDLEWARE] Cookie remove: ${name}`);
           request.cookies.set({
             name,

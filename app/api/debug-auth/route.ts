@@ -33,9 +33,9 @@ export async function GET() {
         email: user?.email
       }
     });
-  } catch (error: any) {
+  } catch (error) {
     return NextResponse.json({
-      error: error.message,
+      error: error instanceof Error ? error.message : 'Unknown error',
       cookies: cookieInfo
     });
   }
