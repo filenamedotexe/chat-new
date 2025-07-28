@@ -2,6 +2,8 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
+import { signOut as supabaseSignOut } from '@/lib/supabase/auth-browser';
+import { useEffect, useState } from 'react';
 import { 
   IconMessage, 
   IconDashboard, 
@@ -44,9 +46,25 @@ function NavigationHeader({ user }: NavigationProps) {
   const router = useRouter();
   const mobileMenu = useMobileMenuContext();
   const { theme, setTheme } = useTheme();
+  const [useSupabaseAuth, setUseSupabaseAuth] = useState(false);
   
-  const handleSignOut = () => {
-    signOut({ callbackUrl: '/login' });
+  useEffect(() => {
+    // Check feature flag on client side
+    fetch('/api/features/supabaseAuth/check')
+      .then(res => res.json())
+      .then(data => setUseSupabaseAuth(data.enabled))
+      .catch(() => setUseSupabaseAuth(false));
+  }, []);
+  
+  const handleSignOut = async () => {
+    if (useSupabaseAuth) {
+      // Use Supabase sign out
+      await supabaseSignOut();
+      router.push('/login');
+    } else {
+      // Use NextAuth sign out
+      signOut({ callbackUrl: '/login' });
+    }
   };
   
   const toggleTheme = () => {
@@ -135,6 +153,7 @@ function NavigationHeader({ user }: NavigationProps) {
             <button 
               className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-all"
               aria-label="User menu"
+              data-testid="user-menu"
             >
               <Avatar 
                 fallback={user.name || user.email} 
@@ -184,6 +203,7 @@ function NavigationHeader({ user }: NavigationProps) {
                 onClick={handleSignOut}
                 destructive
                 className="focus:bg-destructive/10"
+                data-testid="logout-button"
               >
                 <IconLogout className="mr-2 h-4 w-4" />
                 Sign Out

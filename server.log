@@ -7,191 +7,828 @@
   - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 832ms
- ✓ Compiled /middleware in 118ms (305 modules)
+ ✓ Ready in 834ms
+ ✓ Compiled /middleware in 320ms (305 modules)
  ○ Compiling / ...
  ✓ Compiled / in 2.4s (2362 modules)
- GET / 200 in 2520ms
- ✓ Compiled in 215ms (1112 modules)
- ✓ Compiled /login in 199ms (2320 modules)
- GET /login 200 in 288ms
- ✓ Compiled /api/auth/[...nextauth] in 359ms (1585 modules)
- GET /api/auth/session 200 in 620ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 3ms
- ✓ Compiled /dashboard in 476ms (3050 modules)
- GET /dashboard 200 in 600ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 2ms
- GET /login 200 in 13ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 2ms
- GET /login 200 in 13ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 2ms
- GET /api/auth/session 200 in 2ms
- GET /api/auth/session 200 in 3ms
- GET /dashboard 200 in 16ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 3ms
- GET /login 200 in 12ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 2ms
- GET /api/auth/session 200 in 2ms
- GET /login 200 in 13ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 2ms
- GET /api/auth/session 200 in 3ms
- GET /login 200 in 13ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 3ms
- GET /dashboard 200 in 14ms
- GET /api/auth/session 200 in 8ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 2ms
- GET /login 200 in 12ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 2ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 3ms
- GET /login 200 in 12ms
- GET /login 200 in 17ms
- GET /api/auth/session 200 in 11ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 2ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 2ms
- GET /dashboard 200 in 12ms
- GET /api/auth/session 200 in 8ms
+ GET / 200 in 2539ms
+ ✓ Compiled in 228ms (1112 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (108kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+ ✓ Compiled /login in 220ms (2320 modules)
+ GET /login 200 in 363ms
+ ✓ Compiled /api/auth/[...nextauth] in 430ms (1585 modules)
+ GET /api/auth/session 200 in 693ms
  GET /api/auth/session 200 in 5ms
  GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 6ms
- GET /login 200 in 12ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 2ms
  GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 3ms
- GET /login 200 in 13ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 2ms
- GET /api/auth/session 200 in 2ms
- GET /dashboard 200 in 13ms
+ ✓ Compiled /dashboard in 485ms (3050 modules)
+ GET /dashboard 200 in 622ms
  GET /api/auth/session 200 in 7ms
  GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 3ms
  GET /api/auth/session 200 in 2ms
- GET /login 200 in 10ms
- GET /api/auth/session 200 in 3ms
  GET /api/auth/session 200 in 2ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 2ms
- GET /login 200 in 10ms
+ GET /login 200 in 14ms
  GET /api/auth/session 200 in 5ms
  GET /api/auth/session 200 in 2ms
  GET /api/auth/session 200 in 2ms
  GET /api/auth/session 200 in 2ms
- GET /dashboard 200 in 14ms
+ GET /login 200 in 15ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /dashboard 200 in 15ms
  GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 4ms
  GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
  GET /api/auth/session 200 in 3ms
- GET /login 200 in 12ms
- GET /api/auth/session 200 in 4ms
+ GET /login 200 in 11ms
+ GET /api/auth/session 200 in 5ms
  GET /api/auth/session 200 in 3ms
  GET /api/auth/session 200 in 2ms
  GET /api/auth/session 200 in 2ms
  GET /login 200 in 11ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 2ms
- GET /api/auth/session 200 in 3ms
- GET /dashboard 200 in 13ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 2ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 1ms
- GET /login 200 in 11ms
  GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 5ms
  GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 4ms
+ GET /dashboard 200 in 13ms
+ GET /api/auth/session 200 in 9ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 2ms
+ GET /login 200 in 13ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /login 200 in 14ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 2ms
+ GET /dashboard 200 in 18ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /login 200 in 13ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /login 200 in 10ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 2ms
  GET /api/auth/session 200 in 3ms
  GET /api/auth/session 200 in 3ms
  GET /login 200 in 12ms
+ ✓ Compiled /api/test-auth in 303ms (1886 modules)
+🧪 Testing auth components...
+Supabase URL: Present
+Supabase Key: Present
+Testing Supabase client import...
+✅ Supabase client imported successfully
+Testing client creation...
+✅ Supabase client created successfully
+Testing Supabase connection...
+✅ Supabase connection test complete
+ GET /api/test-auth 200 in 495ms
+ GET /api/auth/session 200 in 505ms
+ GET /login 200 in 133ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /dashboard 200 in 28ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /login 200 in 13ms
+ GET /api/auth/session 200 in 3ms
  GET /api/auth/session 200 in 4ms
  GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /login 200 in 11ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 3ms
  GET /api/auth/session 200 in 2ms
  GET /api/auth/session 200 in 2ms
+ GET /dashboard 200 in 11ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /login 200 in 13ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /login 200 in 12ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
  GET /dashboard 200 in 14ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 2ms
- GET /api/auth/session 200 in 3ms
- GET /login 200 in 12ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 2ms
- GET /api/auth/session 200 in 2ms
- GET /api/auth/session 200 in 2ms
- GET /login 200 in 12ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 3ms
- GET /dashboard 200 in 12ms
  GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 3ms
  GET /api/auth/session 200 in 2ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 3ms
  GET /login 200 in 12ms
  GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 2ms
- GET /login 200 in 10ms
- GET /api/auth/session 200 in 3ms
  GET /api/auth/session 200 in 2ms
  GET /api/auth/session 200 in 3ms
  GET /api/auth/session 200 in 2ms
- GET /dashboard 200 in 12ms
- GET /api/auth/session 200 in 7ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 3ms
+ ✓ Compiled /_not-found in 233ms (2474 modules)
+ GET /login 404 in 358ms
+ GET /_next/static/media/e4af272ccee01ff0-s.p.woff2 404 in 10ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 15ms
+ GET /_next/static/css/app/layout.css?v=1753673025124 404 in 16ms
+ GET /_next/static/chunks/main-app.js?v=1753673025124 404 in 15ms
+ GET /_next/static/chunks/app/layout.js 404 in 14ms
+ GET /_next/static/chunks/app/error.js 404 in 9ms
+ GET /login 200 in 18ms
+ GET /_next/static/media/e4af272ccee01ff0-s.p.woff2 404 in 15ms
+ GET /_next/static/css/app/layout.css?v=1753673032460 404 in 11ms
+ GET /_next/static/chunks/main-app.js?v=1753673032460 404 in 12ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 11ms
+ GET /_next/static/chunks/app/(auth)/login/page.js 404 in 12ms
+ GET /_next/static/chunks/app/layout.js 404 in 11ms
+ GET /_next/static/chunks/app/error.js 404 in 8ms
+ GET /login? 200 in 14ms
+ GET /_next/static/css/app/layout.css?v=1753673036267 404 in 10ms
+ GET /_next/static/media/e4af272ccee01ff0-s.p.woff2 404 in 12ms
+ GET /_next/static/chunks/app/(auth)/login/page.js 404 in 13ms
+ GET /_next/static/chunks/main-app.js?v=1753673036267 404 in 14ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 14ms
+ GET /_next/static/chunks/app/layout.js 404 in 7ms
+ GET /_next/static/chunks/app/error.js 404 in 8ms
  GET /login 200 in 11ms
- GET /api/auth/session 200 in 7ms
+ GET /_next/static/media/e4af272ccee01ff0-s.p.woff2 404 in 12ms
+ GET /_next/static/css/app/layout.css?v=1753673051447 404 in 14ms
+ GET /_next/static/chunks/main-app.js?v=1753673051447 404 in 14ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 14ms
+ GET /_next/static/chunks/app/(auth)/login/page.js 404 in 14ms
+ GET /_next/static/chunks/app/error.js 404 in 8ms
+ GET /_next/static/chunks/app/layout.js 404 in 9ms
+ GET /login? 200 in 13ms
+ GET /_next/static/media/e4af272ccee01ff0-s.p.woff2 404 in 13ms
+ GET /_next/static/css/app/layout.css?v=1753673055250 404 in 15ms
+ GET /_next/static/chunks/main-app.js?v=1753673055250 404 in 16ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 16ms
+ GET /_next/static/chunks/app/(auth)/login/page.js 404 in 17ms
+ GET /_next/static/chunks/app/layout.js 404 in 14ms
+ GET /_next/static/chunks/app/error.js 404 in 9ms
+ GET /login 200 in 13ms
+ GET /_next/static/media/e4af272ccee01ff0-s.p.woff2 404 in 11ms
+ GET /_next/static/css/app/layout.css?v=1753673154561 404 in 14ms
+ GET /_next/static/chunks/main-app.js?v=1753673154561 404 in 15ms
+ GET /_next/static/chunks/app/(auth)/login/page.js 404 in 14ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 14ms
+ GET /_next/static/chunks/app/layout.js 404 in 9ms
+ GET /_next/static/chunks/app/error.js 404 in 9ms
+ GET /login? 200 in 12ms
+ GET /_next/static/css/app/layout.css?v=1753673158396 404 in 11ms
+ GET /_next/static/media/e4af272ccee01ff0-s.p.woff2 404 in 13ms
+ GET /_next/static/chunks/main-app.js?v=1753673158396 404 in 13ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 13ms
+ GET /_next/static/chunks/app/(auth)/login/page.js 404 in 13ms
+ GET /_next/static/chunks/app/layout.js 404 in 12ms
+ GET /_next/static/chunks/app/error.js 404 in 9ms
+ ✓ Compiled in 139ms (1272 modules)
+ GET /login 200 in 16ms
+ ✓ Compiled /_not-found in 176ms (2488 modules)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:1:143)
+    at JSON.parse (<anonymous>)
+digest: "231358114"
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:1:143)
+    at JSON.parse (<anonymous>)
+digest: "231358114"
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:1:143)
+    at JSON.parse (<anonymous>)
+digest: "2023478528"
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:1:143)
+    at JSON.parse (<anonymous>)
+digest: "231358114"
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:1:143)
+    at JSON.parse (<anonymous>)
+digest: "231358114"
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:1:143)
+    at require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:18839)
+    at I (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94364)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:96670
+    at F._fromJSON (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:97108)
+    at JSON.parse (<anonymous>)
+    at O (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94085)
+    at t (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:100584)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:569:9)
+    at process.processTimers (node:internal/timers:543:7)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:1:143)
+    at require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:18839)
+    at I (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94364)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:96670
+    at F._fromJSON (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:97108)
+    at JSON.parse (<anonymous>)
+    at O (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94085)
+    at t (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:100584)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:569:9)
+    at process.processTimers (node:internal/timers:543:7)
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:1:143)
+    at require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:18839)
+    at I (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94364)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:96670
+    at F._fromJSON (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:97108)
+    at JSON.parse (<anonymous>)
+    at O (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94085)
+    at t (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:100584)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:569:9)
+    at process.processTimers (node:internal/timers:543:7)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:1:143)
+    at require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:18839)
+    at I (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94364)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:96670
+    at F._fromJSON (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:97108)
+    at JSON.parse (<anonymous>)
+    at O (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94085)
+    at t (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:100584)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:569:9)
+    at process.processTimers (node:internal/timers:543:7)
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:1:143)
+    at require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:18839)
+    at I (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94364)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:96670
+    at F._fromJSON (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:97108)
+    at JSON.parse (<anonymous>)
+    at O (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94085)
+    at t (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:100584)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:569:9)
+    at process.processTimers (node:internal/timers:543:7)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:1:143)
+    at require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:18839)
+    at I (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94364)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:96670
+    at F._fromJSON (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:97108)
+    at JSON.parse (<anonymous>)
+    at O (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94085)
+    at t (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:100584)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:569:9)
+    at process.processTimers (node:internal/timers:543:7)
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:1:143)
+    at require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:18839)
+    at I (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94364)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:96670
+    at F._fromJSON (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:97108)
+    at JSON.parse (<anonymous>)
+    at O (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94085)
+    at t (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:100584)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:1:143)
+    at require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:18839)
+    at I (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94364)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:96670
+    at F._fromJSON (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:97108)
+    at JSON.parse (<anonymous>)
+    at O (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94085)
+    at t (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:100584)
+TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:1:143)
+    at require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:18839)
+    at I (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94364)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:96670
+    at F._fromJSON (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:97108)
+    at JSON.parse (<anonymous>)
+    at O (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94085)
+    at t (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:100584)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:569:9)
+    at process.processTimers (node:internal/timers:543:7)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at Object.t [as require] (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:1:143)
+    at require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:18839)
+    at I (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94364)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:96670
+    at F._fromJSON (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:97108)
+    at JSON.parse (<anonymous>)
+    at O (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:94085)
+    at t (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:100584)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:569:9)
+    at process.processTimers (node:internal/timers:543:7)
+ ✓ Compiled /_error in 398ms (2700 modules)
+ GET /_next/static/chunks/app/error.js 500 in 1840ms
+ GET /_next/static/chunks/main-app.js?v=1753673246061 500 in 1847ms
+ GET /_next/static/css/app/layout.css?v=1753673246061 500 in 1848ms
+ GET /_next/static/chunks/app-pages-internals.js 500 in 1846ms
+ GET /_next/static/chunks/app/(auth)/login/page.js 500 in 1846ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/cache/webpack/client-development-fallback/0.pack.gz_' -> '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/cache/webpack/client-development-fallback/0.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/cache/webpack/client-development-fallback/0.pack.gz_' -> '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/cache/webpack/client-development-fallback/0.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/cache/webpack/client-development-fallback/0.pack.gz_' -> '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/cache/webpack/client-development-fallback/0.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/cache/webpack/client-development-fallback/0.pack.gz_' -> '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/cache/webpack/client-development-fallback/0.pack.gz'
+ ✓ Compiled in 87ms (1460 modules)
+ GET /login? 200 in 52ms
+ ✓ Compiled /api/auth/[...nextauth] in 207ms (1624 modules)
+ GET /api/auth/session 200 in 300ms
  GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 2ms
- GET /api/auth/session 200 in 2ms
- GET /login 200 in 10ms
- GET /api/auth/session 200 in 6ms
- GET /api/auth/session 200 in 2ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 2ms
- GET /dashboard 200 in 13ms
- GET /api/auth/session 200 in 5ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 2ms
- GET /login 200 in 10ms
- GET /api/auth/session 200 in 4ms
- GET /api/auth/session 200 in 2ms
- GET /api/auth/session 200 in 3ms
- GET /api/auth/session 200 in 3ms
- ✓ Compiled in 142ms (1272 modules)
- ✓ Compiled /_not-found in 355ms (2488 modules)
- GET /_next/static/css/app/layout.css?v=1753671372934 404 in 485ms
- GET /_next/static/css/app/layout.css?v=1753671373470 404 in 10ms
+ ⨯ Failed to generate static paths for /api/auth/[...nextauth]:
+Error: Cannot find module './vendor-chunks/@opentelemetry.js'
+Require stack:
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/api/auth/[...nextauth]/route.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1405:15)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1061:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1066:22)
+    at Module._load (node:internal/modules/cjs/loader:1215:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/api/auth/[...nextauth]/route.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/static-paths-worker.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/jest-worker/processChild.js'
+  ]
+}
+ ⨯ Failed to generate static paths for /api/auth/[...nextauth]:
+Error: Cannot find module './vendor-chunks/@opentelemetry.js'
+Require stack:
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/api/auth/[...nextauth]/route.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1405:15)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1061:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1066:22)
+    at Module._load (node:internal/modules/cjs/loader:1215:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/api/auth/[...nextauth]/route.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/static-paths-worker.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/compiled/jest-worker/processChild.js'
+  ]
+}
+ ✓ Compiled / in 208ms (1626 modules)
+ ⨯ Error: Cannot find module './1682.js'
+Require stack:
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/page.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-server.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/start-server.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1405:15)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1061:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1066:22)
+    at Module._load (node:internal/modules/cjs/loader:1215:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at __webpack_require__.f.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:203:28)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:116:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:167:22)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/pages/_document.js:1:340
+    at Object.<anonymous> (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/pages/_document.js:1:383)
+    at Module._compile (node:internal/modules/cjs/loader:1734:14)
+    at Object..js (node:internal/modules/cjs/loader:1899:10)
+    at Module.load (node:internal/modules/cjs/loader:1469:32)
+    at Module._load (node:internal/modules/cjs/loader:1286:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at requirePage (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js:109:84)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js:72:65
+    at async Promise.all (index 0)
+    at async loadComponentsImpl (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js:71:33)
+    at async DevServer.findPageComponentsImpl (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/next-server.js:714:36) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/page.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ GET / 500 in 223ms
+ ⨯ Error: Cannot find module './1682.js'
+Require stack:
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/page.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-server.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/start-server.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1405:15)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1061:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1066:22)
+    at Module._load (node:internal/modules/cjs/loader:1215:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at __webpack_require__.f.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:203:28)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:116:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:167:22)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/pages/_document.js:1:340
+    at Object.<anonymous> (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/pages/_document.js:1:383)
+    at Module._compile (node:internal/modules/cjs/loader:1734:14)
+    at Object..js (node:internal/modules/cjs/loader:1899:10)
+    at Module.load (node:internal/modules/cjs/loader:1469:32)
+    at Module._load (node:internal/modules/cjs/loader:1286:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at requirePage (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js:109:84)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js:72:65
+    at async Promise.all (index 0)
+    at async loadComponentsImpl (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js:71:33)
+    at async DevServer.findPageComponentsImpl (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/next-server.js:714:36) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/page.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ GET /login 500 in 10ms
+ ⨯ Error: Cannot find module './1682.js'
+Require stack:
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/page.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-server.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/start-server.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1405:15)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1061:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1066:22)
+    at Module._load (node:internal/modules/cjs/loader:1215:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at __webpack_require__.f.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:203:28)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:116:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:167:22)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/pages/_document.js:1:340
+    at Object.<anonymous> (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/pages/_document.js:1:383)
+    at Module._compile (node:internal/modules/cjs/loader:1734:14)
+    at Object..js (node:internal/modules/cjs/loader:1899:10)
+    at Module.load (node:internal/modules/cjs/loader:1469:32)
+    at Module._load (node:internal/modules/cjs/loader:1286:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at requirePage (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js:109:84)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js:72:65
+    at async Promise.all (index 0)
+    at async loadComponentsImpl (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js:71:33)
+    at async DevServer.findPageComponentsImpl (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/next-server.js:714:36) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/page.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module './1682.js'
+Require stack:
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/page.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-server.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/start-server.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1405:15)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1061:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1066:22)
+    at Module._load (node:internal/modules/cjs/loader:1215:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at __webpack_require__.f.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:203:28)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:116:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:167:22)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/pages/_document.js:1:340
+    at Object.<anonymous> (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/pages/_document.js:1:383)
+    at Module._compile (node:internal/modules/cjs/loader:1734:14)
+    at Object..js (node:internal/modules/cjs/loader:1899:10)
+    at Module.load (node:internal/modules/cjs/loader:1469:32)
+    at Module._load (node:internal/modules/cjs/loader:1286:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at requirePage (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js:109:84)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js:72:65
+    at async Promise.all (index 0)
+    at async loadComponentsImpl (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js:71:33)
+    at async DevServer.findPageComponentsImpl (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/next-server.js:714:36) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/page.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module './1682.js'
+Require stack:
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/page.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-server.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/start-server.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1405:15)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1061:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1066:22)
+    at Module._load (node:internal/modules/cjs/loader:1215:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at __webpack_require__.f.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:203:28)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:116:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:167:22)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/pages/_document.js:1:340
+    at Object.<anonymous> (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/pages/_document.js:1:383)
+    at Module._compile (node:internal/modules/cjs/loader:1734:14)
+    at Object..js (node:internal/modules/cjs/loader:1899:10)
+    at Module.load (node:internal/modules/cjs/loader:1469:32)
+    at Module._load (node:internal/modules/cjs/loader:1286:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at requirePage (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js:109:84)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js:72:65
+    at async Promise.all (index 0)
+    at async loadComponentsImpl (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js:71:33)
+    at async DevServer.findPageComponentsImpl (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/next-server.js:714:36) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/page.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module './1682.js'
+Require stack:
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/page.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-server.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/start-server.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1405:15)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1061:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1066:22)
+    at Module._load (node:internal/modules/cjs/loader:1215:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at __webpack_require__.f.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:203:28)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:116:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:167:22)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/pages/_document.js:1:340
+    at Object.<anonymous> (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/pages/_document.js:1:383)
+    at Module._compile (node:internal/modules/cjs/loader:1734:14)
+    at Object..js (node:internal/modules/cjs/loader:1899:10)
+    at Module.load (node:internal/modules/cjs/loader:1469:32)
+    at Module._load (node:internal/modules/cjs/loader:1286:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at requirePage (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js:109:84)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js:72:65
+    at async Promise.all (index 0)
+    at async loadComponentsImpl (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js:71:33)
+    at async DevServer.findPageComponentsImpl (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/next-server.js:714:36) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/page.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ Error: Cannot find module './1682.js'
+Require stack:
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/page.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-server.js
+- /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/start-server.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1405:15)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1061:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1066:22)
+    at Module._load (node:internal/modules/cjs/loader:1215:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at __webpack_require__.f.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:203:28)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:116:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:115:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js:167:22)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/pages/_document.js:1:340
+    at Object.<anonymous> (/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/pages/_document.js:1:383)
+    at Module._compile (node:internal/modules/cjs/loader:1734:14)
+    at Object..js (node:internal/modules/cjs/loader:1899:10)
+    at Module.load (node:internal/modules/cjs/loader:1469:32)
+    at Module._load (node:internal/modules/cjs/loader:1286:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at requirePage (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js:109:84)
+    at /Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js:72:65
+    at async Promise.all (index 0)
+    at async loadComponentsImpl (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js:71:33)
+    at async DevServer.findPageComponentsImpl (/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/next-server.js:714:36) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/webpack-runtime.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/.next/server/app/page.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/require.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/load-components.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/build/utils.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/zachwieder/Documents/CODING MAIN/chat-new/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ GET /_next/static/chunks/fallback/webpack.js 500 in 10ms
+ GET /_next/static/chunks/fallback/main.js 500 in 10ms
+ GET /_next/static/chunks/fallback/react-refresh.js 500 in 9ms
+ GET /_next/static/chunks/fallback/pages/_error.js 500 in 10ms
+ GET /_next/static/chunks/fallback/pages/_app.js 500 in 10ms
+ ✓ Compiled in 86ms (1460 modules)
+ ✓ Compiled in 94ms (1460 modules)
+ ✓ Compiled in 141ms (1457 modules)
+ ✓ Compiled in 77ms (1457 modules)
+ ✓ Compiled in 72ms (1457 modules)
+ ✓ Compiled in 71ms (1457 modules)

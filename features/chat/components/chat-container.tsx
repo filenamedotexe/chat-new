@@ -7,6 +7,7 @@ import { MessageInput } from './message-input';
 import { TypingIndicator } from './typing-indicator';
 import type { MessageWithSender } from '../data/messages';
 import { getMessagesEdgeFunction, sendMessageEdgeFunction } from '@/lib/api/edge-functions';
+import { createClient } from '@/lib/supabase/client';
 
 interface ChatContainerProps {
   projectId?: string;
@@ -33,7 +34,9 @@ export function ChatContainer({
   const [hasMore, setHasMore] = useState(false);
   const [offset, setOffset] = useState(0);
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
+  const [conversationId, setConversationId] = useState<string | null>(null);
   const limit = 50;
+  const supabase = createClient();
 
   // Load messages
   const loadMessages = useCallback(async (loadMore = false) => {
@@ -54,6 +57,10 @@ export function ChatContainer({
         setMessages(prev => [...data.messages, ...prev]);
       } else {
         setMessages(data.messages);
+        // Set conversation ID for real-time subscriptions
+        if (data.messages.length > 0 && data.messages[0].message.conversationId) {
+          setConversationId(data.messages[0].message.conversationId);
+        }
       }
       
       setHasMore(data.messages.length === limit);
@@ -69,6 +76,76 @@ export function ChatContainer({
   useEffect(() => {
     loadMessages();
   }, [projectId, taskId, recipientId]); // Don't include loadMessages to avoid infinite loop
+
+  // Real-time subscription for new messages
+  useEffect(() => {
+    if (!conversationId) return;
+
+    console.log('🔄 Setting up real-time subscription for conversation:', conversationId);
+
+    const channel = supabase
+      .channel(`messages:${conversationId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'messages',
+          filter: `conversation_id=eq.${conversationId}`,
+        },
+        (payload) => {
+          console.log('📨 Real-time message received:', payload);
+          
+          // Add the new message to the state
+          const newMessage = payload.new as Record<string, unknown>;
+          
+          // Create a properly formatted message with sender info
+          const messageWithSender: MessageWithSender = {
+            message: {
+              id: String(newMessage.id),
+              content: String(newMessage.content),
+              type: String(newMessage.type || 'text'),
+              senderId: String(newMessage.sender_id),
+              projectId: newMessage.project_id ? String(newMessage.project_id) : null,
+              taskId: newMessage.task_id ? String(newMessage.task_id) : null,
+              recipientId: newMessage.recipient_id ? String(newMessage.recipient_id) : null,
+              parentMessageId: newMessage.parent_message_id ? String(newMessage.parent_message_id) : null,
+              isEdited: Boolean(newMessage.is_edited),
+              deletedAt: newMessage.deleted_at ? new Date(String(newMessage.deleted_at)) : null,
+              createdAt: new Date(String(newMessage.created_at)),
+              updatedAt: new Date(String(newMessage.updated_at)),
+              conversationId: newMessage.conversation_id ? String(newMessage.conversation_id) : null,
+              isInternalNote: Boolean(newMessage.is_internal_note),
+              readAt: newMessage.read_at ? new Date(String(newMessage.read_at)) : null,
+            },
+            sender: {
+              id: String(newMessage.sender_id),
+              name: 'User', // We'll need to fetch this or include it in the payload
+              email: '',
+              role: 'team_member',
+            },
+          };
+
+          setMessages(prev => {
+            // Check if message already exists to avoid duplicates
+            const exists = prev.some(msg => msg.message.id === newMessage.id);
+            if (exists) return prev;
+            
+            // Add new message at the end (most recent)
+            return [...prev, messageWithSender];
+          });
+        }
+      )
+      .subscribe((status) => {
+        console.log('📡 Real-time subscription status:', status);
+      });
+
+    // Cleanup subscription on unmount or conversation change
+    return () => {
+      console.log('🧹 Cleaning up real-time subscription');
+      supabase.removeChannel(channel);
+    };
+  }, [conversationId, supabase]);
 
   // Send message
   const handleSendMessage = async (content: string) => {

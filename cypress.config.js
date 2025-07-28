@@ -7,6 +7,9 @@ module.exports = defineConfig({
     viewportHeight: 720,
     video: true,
     screenshotOnRunFailure: true,
+    env: {
+      SUPABASE_URL: 'https://ixcsflqtipcfscbloahx.supabase.co'
+    },
     setupNodeEvents(on, config) {
       // implement node event listeners here
       const tasks = require('./cypress/support/tasks');
