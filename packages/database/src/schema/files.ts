@@ -15,7 +15,7 @@ export const fileType = pgEnum('file_type', [
 ]);
 
 // File storage type enum
-export const storageType = pgEnum('storage_type', ['local', 's3', 'gcs']);
+export const storageType = pgEnum('storage_type', ['local', 's3', 'gcs', 'supabase']);
 
 export const files = pgTable('files', {
   id: uuid('id').defaultRandom().primaryKey(),

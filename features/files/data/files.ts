@@ -1,6 +1,7 @@
 import { db } from '@chat/database';
 import { files, users, projects, tasks } from '@chat/database';
 import { eq, and, desc, isNull, ilike } from 'drizzle-orm';
+// DEPRECATED: Local storage functions - use Supabase Edge Functions instead
 import { saveFileToStorage, deleteFileFromStorage } from '../lib/storage';
 import { getFileTypeCategory } from '../lib/client-utils';
 import type { UserRole } from '@chat/shared-types';
@@ -32,6 +33,7 @@ export interface FileWithAssociations {
 }
 
 /**
+ * @deprecated Use Supabase Edge Functions for file uploads instead
  * Creates a new file record and saves file to storage
  */
 export async function createFile(input: CreateFileInput): Promise<typeof files.$inferSelect> {

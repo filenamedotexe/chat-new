@@ -1,0 +1,197 @@
+
+> agency-client-platform@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.30
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 832ms
+ ✓ Compiled /middleware in 118ms (305 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 2.4s (2362 modules)
+ GET / 200 in 2520ms
+ ✓ Compiled in 215ms (1112 modules)
+ ✓ Compiled /login in 199ms (2320 modules)
+ GET /login 200 in 288ms
+ ✓ Compiled /api/auth/[...nextauth] in 359ms (1585 modules)
+ GET /api/auth/session 200 in 620ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ ✓ Compiled /dashboard in 476ms (3050 modules)
+ GET /dashboard 200 in 600ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /login 200 in 13ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /login 200 in 13ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /dashboard 200 in 16ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /login 200 in 12ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 2ms
+ GET /login 200 in 13ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /login 200 in 13ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /dashboard 200 in 14ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /login 200 in 12ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /login 200 in 12ms
+ GET /login 200 in 17ms
+ GET /api/auth/session 200 in 11ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 2ms
+ GET /dashboard 200 in 12ms
+ GET /api/auth/session 200 in 8ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 6ms
+ GET /login 200 in 12ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /login 200 in 13ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 2ms
+ GET /dashboard 200 in 13ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /login 200 in 10ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /login 200 in 10ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 2ms
+ GET /dashboard 200 in 14ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /login 200 in 12ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 2ms
+ GET /login 200 in 11ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /dashboard 200 in 13ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 1ms
+ GET /login 200 in 11ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /login 200 in 12ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 2ms
+ GET /dashboard 200 in 14ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /login 200 in 12ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 2ms
+ GET /login 200 in 12ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /dashboard 200 in 12ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /login 200 in 12ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 2ms
+ GET /login 200 in 10ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /dashboard 200 in 12ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ GET /login 200 in 11ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 2ms
+ GET /login 200 in 10ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /dashboard 200 in 13ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 2ms
+ GET /login 200 in 10ms
+ GET /api/auth/session 200 in 4ms
+ GET /api/auth/session 200 in 2ms
+ GET /api/auth/session 200 in 3ms
+ GET /api/auth/session 200 in 3ms
+ ✓ Compiled in 142ms (1272 modules)
+ ✓ Compiled /_not-found in 355ms (2488 modules)
+ GET /_next/static/css/app/layout.css?v=1753671372934 404 in 485ms
+ GET /_next/static/css/app/layout.css?v=1753671373470 404 in 10ms

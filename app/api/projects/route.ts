@@ -1,22 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth/auth.config';
+import { requireAuth, requireRole } from '@/lib/api/adapters';
 import { createProject, getProjects } from '@/features/projects/data/projects';
 import { getOrganizations } from '@/features/organizations/data/organizations';
 import { createActivityLog } from '@/features/timeline/data/activity';
 import { ActivityActions, EntityTypes } from '@/packages/database/src/schema/activity';
-import type { UserRole } from '@chat/shared-types';
 
 export async function GET() {
   try {
-    const session = await auth();
-    
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const projects = await getProjects(session.user.id, session.user.role as UserRole);
+    const session = await requireAuth();
+    const projects = await getProjects(session.user.id, session.user.role);
     return NextResponse.json(projects);
   } catch (error) {
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     console.error('Failed to fetch projects:', error);
     return NextResponse.json(
       { error: 'Failed to fetch projects' },
@@ -27,16 +24,8 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
-    
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
     // Only admins and team members can create projects
-    if (session.user.role !== 'admin' && session.user.role !== 'team_member') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
+    const session = await requireRole(['admin', 'team_member']);
 
     const body = await request.json();
     
@@ -49,7 +38,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify the organization exists and user has access
-    const orgs = await getOrganizations(session.user.id, session.user.role as UserRole);
+    const orgs = await getOrganizations(session.user.id, session.user.role);
     const orgExists = orgs.some(o => o.id === body.organizationId);
     
     if (!orgExists) {
@@ -93,6 +82,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(project);
   } catch (error) {
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    if (error instanceof Error && error.message === 'Forbidden') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
     console.error('Failed to create project:', error);
     return NextResponse.json(
       { error: 'Failed to create project' },

@@ -28,6 +28,7 @@ import {
 import { formatFileSize, getFileTypeCategory } from '../lib/client-utils';
 import { format } from 'date-fns';
 import { FileShareModal } from './file-share-modal';
+import { createClient } from '@/lib/supabase/client';
 
 interface FileRecord {
   file: {
@@ -110,15 +111,40 @@ export function FileList({
   const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
   const [previewFile, setPreviewFile] = useState<FileRecord | null>(null);
   const [shareModalFile, setShareModalFile] = useState<FileRecord | null>(null);
+  const [imageUrls, setImageUrls] = useState<Map<string, string>>(new Map());
 
   useEffect(() => {
     if (providedFiles) {
       setFiles(providedFiles);
       setLoading(false);
+      loadImageUrls(providedFiles);
     } else {
       fetchFiles();
     }
   }, [projectId, taskId, providedFiles]);
+
+  const loadImageUrls = async (fileList: FileRecord[]) => {
+    const supabase = createClient();
+    const urlMap = new Map<string, string>();
+    
+    for (const fileRecord of fileList) {
+      if (isImageFile(fileRecord.file.mimeType)) {
+        try {
+          const { data, error } = await supabase.storage
+            .from('user-uploads')
+            .createSignedUrl(fileRecord.file.filePath, 3600); // 1 hour expiry
+          
+          if (!error && data) {
+            urlMap.set(fileRecord.file.id, data.signedUrl);
+          }
+        } catch (err) {
+          console.error('Error loading image URL for', fileRecord.file.originalName, err);
+        }
+      }
+    }
+    
+    setImageUrls(urlMap);
+  };
 
   const fetchFiles = async () => {
     try {
@@ -136,6 +162,7 @@ export function FileList({
 
       const data = await response.json();
       setFiles(data.files || []);
+      loadImageUrls(data.files || []);
     } catch (err) {
       console.error('Error fetching files:', err);
       setError(err instanceof Error ? err.message : 'Failed to load files');
@@ -146,21 +173,25 @@ export function FileList({
 
   const handleDownload = async (file: FileRecord) => {
     try {
-      const response = await fetch(`/api/files/${file.file.id}/download`);
-      if (!response.ok) {
-        throw new Error('Download failed');
+      const supabase = createClient();
+      
+      // Get signed URL for download from Supabase Storage
+      const { data, error } = await supabase.storage
+        .from('user-uploads')
+        .createSignedUrl(file.file.filePath, 60); // 1 minute expiry
+      
+      if (error) {
+        throw new Error('Failed to get download URL');
       }
-
-      // Create download link
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
+      
+      // Create download link with signed URL
       const link = document.createElement('a');
-      link.href = url;
+      link.href = data.signedUrl;
       link.download = file.file.originalName;
+      link.target = '_blank';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      URL.revokeObjectURL(url);
     } catch (err) {
       console.error('Download error:', err);
       alert('Failed to download file');
@@ -189,12 +220,26 @@ export function FileList({
     }
   };
 
-  const handlePreview = (file: FileRecord) => {
+  const handlePreview = async (file: FileRecord) => {
     if (isImageFile(file.file.mimeType)) {
       setPreviewFile(file);
     } else {
-      // For non-images, open in new tab
-      window.open(file.file.filePath, '_blank');
+      // For non-images, get signed URL and open in new tab
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase.storage
+          .from('user-uploads')
+          .createSignedUrl(file.file.filePath, 60); // 1 minute expiry
+        
+        if (error) {
+          throw new Error('Failed to get preview URL');
+        }
+        
+        window.open(data.signedUrl, '_blank');
+      } catch (err) {
+        console.error('Preview error:', err);
+        alert('Failed to preview file');
+      }
     }
   };
 
@@ -385,9 +430,9 @@ export function FileList({
                   <div className="space-y-3">
                     {/* File Icon/Thumbnail */}
                     <div className="flex justify-center">
-                      {isImageFile(fileRecord.file.mimeType) ? (
+                      {isImageFile(fileRecord.file.mimeType) && imageUrls.has(fileRecord.file.id) ? (
                         <img
-                          src={fileRecord.file.filePath}
+                          src={imageUrls.get(fileRecord.file.id)}
                           alt={fileRecord.file.originalName}
                           className="h-16 w-16 object-cover rounded"
                           onError={(e) => {
@@ -560,7 +605,7 @@ export function FileList({
               <IconX className="h-6 w-6" />
             </Button>
             <img
-              src={previewFile.file.filePath}
+              src={imageUrls.get(previewFile.file.id) || ''}
               alt={previewFile.file.originalName}
               className="max-w-full max-h-full object-contain rounded-lg"
             />

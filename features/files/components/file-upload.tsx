@@ -24,6 +24,7 @@ import {
   getFileTypeCategory,
   MAX_FILE_SIZE 
 } from '../lib/client-utils';
+import { uploadFilesEdgeFunction } from '@/lib/api/edge-functions';
 
 interface UploadedFileResult {
   id: string;
@@ -168,15 +169,6 @@ export function FileUpload({
     setUploading(true);
 
     try {
-      const formData = new FormData();
-      
-      validFiles.forEach(file => {
-        formData.append('files', file);
-      });
-
-      if (projectId) formData.append('projectId', projectId);
-      if (taskId) formData.append('taskId', taskId);
-
       // Update upload progress
       setFiles(prev => prev.map(f => 
         validFiles.find(vf => vf.id === f.id) ? 
@@ -184,16 +176,11 @@ export function FileUpload({
           f
       ));
 
-      const response = await fetch('/api/files', {
-        method: 'POST',
-        body: formData,
+      // Use Edge Function for file upload
+      const result = await uploadFilesEdgeFunction(validFiles, {
+        projectId,
+        taskId
       });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Upload failed');
-      }
 
       // Update file statuses
       setFiles(prev => prev.map(f => {

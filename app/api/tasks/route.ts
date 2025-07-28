@@ -1,22 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth/auth.config';
+import { requireAuth, requireRole } from '@/lib/api/adapters';
 import { createTask, getTasksByProject } from '@/features/tasks/data/tasks';
 import { createActivityLog } from '@/features/timeline/data/activity';
 import { ActivityActions, EntityTypes } from '@/packages/database/src/schema/activity';
-import type { UserRole } from '@chat/shared-types';
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
-    
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
     // Only admins and team members can create tasks
-    if (session.user.role === 'client') {
-      return NextResponse.json({ error: 'Clients cannot create tasks' }, { status: 403 });
-    }
+    const session = await requireRole(['admin', 'team_member']);
 
     const body = await request.json();
     const { projectId, title, description, assignedToId, dueDate } = body;
@@ -65,6 +56,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(task);
   } catch (error) {
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    if (error instanceof Error && error.message === 'Forbidden') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
     console.error('Task creation error:', error);
     return NextResponse.json(
       { error: 'Failed to create task' },
@@ -75,11 +72,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth();
-    
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const session = await requireAuth();
 
     const { searchParams } = new URL(request.url);
     const projectId = searchParams.get('projectId');
@@ -94,11 +87,14 @@ export async function GET(request: NextRequest) {
     const tasks = await getTasksByProject(
       projectId,
       session.user.id,
-      session.user.role as UserRole
+      session.user.role
     );
 
     return NextResponse.json(tasks);
   } catch (error) {
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     console.error('Task fetch error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch tasks' },

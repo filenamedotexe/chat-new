@@ -1,3 +1,7 @@
+// DEPRECATED: This file is deprecated as of Phase 5.3 migration to Supabase Storage
+// All file operations now use Supabase Storage via Edge Functions
+// This file is kept for migration purposes only
+
 import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
@@ -16,6 +20,7 @@ export interface UploadedFile {
 }
 
 /**
+ * @deprecated Use Supabase Storage via Edge Functions instead
  * Saves file buffer to local storage
  */
 export async function saveFileToStorage(
@@ -65,6 +70,7 @@ export async function saveFileToStorage(
 }
 
 /**
+ * @deprecated Use Supabase Storage via Edge Functions instead
  * Deletes a file from storage
  */
 export async function deleteFileFromStorage(filePath: string): Promise<void> {
@@ -77,6 +83,7 @@ export async function deleteFileFromStorage(filePath: string): Promise<void> {
 }
 
 /**
+ * @deprecated Use Supabase Storage via Edge Functions instead
  * Gets file stats from storage
  */
 export async function getFileStats(filePath: string): Promise<{ size: number; exists: boolean }> {

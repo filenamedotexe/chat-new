@@ -6,6 +6,7 @@ import { MessageList } from './message-list';
 import { MessageInput } from './message-input';
 import { TypingIndicator } from './typing-indicator';
 import type { MessageWithSender } from '../data/messages';
+import { getMessagesEdgeFunction, sendMessageEdgeFunction } from '@/lib/api/edge-functions';
 
 interface ChatContainerProps {
   projectId?: string;
@@ -40,21 +41,14 @@ export function ChatContainer({
       setLoading(true);
       setError(null);
 
-      const params = new URLSearchParams({
-        limit: limit.toString(),
-        offset: (loadMore ? offset : 0).toString(),
+      // Use Edge Function for messages
+      const data = await getMessagesEdgeFunction({
+        projectId,
+        taskId,
+        recipientId,
+        limit,
+        offset: loadMore ? offset : 0,
       });
-
-      if (projectId) params.append('projectId', projectId);
-      if (taskId) params.append('taskId', taskId);
-      if (recipientId) params.append('recipientId', recipientId);
-
-      const response = await fetch(`/api/messages?${params}`);
-      if (!response.ok) {
-        throw new Error('Failed to load messages');
-      }
-
-      const data = await response.json();
       
       if (loadMore) {
         setMessages(prev => [...data.messages, ...prev]);
@@ -79,23 +73,12 @@ export function ChatContainer({
   // Send message
   const handleSendMessage = async (content: string) => {
     try {
-      const body: any = { content };
-      if (projectId) body.projectId = projectId;
-      if (taskId) body.taskId = taskId;
-      if (recipientId) body.recipientId = recipientId;
-
-      const response = await fetch('/api/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+      // Use Edge Function for sending messages
+      await sendMessageEdgeFunction(content, {
+        projectId,
+        taskId,
+        recipientId,
       });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to send message');
-      }
-
-      const data = await response.json();
       
       // Refresh messages to get properly formatted data
       setOffset(0);

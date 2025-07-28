@@ -44,6 +44,11 @@ async function seedFeatures() {
       name: 'voiceChat',
       description: 'Voice chat capabilities (coming soon)',
       enabled: false
+    },
+    {
+      name: 'supabaseAuth',
+      description: 'Use Supabase authentication instead of NextAuth',
+      enabled: true
     }
   ];
 

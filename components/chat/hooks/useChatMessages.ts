@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { MessageWithSender } from '@/features/chat/data/messages';
 import type { ChatType } from '../UniversalChat';
+import { getMessagesEdgeFunction, sendMessageEdgeFunction } from '@/lib/api/edge-functions';
 
 interface UseChatMessagesProps {
   type: ChatType;
@@ -24,11 +25,6 @@ export function useChatMessages({
   const [typingUsers] = useState<string[]>([]);
   const limit = 50;
 
-  // Build API endpoint based on chat type
-  const getApiEndpoint = useCallback(() => {
-    if (type === 'ai') return '/api/chat';
-    return '/api/messages';
-  }, [type]);
 
   // Load messages
   const loadMessages = useCallback(async (loadMore = false) => {
@@ -36,36 +32,57 @@ export function useChatMessages({
       setLoading(true);
       setError(null);
 
-      const params = new URLSearchParams({
-        limit: limit.toString(),
-        offset: (loadMore ? offset : 0).toString(),
-      });
+      // For AI chat, use the old API endpoint; for regular messages, use Edge Function
+      if (type === 'ai') {
+        const params = new URLSearchParams({
+          limit: limit.toString(),
+          offset: (loadMore ? offset : 0).toString(),
+        });
 
-      if (projectId) params.append('projectId', projectId);
-      if (taskId) params.append('taskId', taskId);
-      if (recipientId) params.append('recipientId', recipientId);
+        if (projectId) params.append('projectId', projectId);
+        if (taskId) params.append('taskId', taskId);
+        if (recipientId) params.append('recipientId', recipientId);
 
-      const response = await fetch(`${getApiEndpoint()}?${params}`);
-      if (!response.ok) {
-        throw new Error('Failed to load messages');
-      }
+        const response = await fetch(`/api/chat?${params}`);
+        if (!response.ok) {
+          throw new Error('Failed to load messages');
+        }
 
-      const data = await response.json();
-      
-      if (loadMore) {
-        setMessages(prev => [...data.messages, ...prev]);
+        const data = await response.json();
+        
+        if (loadMore) {
+          setMessages(prev => [...data.messages, ...prev]);
+        } else {
+          setMessages(data.messages || []);
+        }
+        
+        setHasMore(data.messages?.length === limit || false);
+        setOffset(prev => prev + (data.messages?.length || 0));
       } else {
-        setMessages(data.messages || []);
+        // Use Edge Function for regular messages
+        const data = await getMessagesEdgeFunction({
+          projectId,
+          taskId,
+          recipientId,
+          limit,
+          offset: loadMore ? offset : 0,
+        });
+        
+        if (loadMore) {
+          setMessages(prev => [...data.messages, ...prev]);
+        } else {
+          setMessages(data.messages || []);
+        }
+        
+        setHasMore(data.messages?.length === limit || false);
+        setOffset(prev => prev + (data.messages?.length || 0));
       }
-      
-      setHasMore(data.messages?.length === limit || false);
-      setOffset(prev => prev + (data.messages?.length || 0));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load messages');
     } finally {
       setLoading(false);
     }
-  }, [projectId, taskId, recipientId, offset, limit, getApiEndpoint]);
+  }, [type, projectId, taskId, recipientId, offset, limit]);
 
   // Initial load
   useEffect(() => {
@@ -75,27 +92,34 @@ export function useChatMessages({
   // Send message
   const sendMessage = async (content: string) => {
     try {
-      const body: Record<string, unknown> = { content };
-      if (projectId) body.projectId = projectId;
-      if (taskId) body.taskId = taskId;
-      if (recipientId) body.recipientId = recipientId;
-
-      const response = await fetch(getApiEndpoint(), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to send message');
-      }
-
-      // For AI chat, handle streaming responses differently
+      // For AI chat, use the old API endpoint; for regular messages, use Edge Function
       if (type === 'ai') {
+        const body: Record<string, unknown> = { content };
+        if (projectId) body.projectId = projectId;
+        if (taskId) body.taskId = taskId;
+        if (recipientId) body.recipientId = recipientId;
+
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Failed to send message');
+        }
+
         const data = await response.json();
         setMessages(prev => [...prev, data]);
       } else {
+        // Use Edge Function for regular messages
+        await sendMessageEdgeFunction(content, {
+          projectId,
+          taskId,
+          recipientId,
+        });
+
         // Refresh messages for regular chat
         setOffset(0);
         await loadMessages();
