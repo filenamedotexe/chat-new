@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth/api-auth';
-import { createFile, getFilesForUser } from '@/features/files/data/files';
-import { validateFile, validateFileList } from '@/features/files/lib/client-utils';
+import { getFilesForUser } from '@/features/files/data/files';
+import { validateFile, validateFileList, getFileTypeCategory } from '@/features/files/lib/client-utils';
 import { createActivityLog } from '@/features/timeline/data/activity';
 import { ActivityActions, EntityTypes } from '@/packages/database/src/schema/activity';
 import type { UserRole } from '@chat/shared-types';
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * POST /api/files - Upload files
+ * POST /api/files - Upload files using Supabase Storage
  */
 export async function POST(request: NextRequest) {
   try {
@@ -81,6 +81,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Create Supabase client with service role for storage operations
+    const { createClient } = await import('@supabase/supabase-js');
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
+
     // Process each file
     const uploadedFiles = [];
     const errors = [];
@@ -98,17 +111,62 @@ export async function POST(request: NextRequest) {
         }
 
         // Convert file to buffer
-        const buffer = Buffer.from(await file.arrayBuffer());
+        const fileBuffer = await file.arrayBuffer();
+        const buffer = new Uint8Array(fileBuffer);
 
-        // Create file record
-        const uploadedFile = await createFile({
-          originalName: file.name,
-          mimeType: file.type,
-          buffer,
-          projectId: projectId || undefined,
-          taskId: taskId || undefined,
-          uploadedById: user.id,
-        });
+        // Generate unique file path
+        const fileExt = file.name.substring(file.name.lastIndexOf('.'));
+        const fileName = `${crypto.randomUUID()}${fileExt}`;
+        const filePath = `user-uploads/${user.id}/${fileName}`;
+
+        // Upload to Supabase Storage
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('user-uploads')
+          .upload(filePath, buffer, {
+            contentType: file.type,
+            upsert: false
+          });
+
+        if (uploadError) {
+          console.error('Storage upload error:', uploadError);
+          errors.push({
+            fileName: file.name,
+            error: 'Failed to upload to storage'
+          });
+          continue;
+        }
+
+        // Create file record in database
+        const { data: fileRecord, error: dbError } = await supabase
+          .from('files')
+          .insert({
+            original_name: file.name,
+            file_name: fileName,
+            file_path: uploadData.path,
+            storage_type: 'supabase',
+            file_size: file.size,
+            file_type: getFileTypeCategory(file.type),
+            mime_type: file.type,
+            uploaded_by_id: user.id,
+            project_id: projectId || null,
+            task_id: taskId || null
+          })
+          .select()
+          .single();
+
+        if (dbError) {
+          console.error('Database insert error:', dbError);
+          // Try to clean up the uploaded file
+          await supabase.storage
+            .from('user-uploads')
+            .remove([uploadData.path]);
+          
+          errors.push({
+            fileName: file.name,
+            error: 'Failed to create file record'
+          });
+          continue;
+        }
 
         // Log the activity
         try {
@@ -118,14 +176,14 @@ export async function POST(request: NextRequest) {
             userName: user.name,
             action: ActivityActions.FILE_UPLOADED,
             entityType: EntityTypes.FILE,
-            entityId: uploadedFile.id,
-            entityName: uploadedFile.originalName,
+            entityId: fileRecord.id,
+            entityName: fileRecord.original_name,
             projectId: projectId || undefined,
             taskId: taskId || undefined,
             metadata: {
-              fileSize: uploadedFile.fileSize,
-              fileType: uploadedFile.fileType,
-              mimeType: uploadedFile.mimeType,
+              fileSize: fileRecord.file_size,
+              fileType: fileRecord.file_type,
+              mimeType: fileRecord.mime_type,
             },
           });
         } catch (logError) {
@@ -133,7 +191,13 @@ export async function POST(request: NextRequest) {
         }
 
         uploadedFiles.push({
-          ...uploadedFile,
+          id: fileRecord.id,
+          originalName: fileRecord.original_name,
+          fileName: fileRecord.file_name,
+          filePath: fileRecord.file_path,
+          mimeType: fileRecord.mime_type,
+          fileType: fileRecord.file_type,
+          fileSize: fileRecord.file_size,
           warnings: fileValidation.warnings,
         });
       } catch (error) {

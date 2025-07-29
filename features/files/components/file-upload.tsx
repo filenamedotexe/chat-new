@@ -126,6 +126,8 @@ export function FileUpload({
       allowedTypes.reduce((acc, type) => ({ ...acc, [type]: [] }), {}) : 
       undefined,
     disabled: uploading || uploadComplete,
+    noClick: false,
+    noKeyboard: false,
   });
 
   const removeFile = (fileId: string) => {
@@ -177,16 +179,26 @@ export function FileUpload({
       ));
 
       // Use Edge Function for file upload
+      console.log('🚀 Calling Edge Function with:', { 
+        fileCount: validFiles.length, 
+        projectId, 
+        taskId 
+      });
+      
       const result = await uploadFilesEdgeFunction(validFiles, {
         projectId,
         taskId
       });
+      
+      console.log('📊 Edge Function result:', result);
 
       // Update file statuses
       setFiles(prev => prev.map(f => {
         const uploaded = result.uploadedFiles?.find((uf: any) => 
-          uf.originalName === f.name
+          uf.original_name === f.name
         );
+        
+        console.log('🔍 Matching file:', f.name, 'with uploaded:', result.uploadedFiles?.map((uf: any) => uf.original_name));
         const error = result.errors?.find((e: any) => e.fileName === f.name);
 
         if (uploaded) {
@@ -229,16 +241,15 @@ export function FileUpload({
     <div className={`space-y-4 ${className}`}>
       {/* Drop Zone */}
       {!uploadComplete && (
-        <Card>
-          <div
-            {...getRootProps()}
-            className={`p-8 border-2 border-dashed rounded-lg text-center cursor-pointer transition-colors ${
-              isDragActive
-                ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/20'
-                : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
-            } ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            data-testid="file-dropzone"
-          >
+        <div
+          {...getRootProps()}
+          className={`p-8 border-2 border-dashed rounded-lg text-center cursor-pointer transition-colors bg-card shadow-md ${
+            isDragActive
+              ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/20'
+              : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
+          } ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          data-testid="file-dropzone"
+        >
             <input {...getInputProps()} ref={fileInputRef} />
             <div className="space-y-4">
               <IconUpload className="h-12 w-12 mx-auto text-gray-400" />
@@ -249,14 +260,24 @@ export function FileUpload({
                 <p className="text-sm text-gray-500 mt-1">
                   or click to browse files
                 </p>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    fileInputRef.current?.click();
+                  }}
+                >
+                  Browse Files
+                </Button>
               </div>
               <div className="text-xs text-gray-400 space-y-1">
                 <p>Maximum {maxFiles} files, {formatFileSize(MAX_FILE_SIZE)} per file</p>
                 <p>Supported: Images, Documents, Spreadsheets, Presentations, Archives, Code</p>
               </div>
             </div>
-          </div>
-        </Card>
+        </div>
       )}
 
       {/* File List */}
